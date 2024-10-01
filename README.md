@@ -18,10 +18,14 @@ Key Problems Solved:
 * Ensuring that all relevant stakeholders (high schools and their counselors, prospective students, admins, information office advisors, information office coordinator and guides) can access the information they need easily.
 
 ## Features ##
-* Interface: Separate interfaces for visitors, admins, advisors, guides and the coordinator.
-* Booking System: High schools and individuals can schedule campus visits and tours. High schools  fill the application form within the system which is later seen by advisors with the priority order. The application form includes terms & conditions, number of students, contact information, and busy hours to lower the number of rejections.
-* Notifications & Reminders: Email reminders and confirmation for upcoming events.
-* Dashboard: Admins and coordinators can manage visits, view schedules, and add/remove guides. Also, only the admin can see the gathered data within the system.
+* Interface: Separate interfaces for visitors, admins, advisors, guides and the coordinator. There will also be different roles with different levels of access.
+* Booking System: High schools and individuals can schedule campus visits and tours. High schools  fill the application form within the system which is later seen by advisors with the priority order. The application form includes terms & conditions, number of students, contact information, and busy hours to lower the number of rejections. If an hour already has an accepted tour, the further applicants will be shown a message strongly discourraging them from booking that hour.
+* High schools and individuals will be able to choose multiple hours so that a schedule that fits all the applicants can be created more easily. If a single high school or individual applies more than one, the system will notice that and flag it as spam.
+* Notifications & Reminders: Reminders and confirmation for upcoming events will be delivered by email to the applicants email.
+* Dashboard: Coordinators and advisors can manage visits, view schedules, and add/remove guides. There will be two tables: A table for all applied tours, and a table for all approved tours. Only coordinator and advisors can see the first table and approve tours. Then, the applied tour automatically gets transferred to the approved table. Also, only the coordinator can see the gathered data within the system.
+* There will be a priority recommendation function to sort the high schools that applied. It will provide options to sort by time of application, distance to Bilkent, YKS scores, and loyalty to Bilkent. Additionally, all the high schools will be distributed in four different categories based on their YKS scores, and loyalty to Bilkent: ?, Maintanence, Nurturing, ✰. These will only be available for the coordinator and advisors.
+* Guides can volunteer for a guideless tour in the approved tours table. If no guide volunteers, the advisor of the day can appoint a guide.
+* Guides and advisors can enter their Bilkent Schedules to avoid getting called for tours which happen at their course hours. They can also reserve hours for themselves for things not shown on the stars site (like tutoring sessions).
 ### Selling Points ###
 * Intuitive and user-friendly interface.
 * Automated booking and scheduling.

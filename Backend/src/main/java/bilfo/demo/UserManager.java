@@ -29,9 +29,10 @@ public class UserManager {
         String email = userRequest.get("email");
         String password = userRequest.get("password");
         USER_STATUS status = USER_STATUS.valueOf(userRequest.get("status").toUpperCase());
+        DEPARTMENT department = DEPARTMENT.valueOf(userRequest.get("department").toUpperCase());
 
         // Attempt to create the user
-        Optional<User> newUser = userService.createUser(bilkentId, username, email, password, status);
+        Optional<User> newUser = userService.createUser(bilkentId, username, email, password, status, department);
 
         if (newUser.isPresent()) {
             return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);

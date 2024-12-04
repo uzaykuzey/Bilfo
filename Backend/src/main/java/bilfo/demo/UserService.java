@@ -29,7 +29,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status) {
+    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department) {
         logger.info("Creating user with ID: {}", bilkentId);
 
         // Check if user already exists
@@ -44,7 +44,7 @@ public class UserService {
         logger.info("Password hashed successfully for user ID: {}", bilkentId);
 
         // Create the new User object
-        User newUser = new User(new ObjectId(), bilkentId, status, username, email, hashedPassword);
+        User newUser = new User(new ObjectId(), bilkentId, status, username, email, hashedPassword, department);
 
         // Save the user in the database
         User savedUser = userRepository.save(newUser);

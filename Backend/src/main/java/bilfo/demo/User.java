@@ -22,5 +22,6 @@ public class User {
     private String username;
     private String email;
     private String password; // Store hashed passwords in real applications
+    private DEPARTMENT department;
 
 }

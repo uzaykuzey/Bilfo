@@ -1,53 +1,55 @@
 import "./home.css";
+
 export default function HomeLayout() {
   return (
     <div className="home-layout">
       {/* Sidebar Navigation */}
-        <nav className="sidebar">
+      <nav className="sidebar">
         <div className="logo-container">
-            <div className="logo">
+          <div className="logo">
             <img
-                src="/bilkent.png?height=60&width=60"
-                alt="University Logo"
-                className="logo-image"
+              src="/bilkent.png?height=60&width=60"
+              alt="University Logo"
+              className="logo-image"
             />
             <div className="logo-text">
-                <h1>BILFO</h1>
-                <p>Bilkent Information Office</p>
+              <h1>BILFO</h1>
+              <p>Bilkent Information Office</p>
             </div>
-            </div>
+          </div>
         </div>
 
         <div className="nav-links">
-            <a href="/campus-tours" className="nav-link">Campus Tours</a>
-            <a href="/fair-application" className="nav-link">Fair Application</a>
-            <a href="/login" className="nav-link">Log In</a>
+          <a href="/campus-tours" className="nav-link">Campus Tours</a>
+          <a href="/fair-application" className="nav-link">Fair Application</a>
+          <a href="/login" className="nav-link">Log In</a>
         </div>
 
         <div className="language-switcher">
-            <img
+          <img
             src="/Flag_England.png?height=32&width=40"
             alt="English"
             className="language-icon"
-            />
-            <img
+          />
+          <img
             src="/Flag_of_Turkey.png?height=32&width=40"
             alt="Turkish"
             className="language-icon"
-            />
+          />
         </div>
-        </nav>
-
+      </nav>
 
       {/* Main Content */}
       <main className="main-content">
         <h1 className="page-title">Campus Tours</h1>
 
+        {/* Tour Application Buttons */}
         <div className="tour-links">
-            <a href="/school-tour" className="tour-link">School Tour Application</a>
-            <a href="/individual-tour" className="tour-link">Individual Tour Application</a>
+          <a href="/school-tour" className="tour-link">School Tour Application</a>
+          <a href="/individual-tour" className="tour-link">Individual Tour Application</a>
         </div>
 
+        {/* Content Description */}
         <div className="content-description">
           <p>
             During your campus visit, you will have the opportunity to receive information about
@@ -55,6 +57,7 @@ export default function HomeLayout() {
             experience the beauty and facilities of the campus firsthand.
           </p>
 
+          {/* Visit Expectations */}
           <div className="visit-expectations">
             <h2>What to Expect During Your Campus Visit:</h2>
             <p>

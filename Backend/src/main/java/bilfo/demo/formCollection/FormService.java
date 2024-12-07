@@ -47,6 +47,7 @@ public class FormService {
             case FAIR -> form = new FairForm(new ObjectId(), approved, possibleDates, location, schoolId);
             case INDIVIDUAL_TOUR -> form = new IndividualTourForm(new ObjectId(), approved, possibleDates, visitorCount, visitorNotes, names, department);
             case HIGHSCHOOL_TOUR -> form = new HighSchoolTourForm(new ObjectId(), approved, possibleDates, visitorCount, visitorNotes, schoolId, counselorId);
+            default -> throw new IllegalArgumentException("Unknown EVENT_TYPE: " + type);
         }
 
         // Save the Form in the database

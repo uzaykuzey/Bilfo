@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document(collection = "users")
+@Document(collection = "user")
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {

@@ -1,4 +1,4 @@
-package bilfo.demo.formCollection;
+package bilfo.demo.logCollection;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @RestController
 @Repository
-public interface FormRepository extends MongoRepository<Form, ObjectId> {
-    public Optional<Form> findFormById(ObjectId id);
+public interface LogRepository extends MongoRepository<Log, ObjectId> {
+    public Optional<Log> findLogById(ObjectId id);
 }

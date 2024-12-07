@@ -1,6 +1,8 @@
 import "./userHome.css";
+import { useParams } from "react-router-dom";
 
 export default function UserHomeLayout() {
+  const { bilkentId } = useParams();
   return (
     <div className="home-layout">
       {/* Sidebar Navigation */}
@@ -65,7 +67,7 @@ export default function UserHomeLayout() {
               <div className="profile-header-details">
                 <h2>
                   Emir Görgülü
-                  <a href="/userHome/:bilkentId/settings" className="nav-link"><i className="fas fa-user-circle"></i> </a>
+                  <a href={`/userHome/${bilkentId}/settings`} className="nav-link"><i className="fas fa-user-circle"></i> </a>
                 </h2>
                 <h3>Guide</h3>
               </div>

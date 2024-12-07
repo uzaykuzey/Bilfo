@@ -51,10 +51,8 @@ public class UserManager {
 
     @PostMapping("/user/login")
     public ResponseEntity<String> login(@RequestBody Map<String, String> loginRequest) {
-        System.out.println("zort");
         int userId = Integer.parseInt(loginRequest.get("userId"));
         String password = loginRequest.get("password");
-        System.out.println("zort");
         // Authenticate the user
         Optional<User> user = userService.authenticate(userId, password);
 
@@ -65,6 +63,21 @@ public class UserManager {
             return new ResponseEntity<String>("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @PostMapping("/changeOwnUsername")
+    public ResponseEntity<String> changeOwnUsername( @RequestBody Map<String,Object> changeUserRequest) {
+        String username = (String) changeUserRequest.get("username");
+        String password = (String) changeUserRequest.get("password");
+        int id = Integer.parseInt(changeUserRequest.get("id").toString());
+        Optional<User> user = userService.authenticate(id,password);
+        if (user.isPresent()) {
+            userService.changeUsername(id,username);
+            return new ResponseEntity<String>("Change Username successful", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("Invalid credentials", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 }
 
 

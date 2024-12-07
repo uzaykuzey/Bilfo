@@ -136,10 +136,17 @@
     border-radius: 5px;
   }
   
-  .advisor-info {
-    background-color: #003f87;
+  .advisor-section {
+    background-color: #1e5aa8;
     color: white;
-    padding: 10px;
-    text-align: right;
-  }
+    padding: 1rem;
+    border-radius: 0.5rem;
+    position: absolute;
+    top: 1rem;
+    right: 2rem; /* Adjust for better alignment */
+    width: 300px;
+    text-align: center;
+    font-size: 1rem;
+    z-index: 10; /* Ensure it stays on top of other elements */
+}
   

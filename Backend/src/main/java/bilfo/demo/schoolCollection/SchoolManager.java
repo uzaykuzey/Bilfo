@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping
+@RequestMapping("/school")
 public class SchoolManager {
     @Autowired
     private SchoolService schoolService;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./userSettings.css";
+import api from "./api/axios_config"
 
 export default function UserSettingsLayout() {
   // State variables to handle form inputs
@@ -18,22 +19,16 @@ export default function UserSettingsLayout() {
       alert("Please fill out all fields for username change.");
       return;
     }
+    const usernameData = {username: username, password: passwordForUsername, id: bilkentId};
     try {
-      const response = await fetch(`/changeOwnUsername`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password: passwordForUsername, id: bilkentId }),
-      });
-      if (response.ok) {
+      const response = await api.post("/changeOwnUsername", usernameData);
+      if (response.status == 200) {
         alert("Username changed successfully!");
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.message}`);
       }
     } catch (error) {
-      console.error("Error changing username:", error);
       alert("Failed to change username.");
     }
   };
@@ -44,14 +39,9 @@ export default function UserSettingsLayout() {
       alert("Please fill out all fields for email change.");
       return;
     }
+    const emailData = {email: email, password: passwordForUsername, id: bilkentId};
     try {
-      const response = await fetch(`/changeOwnEmail/${bilkentId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password: passwordForEmail }),
-      });
+      const response = await api.post("/changeOwnEmail", emailData);
       if (response.ok) {
         alert("Email changed successfully!");
       } else {

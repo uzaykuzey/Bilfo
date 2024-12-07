@@ -78,6 +78,34 @@ public class UserManager {
         }
     }
 
+    @PostMapping("/changeOwnEmail")
+    public ResponseEntity<String> changeOwnEmail( @RequestBody Map<String,Object> changeUserRequest) {
+        String email = (String) changeUserRequest.get("email");
+        String password = (String) changeUserRequest.get("password");
+        int id = Integer.parseInt(changeUserRequest.get("id").toString());
+        Optional<User> user = userService.authenticate(id,password);
+        if (user.isPresent()) {
+            userService.changeEmail(id,email);
+            return new ResponseEntity<String>("Change Username successful", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("Invalid credentials", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/changeOwnPassword")
+    public ResponseEntity<String> changeOwnPassword( @RequestBody Map<String,Object> changeUserRequest) {
+        String newPassword = (String) changeUserRequest.get("newPassword");
+        String oldPassword = (String) changeUserRequest.get("oldPassword");
+        int id = Integer.parseInt(changeUserRequest.get("id").toString());
+        Optional<User> user = userService.authenticate(id,oldPassword);
+        if (user.isPresent()) {
+            userService.changePassword(id,newPassword);
+            return new ResponseEntity<String>("Change Username successful", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("Invalid credentials", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 }
 
 

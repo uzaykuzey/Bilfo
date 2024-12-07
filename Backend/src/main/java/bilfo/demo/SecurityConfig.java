@@ -25,8 +25,9 @@ public class SecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.POST, "/create","/user/login","/changeOwnUsername").permitAll()  // Allow unauthenticated access to /create
-                         // Require authentication for other endpoints
+                        .requestMatchers(HttpMethod.POST, "/create", "/user/login", "/changeOwnUsername"
+                                    ,"/changeOwnEmail","/changeOwnPassword").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable());

@@ -78,6 +78,20 @@ public class UserService {
             user.get().setUsername(username);
             userRepository.save(user.get());
         }
-
+    }
+    public void changeEmail(int bilkentId, String email){
+        Optional<User> user = userRepository.findByBilkentId(bilkentId);
+        if (user.isPresent()) {
+            user.get().setEmail(email);
+            userRepository.save(user.get());
+        }
+    }
+    public void changePassword(int bilkentId, String password){
+        Optional<User> user = userRepository.findByBilkentId(bilkentId);
+        if (user.isPresent()) {
+            String hashedPassword = passwordEncoder.encode(password);
+            user.get().setPassword(hashedPassword);
+            userRepository.save(user.get());
+        }
     }
 }

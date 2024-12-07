@@ -52,7 +52,6 @@ public class FormManager {
         else
         {
             School s=schoolService.createSchool(formApplication.get("school"), city).get();
-            schoolRepository.save(s);
             schoolId = s.getId();
         }
 
@@ -65,7 +64,6 @@ public class FormManager {
         else
         {
             Counselor c=counselorService.createCounselor(formApplication.get("name"), formApplication.get("email"), Integer.parseInt(formApplication.get("phoneNo")), schoolId).get();
-            counselorRepository.save(c);
             counselorId = c.getId();
         }
 
@@ -88,7 +86,6 @@ public class FormManager {
         Optional<Form> newForm = formService.createForm(EVENT_TYPES.HIGHSCHOOL_TOUR, false, dates, city, schoolId, visitorCount, visitorNotes, counselorId, null, DEPARTMENT.CS);
         if(newForm.isPresent())
         {
-            formRepository.save(newForm.get());
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
         }
         return new ResponseEntity<String>("Form creation failed", HttpStatus.BAD_REQUEST);

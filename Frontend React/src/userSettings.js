@@ -39,17 +39,16 @@ export default function UserSettingsLayout() {
       alert("Please fill out all fields for email change.");
       return;
     }
-    const emailData = {email: email, password: passwordForUsername, id: bilkentId};
+    const emailData = {email: email, password: passwordForEmail, id: bilkentId};
     try {
       const response = await api.post("/changeOwnEmail", emailData);
-      if (response.ok) {
+      if (response.status == 200) {
         alert("Email changed successfully!");
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.message}`);
       }
     } catch (error) {
-      console.error("Error changing email:", error);
       alert("Failed to change email.");
     }
   };
@@ -64,14 +63,9 @@ export default function UserSettingsLayout() {
       alert("New passwords do not match.");
       return;
     }
+    const passwordData = {newPassword: newPassword,oldPassword: oldPassword, id: bilkentId };
     try {
-      const response = await fetch(`/changeOwnPassword/${bilkentId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ oldPassword, newPassword }),
-      });
+      const response = await api.post("/changeOwnPassword",passwordData);
       if (response.ok) {
         alert("Password changed successfully!");
       } else {
@@ -79,7 +73,6 @@ export default function UserSettingsLayout() {
         alert(`Error: ${errorData.message}`);
       }
     } catch (error) {
-      console.error("Error changing password:", error);
       alert("Failed to change password.");
     }
   };

@@ -1,5 +1,6 @@
 package bilfo.demo.userCollection;
 
+import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import org.bson.types.ObjectId;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,8 +37,13 @@ public class UserManager {
         USER_STATUS status = USER_STATUS.valueOf(userRequest.get("status").toUpperCase());
         DEPARTMENT department = DEPARTMENT.valueOf(userRequest.get("department").toUpperCase());
 
+        DAY day = DAY.MONDAY;
+        if(status != USER_STATUS.GUIDE)
+        {
+            day = DAY.valueOf(userRequest.get("dayOfAdvisor").toUpperCase());
+        }
         // Attempt to create the user
-        Optional<User> newUser = userService.createUser(bilkentId, username, email, password, status, department);
+        Optional<User> newUser = userService.createUser(bilkentId, username, email, password, status, department, new ArrayList<>(),day);
 
         if (newUser.isPresent()) {
             return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
@@ -108,6 +115,8 @@ public class UserManager {
             return new ResponseEntity<String>("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
     }
+
+
 
 }
 

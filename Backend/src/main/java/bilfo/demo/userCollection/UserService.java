@@ -1,8 +1,10 @@
 package bilfo.demo.userCollection;
 
 
+import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
+import bilfo.demo.logCollection.Log;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +34,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department) {
+    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, DAY day) {
         logger.info("Creating user with ID: {}", bilkentId);
 
         // Check if user already exists
@@ -46,7 +49,16 @@ public class UserService {
         logger.info("Password hashed successfully for user ID: {}", bilkentId);
 
         // Create the new User object
-        User newUser = new User(new ObjectId(), bilkentId, status, username, email, hashedPassword, department);
+        User newUser;
+
+        if(status!=USER_STATUS.GUIDE)
+        {
+            newUser=new Advisor(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs, day);
+        }
+        else
+        {
+            newUser = new User(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs);
+        }
 
         // Save the user in the database
         User savedUser = userRepository.save(newUser);
@@ -92,5 +104,46 @@ public class UserService {
             user.get().setPassword(password);
             userRepository.save(user.get());
         }
+    }
+
+    public void addLog(ObjectId logId, int bilkentId)
+    {
+        Optional<User> user = userRepository.findByBilkentId(bilkentId);
+        if(!user.isPresent() || user.get().getLogs().contains(logId))
+        {
+            return;
+        }
+        user.get().getLogs().add(logId);
+        userRepository.save(user.get());
+    }
+
+    public void removeLog(ObjectId logId, int bilkentId)
+    {
+        Optional<User> user = userRepository.findByBilkentId(bilkentId);
+        if(!user.isPresent() || !user.get().getLogs().contains(logId))
+        {
+            return;
+        }
+        user.get().getLogs().remove(logId);
+        userRepository.save(user.get());
+    }
+
+    public List<User> getAdvisorsOfTheDay(DAY day)
+    {
+        Optional<List<User>> advisors = userRepository.findUsersByStatus(USER_STATUS.ADVISOR);
+        List<User> result = new ArrayList<>();
+        if(!advisors.isPresent())
+        {
+            return result;
+        }
+
+        for(User user : advisors.get())
+        {
+            if(((Advisor) user).getDayOfAdvisor() == day)
+            {
+                result.add(user);
+            }
+        }
+        return result;
     }
 }

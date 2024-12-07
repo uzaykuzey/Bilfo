@@ -11,8 +11,6 @@ import org.springframework.data.util.Pair;
 import java.util.Date;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 public class FairForm extends Form {
     private String location;
     private ObjectId schoolId;

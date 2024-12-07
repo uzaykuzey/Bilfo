@@ -12,8 +12,6 @@ import org.springframework.data.util.Pair;
 import java.util.Date;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 public class HighSchoolTourForm extends TourForm {
     private ObjectId schoolId;
     private ObjectId counselorId;

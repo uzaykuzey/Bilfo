@@ -12,8 +12,6 @@ import org.springframework.data.util.Pair;
 import java.util.Date;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 public class IndividualTourForm extends TourForm {
     private String[] names;
     private DEPARTMENT department;

@@ -1,6 +1,7 @@
 package bilfo.demo.logCollection;
 
 import bilfo.demo.enums.TOUR_TIMES;
+import bilfo.demo.userCollection.User;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,4 +47,6 @@ public class LogService {
 
         return Optional.of(savedLog);
     }
+
+
 }

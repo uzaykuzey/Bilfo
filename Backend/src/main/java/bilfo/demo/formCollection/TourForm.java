@@ -11,8 +11,6 @@ import org.springframework.data.util.Pair;
 import java.util.Date;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 public class TourForm extends Form {
     private int visitorCount;
     private String visitorNotes;

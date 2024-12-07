@@ -20,7 +20,7 @@ export default function HomeLayout() {
         </div>
 
         <div className="nav-links">
-          <a href="/campus-tours" className="nav-link">Campus Tours</a>
+          <a href="/" className="nav-link">Campus Tours</a>
           <a href="/fair-application" className="nav-link">Fair Application</a>
           <a href="/login" className="nav-link">Log In</a>
         </div>
@@ -45,7 +45,7 @@ export default function HomeLayout() {
 
         {/* Tour Application Buttons */}
         <div className="tour-links">
-          <a href="/school-tour" className="tour-link">School Tour Application</a>
+          <a href="/school_tours" className="tour-link">School Tour Application</a>
           <a href="/individual-tour" className="tour-link">Individual Tour Application</a>
         </div>
 

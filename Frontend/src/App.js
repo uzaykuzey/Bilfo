@@ -5,12 +5,14 @@ import HomeLayout from './home';
 import LoginForm from './login';
 import UserHomeLayout from './userHome';
 import UserSettingsLayout from './userSettings';
+import SchoolToursLayout from './school_tours';
 
 function  App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<HomeLayout />} />
+        <Route path="/school_tours" element={<SchoolToursLayout/>} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/userHome/:bilkentId" element={<UserHomeLayout/>} />
         <Route path="/userHome/:bilkentId/settings" element={<UserSettingsLayout/>} />

@@ -42,7 +42,7 @@ public class FormManager {
 
     @PostMapping("/hsform")
     public ResponseEntity<String> applyForHighschoolTour(@RequestBody Map<String, String> formApplication) {
-        Optional<School> schoolOptional=schoolRepository.findSchoolByName(formApplication.get("school"));
+        Optional<School> schoolOptional=schoolRepository.findSchoolByName(formApplication.get("schoolName"));
         ObjectId schoolId;
         CITIES city = CITIES.valueOf(formApplication.get("city").toUpperCase());
         if(schoolOptional.isPresent())
@@ -51,7 +51,7 @@ public class FormManager {
         }
         else
         {
-            School s=schoolService.createSchool(formApplication.get("school"), city).get();
+            School s=schoolService.createSchool(formApplication.get("schoolName"), city).get();
             schoolId = s.getId();
         }
 
@@ -63,7 +63,7 @@ public class FormManager {
         }
         else
         {
-            Counselor c=counselorService.createCounselor(formApplication.get("name"), formApplication.get("email"), Integer.parseInt(formApplication.get("phoneNo")), schoolId).get();
+            Counselor c=counselorService.createCounselor(formApplication.get("counselorName"), formApplication.get("email"), Integer.parseInt(formApplication.get("phoneNo")), schoolId).get();
             counselorId = c.getId();
         }
 

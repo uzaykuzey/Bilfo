@@ -63,10 +63,10 @@ export default function UserSettingsLayout() {
       alert("New passwords do not match.");
       return;
     }
-    const passwordData = {newPassword: newPassword,oldPassword: oldPassword, id: bilkentId };
+    const passwordData = {newPassword: newPassword,password: oldPassword, id: bilkentId };
     try {
       const response = await api.post("/changeOwnPassword",passwordData);
-      if (response.ok) {
+      if (response.status == 200) {
         alert("Password changed successfully!");
       } else {
         const errorData = await response.json();

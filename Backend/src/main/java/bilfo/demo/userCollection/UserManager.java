@@ -4,6 +4,7 @@ import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,8 @@ import java.util.Optional;
 public class UserManager {
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @GetMapping
     public ResponseEntity<List<User>> allUsers(){
         return new ResponseEntity<List<User>>(userService.allUsers(),HttpStatus.OK);
@@ -95,11 +97,12 @@ public class UserManager {
     @PostMapping("/changeOwnPassword")
     public ResponseEntity<String> changeOwnPassword( @RequestBody Map<String,Object> changeUserRequest) {
         String newPassword = (String) changeUserRequest.get("newPassword");
-        String oldPassword = (String) changeUserRequest.get("oldPassword");
+        String oldPassword = (String) changeUserRequest.get("password");
         int id = Integer.parseInt(changeUserRequest.get("id").toString());
         Optional<User> user = userService.authenticate(id,oldPassword);
         if (user.isPresent()) {
-            userService.changePassword(id,newPassword);
+            String hashedPassword = passwordEncoder.encode(newPassword);
+            userService.changePassword(id,hashedPassword);
             return new ResponseEntity<String>("Change Username successful", HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Invalid credentials", HttpStatus.UNAUTHORIZED);

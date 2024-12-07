@@ -28,7 +28,6 @@ export default function LoginForm() {
         alert(response.data.message || "Invalid credentials. Please try again.");
       }
     } catch (error) {
-      console.error("Login error:", error);
       
       if (error.response) {
         alert(`Error: ${error.response.data.message || "An error occurred. Please try again later."}`);

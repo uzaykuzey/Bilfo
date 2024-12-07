@@ -89,8 +89,7 @@ public class UserService {
     public void changePassword(int bilkentId, String password){
         Optional<User> user = userRepository.findByBilkentId(bilkentId);
         if (user.isPresent()) {
-            String hashedPassword = passwordEncoder.encode(password);
-            user.get().setPassword(hashedPassword);
+            user.get().setPassword(password);
             userRepository.save(user.get());
         }
     }

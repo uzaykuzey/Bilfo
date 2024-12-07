@@ -65,7 +65,7 @@ export default function UserHomeLayout() {
               <div className="profile-header-details">
                 <h2>
                   Emir Görgülü
-                  <a><i className="fas fa-user-circle"></i> </a>
+                  <a href="/userHome/:bilkentId/settings" className="nav-link"><i className="fas fa-user-circle"></i> </a>
                 </h2>
                 <h3>Guide</h3>
               </div>

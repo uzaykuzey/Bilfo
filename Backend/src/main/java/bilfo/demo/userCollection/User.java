@@ -1,8 +1,9 @@
-package bilfo.demo;
+package bilfo.demo.userCollection;
+import bilfo.demo.enums.DEPARTMENT;
+import bilfo.demo.enums.USER_STATUS;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

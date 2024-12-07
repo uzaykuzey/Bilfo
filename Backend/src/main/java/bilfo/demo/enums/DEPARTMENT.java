@@ -1,4 +1,4 @@
-package bilfo.demo;
+package bilfo.demo.enums;
 
 public enum DEPARTMENT {
     AMER,

@@ -1,6 +1,8 @@
-package bilfo.demo;
+package bilfo.demo.userCollection;
 
 
+import bilfo.demo.enums.DEPARTMENT;
+import bilfo.demo.enums.USER_STATUS;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

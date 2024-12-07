@@ -1,4 +1,4 @@
-package bilfo.demo;
+package bilfo.demo.userCollection;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;

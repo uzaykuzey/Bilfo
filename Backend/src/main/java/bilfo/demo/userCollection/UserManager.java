@@ -1,5 +1,7 @@
-package bilfo.demo;
+package bilfo.demo.userCollection;
 
+import bilfo.demo.enums.DEPARTMENT;
+import bilfo.demo.enums.USER_STATUS;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/form")
 public class FormManager {
     @Autowired
     private FormService formService;

@@ -29,22 +29,23 @@ public class SchoolService {
         return schoolRepository.findById(id);
     }
 
-    public Optional<School> createSchool(ObjectId id, String name, String location, ObjectId counselorId) {
-        logger.info("Creating school with id: {}", name);
+    public Optional<School> createSchool(String name, String location, ObjectId counselorId) {
+        logger.info("Creating school with name: {}", name);
 
         // Check if school already exists
-        Optional<School> existingUser = schoolRepository.findSchoolById(id);
+        //TODO
+        /*Optional<School> existingUser = schoolRepository.findSchoolById(id);
         if (existingUser.isPresent()) {
             logger.warn("School with ID {} already exists. User creation failed.", id);
             return Optional.empty();
-        }
+        }*/
 
         // Create the new School object
-        School school = new School(id, name, location, counselorId);
+        School school = new School(new ObjectId(), name, location, counselorId);
 
         // Save the school in the database
         School savedSchool = schoolRepository.save(school);
-        logger.info("School with ID {} created successfully.", id);
+        logger.info("School with ID {} created successfully.", school.getId());
 
         return Optional.of(savedSchool);
     }

@@ -14,6 +14,7 @@ public class Counselor {
     @Id
     private ObjectId id;
 
+    private String name;
     private String email;
     private int phoneNo;
     private ObjectId schoolId;

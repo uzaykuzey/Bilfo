@@ -46,7 +46,7 @@ export default function HomeLayout() {
         {/* Tour Application Buttons */}
         <div className="tour-links">
           <a href="/school_tours" className="tour-link">School Tour Application</a>
-          <a href="/individual-tour" className="tour-link">Individual Tour Application</a>
+          <a href="/individual_tours" className="tour-link">Individual Tour Application</a>
         </div>
 
         {/* Content Description */}

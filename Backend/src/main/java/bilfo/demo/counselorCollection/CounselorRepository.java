@@ -12,4 +12,5 @@ import java.util.Optional;
 @Repository
 public interface CounselorRepository extends MongoRepository<Counselor, ObjectId> {
     public Optional<Counselor> findCounselorById(ObjectId id);
+    public Optional<Counselor> findCounselorByEmail(String email);
 }

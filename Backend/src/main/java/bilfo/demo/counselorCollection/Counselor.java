@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -15,6 +16,7 @@ public class Counselor {
     private ObjectId id;
 
     private String name;
+    @Indexed(unique = true)
     private String email;
     private int phoneNo;
     private ObjectId schoolId;

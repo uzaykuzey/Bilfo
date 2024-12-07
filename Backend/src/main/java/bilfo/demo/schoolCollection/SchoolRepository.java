@@ -11,5 +11,6 @@ import java.util.Optional;
 @RestController
 @Repository
 public interface SchoolRepository extends MongoRepository<School, ObjectId> {
-    public Optional<School> findEventById(ObjectId id);
+    public Optional<School> findSchoolById(ObjectId id);
+    public Optional<School> findSchoolByName(String name);
 }

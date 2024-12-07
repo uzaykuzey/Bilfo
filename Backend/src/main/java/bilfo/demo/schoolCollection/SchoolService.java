@@ -1,6 +1,7 @@
 package bilfo.demo.schoolCollection;
 
 
+import bilfo.demo.enums.CITIES;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import bilfo.demo.userCollection.User;
@@ -29,7 +30,7 @@ public class SchoolService {
         return schoolRepository.findById(id);
     }
 
-    public Optional<School> createSchool(String name, String location, ObjectId counselorId) {
+    public Optional<School> createSchool(String name, CITIES location) {
         logger.info("Creating school with name: {}", name);
 
         // Check if school already exists
@@ -41,7 +42,7 @@ public class SchoolService {
         }*/
 
         // Create the new School object
-        School school = new School(new ObjectId(), name, location, counselorId);
+        School school = new School(new ObjectId(), name, location);
 
         // Save the school in the database
         School savedSchool = schoolRepository.save(school);

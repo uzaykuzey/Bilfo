@@ -67,7 +67,7 @@ public class UserService {
         return Optional.of(savedUser);
     }
 
-    public Optional<User> authenticate(int bilkentId, String password){
+    public Optional<User> authenticate(int bilkentId, String password) {
 
         Optional<User> user = userRepository.findByBilkentId(bilkentId);
 
@@ -128,10 +128,10 @@ public class UserService {
         userRepository.save(user.get());
     }
 
-    public List<User> getAdvisorsOfTheDay(DAY day)
+    public List<Advisor> getAdvisorsOfTheDay(DAY day)
     {
         Optional<List<User>> advisors = userRepository.findUsersByStatus(USER_STATUS.ADVISOR);
-        List<User> result = new ArrayList<>();
+        List<Advisor> result = new ArrayList<>();
         if(!advisors.isPresent())
         {
             return result;
@@ -141,7 +141,7 @@ public class UserService {
         {
             if(((Advisor) user).getDayOfAdvisor() == day)
             {
-                result.add(user);
+                result.add((Advisor) user);
             }
         }
         return result;

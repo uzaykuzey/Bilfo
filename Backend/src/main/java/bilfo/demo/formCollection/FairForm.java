@@ -1,5 +1,6 @@
 package bilfo.demo.formCollection;
 
+import bilfo.demo.enums.CITIES;
 import bilfo.demo.enums.EVENT_TYPES;
 import bilfo.demo.enums.TOUR_TIMES;
 import lombok.AllArgsConstructor;
@@ -12,10 +13,10 @@ import java.util.Date;
 import java.util.List;
 
 public class FairForm extends Form {
-    private String location;
+    private CITIES location;
     private ObjectId schoolId;
 
-    public FairForm(ObjectId id, boolean approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, String location, ObjectId schoolId) {
+    public FairForm(ObjectId id, boolean approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, CITIES location, ObjectId schoolId) {
         super(id, approved, possibleTimes, EVENT_TYPES.FAIR);
         this.location = location;
         this.schoolId = schoolId;

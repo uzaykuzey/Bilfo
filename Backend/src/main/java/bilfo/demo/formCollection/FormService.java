@@ -1,6 +1,7 @@
 package bilfo.demo.formCollection;
 
 
+import bilfo.demo.enums.CITIES;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.EVENT_TYPES;
 import bilfo.demo.enums.TOUR_TIMES;
@@ -30,7 +31,7 @@ public class FormService {
         return formRepository.findById(id);
     }
 
-    public Optional<Form> createForm(EVENT_TYPES type, boolean approved, List<Pair<Date, TOUR_TIMES>> possibleDates, String location, ObjectId schoolId, int visitorCount, String visitorNotes, ObjectId counselorId, String[] names, DEPARTMENT department) {
+    public Optional<Form> createForm(EVENT_TYPES type, boolean approved, List<Pair<Date, TOUR_TIMES>> possibleDates, CITIES city, ObjectId schoolId, int visitorCount, String visitorNotes, ObjectId counselorId, String[] names, DEPARTMENT department) {
         logger.info("Creating Form");
 
         // Check if Form already exists
@@ -44,9 +45,9 @@ public class FormService {
         Form form = new Form();
         switch (type)
         {
-            case FAIR -> form = new FairForm(new ObjectId(), approved, possibleDates, location, schoolId);
+            case FAIR -> form = new FairForm(new ObjectId(), approved, possibleDates, city, schoolId);
             case INDIVIDUAL_TOUR -> form = new IndividualTourForm(new ObjectId(), approved, possibleDates, visitorCount, visitorNotes, names, department);
-            case HIGHSCHOOL_TOUR -> form = new HighSchoolTourForm(new ObjectId(), approved, possibleDates, visitorCount, visitorNotes, schoolId, counselorId);
+            case HIGHSCHOOL_TOUR -> form = new HighSchoolTourForm(new ObjectId(), approved, possibleDates, visitorCount, visitorNotes, schoolId, counselorId, city);
             default -> throw new IllegalArgumentException("Unknown EVENT_TYPE: " + type);
         }
 
@@ -55,5 +56,10 @@ public class FormService {
         logger.info("Form created successfully.");
 
         return Optional.of(savedForm);
+    }
+
+    public Form createHighschoolForm(List<Pair<Date, TOUR_TIMES>> possibleDates, String location, ObjectId schoolId, ObjectId counselorId)
+    {
+        return null;
     }
 }

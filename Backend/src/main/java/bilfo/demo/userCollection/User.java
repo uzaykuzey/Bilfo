@@ -30,4 +30,5 @@ public class User {
     private List<ObjectId> logs;
     private List<ObjectId> suggestedEvents;
     private boolean trainee;
+    private boolean[] availability;
 }

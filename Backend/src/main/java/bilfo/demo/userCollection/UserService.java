@@ -34,7 +34,11 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, DAY day) {
+    public Optional<User> getUser(int bilkentId){
+        return userRepository.findByBilkentId(bilkentId);
+    }
+
+    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability, DAY day) {
         logger.info("Creating user with ID: {}", bilkentId);
 
         // Check if user already exists
@@ -53,11 +57,11 @@ public class UserService {
 
         if(status!=USER_STATUS.GUIDE)
         {
-            newUser=new Advisor(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs, suggestedEvents, day);
+            newUser=new Advisor(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs, suggestedEvents, availability, day);
         }
         else
         {
-            newUser = new User(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs, suggestedEvents, trainee);
+            newUser = new User(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs, suggestedEvents, trainee, availability);
         }
 
         // Save the user in the database
@@ -102,6 +106,14 @@ public class UserService {
         Optional<User> user = userRepository.findByBilkentId(bilkentId);
         if (user.isPresent()) {
             user.get().setPassword(password);
+            userRepository.save(user.get());
+        }
+    }
+
+    public void changeAvailability(int bilkentId, int slot, boolean availability){
+        Optional<User> user = userRepository.findByBilkentId(bilkentId);
+        if (user.isPresent()) {
+            user.get().getAvailability()[slot] = availability;
             userRepository.save(user.get());
         }
     }

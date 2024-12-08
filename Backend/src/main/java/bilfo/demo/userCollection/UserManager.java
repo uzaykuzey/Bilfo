@@ -48,7 +48,7 @@ public class UserManager {
             trainee = Boolean.parseBoolean(userRequest.get("trainee"));
         }
         // Attempt to create the user
-        Optional<User> newUser = userService.createUser(bilkentId, username, email, password, status, department, new ArrayList<>(), new ArrayList<>(), trainee, day);
+        Optional<User> newUser = userService.createUser(bilkentId, username, email, password, status, department, new ArrayList<>(), new ArrayList<>(), trainee, new boolean[77], day);
 
         if (newUser.isPresent()) {
             return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
@@ -121,8 +121,19 @@ public class UserManager {
         }
     }
 
+    @PostMapping("/changeAvailability")
+    public ResponseEntity<String> changeAvailability(@RequestBody Map<String,String> changeUserRequest) {
+        int id = Integer.parseInt(changeUserRequest.get("id"));
+        int slot = Integer.parseInt(changeUserRequest.get("slot"));
+        boolean availability = Boolean.parseBoolean(changeUserRequest.get("availability"));
 
-
+        Optional<User> user = userService.getUser(id);
+        if(user.isPresent()) {
+            userService.changeAvailability(id, slot, availability);
+            return new ResponseEntity<String>("Change availability successful", HttpStatus.OK);
+        }
+        return new ResponseEntity<String>("No User", HttpStatus.BAD_REQUEST);
+    }
 }
 
 

@@ -1,7 +1,6 @@
 package bilfo.demo.enums;
 
-public enum CITIES
-{
+public enum CITIES {
     ADANA,
     ADIYAMAN,
     AFYONKARAHISAR,
@@ -23,10 +22,10 @@ public enum CITIES
     BOLU,
     BURDUR,
     BURSA,
-    CAGRI,
     CANAKKALE,
     CANKIRI,
     CORUM,
+    DENIZLI,
     DIYARBAKIR,
     DUZCE,
     EDIRNE,
@@ -36,7 +35,6 @@ public enum CITIES
     ESKISEHIR,
     GAZIANTEP,
     GIRESUN,
-    GOKCEADA,
     GUMUSHANE,
     HAKKARI,
     HATAY,
@@ -74,6 +72,7 @@ public enum CITIES
     SIIRT,
     SINOP,
     SIVAS,
+    SIRNAK,
     TEKIRDAG,
     TOKAT,
     TRABZON,

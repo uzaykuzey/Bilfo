@@ -7,7 +7,6 @@ import bilfo.demo.enums.*;
 import bilfo.demo.schoolCollection.School;
 import bilfo.demo.schoolCollection.SchoolRepository;
 import bilfo.demo.schoolCollection.SchoolService;
-import bilfo.demo.userCollection.User;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -32,8 +31,6 @@ public class FormManager {
     private CounselorRepository counselorRepository;
     @Autowired
     private CounselorService counselorService;
-    @Autowired
-    private FormRepository formRepository;
 
     @GetMapping
     public ResponseEntity<List<Form>> allForms() {
@@ -67,6 +64,42 @@ public class FormManager {
             counselorId = c.getId();
         }
 
+        List<Pair<Date, TOUR_TIMES>> dates=createPossibleTimes(formApplication);
+
+        int visitorCount=Integer.parseInt(formApplication.get("visitorCount"));
+        String visitorNotes=formApplication.get("visitorNotes");
+
+        Optional<Form> newForm = formService.createForm(EVENT_TYPES.HIGHSCHOOL_TOUR, false, dates, city, schoolId, visitorCount, visitorNotes, counselorId, null, DEPARTMENT.CS);
+        if(newForm.isPresent())
+        {
+            return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
+        }
+        return new ResponseEntity<String>("Form creation failed", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/indform")
+    public ResponseEntity<String> applyForIndividualTour(@RequestBody Map<String, String> formApplication)
+    {
+        String[] names = formApplication.get("names").split(",");
+        DEPARTMENT department = DEPARTMENT.valueOf(formApplication.get("department"));
+        int visitorCount=Integer.parseInt(formApplication.get("visitorCount"));
+        if(visitorCount != names.length)
+        {
+            throw new IllegalArgumentException("name count != visitor count");
+        }
+        String visitorNotes=formApplication.get("visitorNotes");
+
+        List<Pair<Date, TOUR_TIMES>> dates=createPossibleTimes(formApplication);
+
+        Optional<Form> newForm = formService.createForm(EVENT_TYPES.INDIVIDUAL_TOUR, false, dates, CITIES.ANKARA, null, visitorCount, visitorNotes, null, names, department);
+        if(newForm.isPresent())
+        {
+            return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
+        }
+        return new ResponseEntity<String>("Form creation failed", HttpStatus.BAD_REQUEST);
+    }
+
+    private List<Pair<Date, TOUR_TIMES>> createPossibleTimes(Map<String, String> formApplication) {
         TOUR_TIMES time1 = stringToEnum(formApplication.get("time1"));
         TOUR_TIMES time2 = stringToEnum(formApplication.get("time2"));
         TOUR_TIMES time3 = stringToEnum(formApplication.get("time3"));
@@ -79,16 +112,7 @@ public class FormManager {
         dates.add(Pair.of(date1, time1));
         dates.add(Pair.of(date2, time2));
         dates.add(Pair.of(date3, time3));
-
-        int visitorCount=Integer.parseInt(formApplication.get("visitorCount"));
-        String visitorNotes=formApplication.get("visitorNotes");
-
-        Optional<Form> newForm = formService.createForm(EVENT_TYPES.HIGHSCHOOL_TOUR, false, dates, city, schoolId, visitorCount, visitorNotes, counselorId, null, DEPARTMENT.CS);
-        if(newForm.isPresent())
-        {
-            return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
-        }
-        return new ResponseEntity<String>("Form creation failed", HttpStatus.BAD_REQUEST);
+        return dates;
     }
 
     public static TOUR_TIMES stringToEnum(String timeString) {

@@ -19,8 +19,8 @@ public class Event {
     @Id
     private ObjectId id;
     private ObjectId originalForm;
-    private ObjectId[] guides;
-    private ObjectId[] trainees;
+    private int[] guides; //store bilkent ids
+    private int[] trainees;
     private EVENT_TYPES eventType;
     private Date date;
     private TOUR_TIMES time;

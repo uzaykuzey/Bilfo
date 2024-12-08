@@ -1,5 +1,6 @@
 package bilfo.demo.userCollection;
 
+import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import org.bson.types.ObjectId;
@@ -38,11 +39,11 @@ public class UserManager {
         USER_STATUS status = USER_STATUS.valueOf(userRequest.get("status").toUpperCase());
         DEPARTMENT department = DEPARTMENT.valueOf(userRequest.get("department").toUpperCase());
 
-        DayOfWeek day = DayOfWeek.MONDAY;
+        DAY day = DAY.NOT_ASSIGNED;
         boolean trainee = false;
         if(status != USER_STATUS.GUIDE)
         {
-            day = DayOfWeek.valueOf(userRequest.get("dayOfAdvisor").toUpperCase());
+            day = DAY.valueOf(userRequest.get("dayOfAdvisor").toUpperCase());
         }
         else
         {
@@ -139,7 +140,34 @@ public class UserManager {
     @PostMapping("/getAdvisorsOfTheDay")
     public ResponseEntity<List<Advisor>> getAdvisorsOfTheDay()
     {
-        return new ResponseEntity<>(userService.getAdvisorsOfTheDay(LocalDate.now().getDayOfWeek()), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAdvisorsOfTheDay(getCurrentDay()), HttpStatus.OK);
+    }
+
+    private DAY getCurrentDay() {
+        return switch (LocalDate.now().getDayOfWeek()) {
+            case MONDAY -> DAY.MONDAY;
+            case TUESDAY -> DAY.TUESDAY;
+            case WEDNESDAY -> DAY.WEDNESDAY;
+            case THURSDAY -> DAY.THURSDAY;
+            case FRIDAY -> DAY.FRIDAY;
+            case SATURDAY -> DAY.SATURDAY;
+            case SUNDAY -> DAY.SUNDAY;
+        };
+    }
+
+    @PostMapping("/promoteUser")
+    public ResponseEntity<String> promoteUser(@RequestBody Map<String,String> promoteRequest) {
+        int bilkentId = Integer.parseInt(promoteRequest.get("bilkentId"));
+        DAY day=DAY.NOT_ASSIGNED;
+        if(promoteRequest.containsKey("day"))
+        {
+            day=DAY.valueOf(promoteRequest.get("day").toUpperCase());
+        }
+        if(userService.promote(bilkentId, day))
+        {
+            return new ResponseEntity<>("successful promotion!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("user can't be promoted", HttpStatus.BAD_REQUEST);
     }
 }
 

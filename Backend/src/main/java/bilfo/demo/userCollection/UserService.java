@@ -1,6 +1,7 @@
 package bilfo.demo.userCollection;
 
 
+import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import org.bson.types.ObjectId;
@@ -37,7 +38,7 @@ public class UserService {
         return userRepository.findByBilkentId(bilkentId);
     }
 
-    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability, DayOfWeek day) {
+    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability, DAY day) {
         logger.info("Creating user with ID: {}", bilkentId);
 
         // Check if user already exists
@@ -139,7 +140,7 @@ public class UserService {
         userRepository.save(user.get());
     }
 
-    public List<Advisor> getAdvisorsOfTheDay(DayOfWeek day)
+    public List<Advisor> getAdvisorsOfTheDay(DAY day)
     {
         Optional<List<User>> advisors = userRepository.findUsersByStatus(USER_STATUS.ADVISOR);
         List<Advisor> result = new ArrayList<>();
@@ -156,5 +157,57 @@ public class UserService {
             }
         }
         return result;
+    }
+
+    public boolean promote(int bilkentId, DAY day)
+    {
+        Optional<User> user = userRepository.findByBilkentId(bilkentId);
+        if(!user.isPresent())
+        {
+            return false;
+        }
+
+        return switch (user.get().getStatus()) {
+            case GUIDE -> promoteToAdvisor((Guide) user.get(), day);
+            case ADVISOR -> promoteToCoordinator((Advisor) user.get());
+            default -> false;
+        };
+    }
+
+    private boolean promoteToAdvisor(Guide guide, DAY day)
+    {
+        int bilkentId = guide.getBilkentId();
+        String username = guide.getUsername();
+        String email = guide.getEmail();
+        String password = guide.getPassword();
+        DEPARTMENT department = guide.getDepartment();
+        List<ObjectId> logs = guide.getLogs();
+        List<ObjectId> suggestedEvents = guide.getSuggestedEvents();
+        boolean[] availability = guide.getAvailability();
+
+        userRepository.deleteById(guide.getId());
+        this.createUser(bilkentId, username, email, password, USER_STATUS.ADVISOR, department, logs, suggestedEvents, false, availability, day);
+        return true;
+    }
+
+    private boolean promoteToCoordinator(Advisor advisor)
+    {
+        Optional<List<User>> coordinators = userRepository.findUsersByStatus(USER_STATUS.COORDINATOR);
+        if(coordinators.isPresent() && !coordinators.get().isEmpty())
+        {
+            return false;
+        }
+
+        int bilkentId = advisor.getBilkentId();
+        String username = advisor.getUsername();
+        String email = advisor.getEmail();
+        String password = advisor.getPassword();
+        DEPARTMENT department = advisor.getDepartment();
+        List<ObjectId> logs = advisor.getLogs();
+        List<ObjectId> suggestedEvents = advisor.getSuggestedEvents();
+        boolean[] availability = advisor.getAvailability();
+
+        this.createUser(bilkentId, username, email, password, USER_STATUS.COORDINATOR, department, logs, suggestedEvents, false, availability, DAY.NOT_ASSIGNED);
+        return true;
     }
 }

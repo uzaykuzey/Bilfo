@@ -21,7 +21,7 @@ export default function SchoolToursForm() {
         formErrors: {} // Store validation errors here
     });
 
-    const timeOptions = ["9.00", "11.00", "13.30", "1600"];
+    const timeOptions = ["9.00", "11.00", "13.30", "16.00"];
     const cities = [
         "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir",
         "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır",

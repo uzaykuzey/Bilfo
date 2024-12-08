@@ -18,6 +18,6 @@ public class Counselor {
     private String name;
     @Indexed(unique = true)
     private String email;
-    private int phoneNo;
+    private String phoneNo;
     private ObjectId schoolId;
 }

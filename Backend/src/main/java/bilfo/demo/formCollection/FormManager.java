@@ -60,7 +60,7 @@ public class FormManager {
         }
         else
         {
-            Counselor c=counselorService.createCounselor(formApplication.get("counselorName"), formApplication.get("email"), Integer.parseInt(formApplication.get("phoneNo")), schoolId).get();
+            Counselor c=counselorService.createCounselor(formApplication.get("counselorName"), formApplication.get("email"), formApplication.get("phoneNo"), schoolId).get();
             counselorId = c.getId();
         }
 

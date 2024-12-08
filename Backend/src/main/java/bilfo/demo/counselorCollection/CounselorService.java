@@ -26,7 +26,7 @@ public class CounselorService {
         return counselorRepository.findById(id);
     }
 
-    public Optional<Counselor> createCounselor(String name, String email, int phoneNo, ObjectId schoolId) {
+    public Optional<Counselor> createCounselor(String name, String email, String phoneNo, ObjectId schoolId) {
         logger.info("Creating counselor with name: {}", name);
 
         // Check if counselor already exists

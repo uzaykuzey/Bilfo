@@ -99,6 +99,36 @@ public class FormManager {
         return new ResponseEntity<String>("Form creation failed", HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/fairform")
+    public ResponseEntity<String> applyForFair(@RequestBody Map<String, String> formApplication)
+    {
+        Optional<School> schoolOptional=schoolRepository.findSchoolByName(formApplication.get("schoolName"));
+        ObjectId schoolId;
+        CITIES city = CITIES.valueOf(formApplication.get("city").toUpperCase());
+        if(schoolOptional.isPresent())
+        {
+            schoolId=schoolOptional.get().getId();
+        }
+        else
+        {
+            School s=schoolService.createSchool(formApplication.get("schoolName"), city).get();
+            schoolId = s.getId();
+        }
+
+        TOUR_TIMES time = stringToEnum(formApplication.get("time"));
+        Date date = stringToDate(formApplication.get("date"));
+
+        List<Pair<Date, TOUR_TIMES>> dates=new ArrayList<>();
+        dates.add(Pair.of(date, time));
+
+        Optional<Form> newForm=formService.createForm(EVENT_TYPES.FAIR, false, dates, city, schoolId, 0, "", null, null, DEPARTMENT.CS);
+        if(newForm.isPresent())
+        {
+            return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
+        }
+        return new ResponseEntity<String>("Form creation failed", HttpStatus.BAD_REQUEST);
+    }
+
     private List<Pair<Date, TOUR_TIMES>> createPossibleTimes(Map<String, String> formApplication) {
         TOUR_TIMES time1 = stringToEnum(formApplication.get("time1"));
         TOUR_TIMES time2 = stringToEnum(formApplication.get("time2"));

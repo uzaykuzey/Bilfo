@@ -1,6 +1,5 @@
 package bilfo.demo.userCollection;
 
-import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import org.bson.types.ObjectId;
@@ -10,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +38,11 @@ public class UserManager {
         USER_STATUS status = USER_STATUS.valueOf(userRequest.get("status").toUpperCase());
         DEPARTMENT department = DEPARTMENT.valueOf(userRequest.get("department").toUpperCase());
 
-        DAY day = DAY.MONDAY;
+        DayOfWeek day = DayOfWeek.MONDAY;
         boolean trainee = false;
         if(status != USER_STATUS.GUIDE)
         {
-            day = DAY.valueOf(userRequest.get("dayOfAdvisor").toUpperCase());
+            day = DayOfWeek.valueOf(userRequest.get("dayOfAdvisor").toUpperCase());
         }
         else
         {
@@ -133,6 +134,12 @@ public class UserManager {
             return new ResponseEntity<String>("Change availability successful", HttpStatus.OK);
         }
         return new ResponseEntity<String>("No User", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/getAdvisorsOfTheDay")
+    public ResponseEntity<List<Advisor>> getAdvisorsOfTheDay()
+    {
+        return new ResponseEntity<>(userService.getAdvisorsOfTheDay(LocalDate.now().getDayOfWeek()), HttpStatus.OK);
     }
 }
 

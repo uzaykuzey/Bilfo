@@ -1,10 +1,8 @@
 package bilfo.demo.userCollection;
 
 
-import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
-import bilfo.demo.logCollection.Log;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +37,7 @@ public class UserService {
         return userRepository.findByBilkentId(bilkentId);
     }
 
-    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability, DAY day) {
+    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability, DayOfWeek day) {
         logger.info("Creating user with ID: {}", bilkentId);
 
         // Check if user already exists
@@ -140,7 +139,7 @@ public class UserService {
         userRepository.save(user.get());
     }
 
-    public List<Advisor> getAdvisorsOfTheDay(DAY day)
+    public List<Advisor> getAdvisorsOfTheDay(DayOfWeek day)
     {
         Optional<List<User>> advisors = userRepository.findUsersByStatus(USER_STATUS.ADVISOR);
         List<Advisor> result = new ArrayList<>();

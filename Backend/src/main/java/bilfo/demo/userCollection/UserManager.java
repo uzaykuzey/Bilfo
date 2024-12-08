@@ -38,12 +38,17 @@ public class UserManager {
         DEPARTMENT department = DEPARTMENT.valueOf(userRequest.get("department").toUpperCase());
 
         DAY day = DAY.MONDAY;
+        boolean trainee = false;
         if(status != USER_STATUS.GUIDE)
         {
             day = DAY.valueOf(userRequest.get("dayOfAdvisor").toUpperCase());
         }
+        else
+        {
+            trainee = Boolean.parseBoolean(userRequest.get("trainee"));
+        }
         // Attempt to create the user
-        Optional<User> newUser = userService.createUser(bilkentId, username, email, password, status, department, new ArrayList<>(),day);
+        Optional<User> newUser = userService.createUser(bilkentId, username, email, password, status, department, new ArrayList<>(), new ArrayList<>(), trainee, day);
 
         if (newUser.isPresent()) {
             return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);

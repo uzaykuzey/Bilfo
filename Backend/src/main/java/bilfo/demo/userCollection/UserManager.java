@@ -73,7 +73,7 @@ public class UserManager {
 
         if (user.isPresent()) {
             // You can return a JWT token or any other response after successful login
-            return new ResponseEntity<String>("Login successful", HttpStatus.OK);
+            return new ResponseEntity<String>(user.get().getStatus().toString(), HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }

@@ -1,8 +1,19 @@
 import "./userHome.css";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function UserHomeLayout() {
   const { bilkentId } = useParams();
+  const {state} = useLocation();
+  const navigate = useNavigate();
+  const { statusUser } = state;
+
+  console.log(statusUser);
+  const goToGuideList = (e) => {
+    e.preventDefault(); // Prevent the default anchor behavior
+    navigate(`/userHome/${bilkentId}/guide_list`, { state: { statusUser } });
+  };
   return (
     <div className="home-layout">
       {/* Sidebar Navigation */}
@@ -24,6 +35,12 @@ export default function UserHomeLayout() {
         <div className="nav-links">
           <a href="/profile" className="nav-link">Profile</a>
           <a href="/tours-fairs" className="nav-link">Tours and Fairs</a>
+          
+          {/* Conditionally render Guide List link for Advisors */}
+          {statusUser == "ADVISOR" && (
+            <a className="nav-link" onClick={goToGuideList}>Guide List</a>
+          )}
+
           <a href="/puantaj" className="nav-link">Puantaj Table</a>
           <a href="/logout" className="nav-link">Log Out</a>
         </div>
@@ -69,7 +86,7 @@ export default function UserHomeLayout() {
                   Emir Görgülü
                   <a href={`/userHome/${bilkentId}/settings`} className="nav-link"><i className="fas fa-user-circle"></i> </a>
                 </h2>
-                <h3>Guide</h3>
+                <h3>{statusUser == 'ADVISOR' ? "Advisor" : "Guide"}</h3>
               </div>
             </div>
 
@@ -77,7 +94,7 @@ export default function UserHomeLayout() {
             <div className="profile-details">
               <p><strong>Username:</strong> Emir Görgülü</p>
               <p><strong>E-mail:</strong> emir.gorgulu@ug.bilkent.edu.tr</p>
-              <p><strong>Role:</strong> Guide</p>
+              <p><strong>Role:</strong> {statusUser}</p>
               <p><strong>Total Hours of Service:</strong> 12</p>
             </div>
 

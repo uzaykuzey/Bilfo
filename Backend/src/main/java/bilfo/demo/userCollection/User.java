@@ -25,7 +25,9 @@ public class User {
     private USER_STATUS status;
     private String username;
     private String email;
-    private String password; // Store hashed passwords in real applications
+    private String password; // Store hashed passwords
     private DEPARTMENT department;
     private List<ObjectId> logs;
+    private List<ObjectId> suggestedEvents;
+    private boolean trainee;
 }

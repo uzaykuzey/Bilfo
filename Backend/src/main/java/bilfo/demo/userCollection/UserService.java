@@ -34,7 +34,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, DAY day) {
+    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, DAY day) {
         logger.info("Creating user with ID: {}", bilkentId);
 
         // Check if user already exists
@@ -53,11 +53,11 @@ public class UserService {
 
         if(status!=USER_STATUS.GUIDE)
         {
-            newUser=new Advisor(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs, day);
+            newUser=new Advisor(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs, suggestedEvents, day);
         }
         else
         {
-            newUser = new User(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs);
+            newUser = new User(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs, suggestedEvents, trainee);
         }
 
         // Save the user in the database

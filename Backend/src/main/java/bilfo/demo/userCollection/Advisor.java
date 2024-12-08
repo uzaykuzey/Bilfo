@@ -10,17 +10,16 @@ import java.util.List;
 public class Advisor extends Guide {
     private DAY dayOfAdvisor;
 
-    public Advisor(ObjectId id, int bilkentID, USER_STATUS status, String username, String email, String password, DEPARTMENT department, DAY dayOfAdvisor) {
-        super(id, bilkentID, status, username, email, password, department);
+    public Advisor(ObjectId id, int bilkentID, USER_STATUS status, String username, String email, String password, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, DAY dayOfAdvisor) {
+        super(id, bilkentID, status, username, email, password, department, logs, suggestedEvents, false);
         this.dayOfAdvisor = dayOfAdvisor;
-    }
-
-    public Advisor(ObjectId id, int bilkentID, USER_STATUS status, String username, String email, String password, DEPARTMENT department, List<ObjectId> logs, DAY dayOfAdvisor) {
-        this(id, bilkentID, status, username, email, password, department, dayOfAdvisor);
-        this.setLogs(logs);
     }
 
     public DAY getDayOfAdvisor() {
         return dayOfAdvisor;
+    }
+
+    public void setDayOfAdvisor(DAY dayOfAdvisor) {
+        this.dayOfAdvisor = dayOfAdvisor;
     }
 }

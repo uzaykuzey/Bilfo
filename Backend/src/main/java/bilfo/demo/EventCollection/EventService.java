@@ -27,7 +27,7 @@ public class EventService {
         return eventRepository.findById(id);
     }
 
-    public Optional<Event> createEvent(ObjectId originalForm, int[] guides, int[] trainees, EVENT_TYPES eventType, Date date, TOUR_TIMES time) {
+    public Optional<Event> createEvent(ObjectId originalForm, List<Integer> guides, List<Integer> trainees, EVENT_TYPES eventType, Date date, TOUR_TIMES time) {
         logger.info("Creating Event");
 
         // Check if Event already exists

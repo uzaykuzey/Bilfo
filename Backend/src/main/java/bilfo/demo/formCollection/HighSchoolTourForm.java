@@ -1,9 +1,6 @@
 package bilfo.demo.formCollection;
 
-import bilfo.demo.enums.CITIES;
-import bilfo.demo.enums.DEPARTMENT;
-import bilfo.demo.enums.EVENT_TYPES;
-import bilfo.demo.enums.TOUR_TIMES;
+import bilfo.demo.enums.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +15,7 @@ public class HighSchoolTourForm extends TourForm {
     private ObjectId counselorId;
     private CITIES location;
 
-    public HighSchoolTourForm(ObjectId id, boolean approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, int visitorCount, String visitorNotes, ObjectId schoolId, ObjectId counselorId, CITIES location) {
+    public HighSchoolTourForm(ObjectId id, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, int visitorCount, String visitorNotes, ObjectId schoolId, ObjectId counselorId, CITIES location) {
         super(id, approved, possibleTimes, visitorCount, visitorNotes, EVENT_TYPES.HIGHSCHOOL_TOUR);
         this.schoolId = schoolId;
         this.counselorId = counselorId;

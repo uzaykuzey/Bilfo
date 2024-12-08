@@ -1,5 +1,6 @@
 package bilfo.demo.formCollection;
 import bilfo.demo.enums.EVENT_TYPES;
+import bilfo.demo.enums.FORM_STATES;
 import bilfo.demo.enums.TOUR_TIMES;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class Form {
     @Id
     private ObjectId id;
 
-    private boolean approved;
+    private FORM_STATES state;
     private List<Pair<Date, TOUR_TIMES>> possibleTimes;
     private EVENT_TYPES type;
 }

@@ -1,10 +1,9 @@
 package bilfo.demo.formCollection;
 
 
-import bilfo.demo.enums.CITIES;
-import bilfo.demo.enums.DEPARTMENT;
-import bilfo.demo.enums.EVENT_TYPES;
-import bilfo.demo.enums.TOUR_TIMES;
+import bilfo.demo.EventCollection.Event;
+import bilfo.demo.EventCollection.EventService;
+import bilfo.demo.enums.*;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +22,8 @@ public class FormService {
     @Autowired
     private FormRepository formRepository;
     private static final Logger logger = LoggerFactory.getLogger(FormService.class);
+    @Autowired
+    private EventService eventService;
 
     public List<Form> allForms(){
         return formRepository.findAll();
@@ -31,7 +33,7 @@ public class FormService {
         return formRepository.findById(id);
     }
 
-    public Optional<Form> createForm(EVENT_TYPES type, boolean approved, List<Pair<Date, TOUR_TIMES>> possibleDates, CITIES city, ObjectId schoolId, int visitorCount, String visitorNotes, ObjectId counselorId, String[] names, DEPARTMENT department) {
+    public Optional<Form> createForm(EVENT_TYPES type, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleDates, CITIES city, ObjectId schoolId, int visitorCount, String visitorNotes, ObjectId counselorId, String[] names, DEPARTMENT department) {
         logger.info("Creating Form");
 
         // Check if Form already exists
@@ -58,8 +60,23 @@ public class FormService {
         return Optional.of(savedForm);
     }
 
-    public Form createHighschoolForm(List<Pair<Date, TOUR_TIMES>> possibleDates, String location, ObjectId schoolId, ObjectId counselorId)
+    public Optional<Event> evaluateForm(ObjectId formId, FORM_STATES state, Date chosenDate, TOUR_TIMES chosenTime, String rejectionMessage)
     {
-        return null;
+        Optional<Form> form = formRepository.findById(formId);
+        if (!form.isPresent()) {
+            return Optional.empty();
+        }
+
+        form.get().setState(state);
+        formRepository.save(form.get());
+
+        //TODO send mail
+        if(state==FORM_STATES.REJECTED)
+        {
+            return Optional.empty();
+        }
+
+        return eventService.createEvent(formId, new ArrayList<>(), new ArrayList<>(), form.get().getType(), chosenDate, chosenTime);
     }
+
 }

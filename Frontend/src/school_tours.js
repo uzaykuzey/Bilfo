@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import api from "./api/axios_config.js"
 import './school_tours.css';
 
 export default function SchoolToursForm() {
@@ -12,7 +13,7 @@ export default function SchoolToursForm() {
         thirdTimeDate: '',
         thirdTimeHour: '',
         numberOfVisitors: '',
-        counsellor: '',
+        counsellorName: '',
         counsellorPhone: '',
         counsellorEmail: '',
         visitorNotes: '',
@@ -20,7 +21,7 @@ export default function SchoolToursForm() {
         formErrors: {} // Store validation errors here
     });
 
-    const timeOptions = ["9:00", "11:00", "13:30", "16:00"];
+    const timeOptions = ["9.00", "11.00", "13.30", "1600"];
     const cities = [
         "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir",
         "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır",
@@ -28,9 +29,9 @@ export default function SchoolToursForm() {
         "Isparta", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kilis", "Kocaeli", "Konya", "Kütahya", "Malatya",
         "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya",
         "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van",
-        "Yalova", "Yozgat", "Zonguldak", "Ardahan", "Bartın", "Bayburt", "Bingöl", "Bitlis", "Bolu", "Burdur", "Çorum",
-        "Denizli", "Diyarbakır", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep"
+        "Yalova", "Yozgat", "Zonguldak", "Ardahan", "Bartın", "Bayburt"
     ];
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -68,7 +69,7 @@ export default function SchoolToursForm() {
         return errors;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const errors = validateForm();
@@ -77,9 +78,52 @@ export default function SchoolToursForm() {
                 ...formData,
                 formErrors: errors
             });
-        } else {
-            // Process form data or send to API here
-            alert('Tour application submitted!');
+        } 
+        const schoolFormData = {
+            schoolName: formData.schoolName,
+            city: formData.city,
+            date1: formData.firstTimeDate,
+            time1: formData.firstTimeHour,
+            date2: formData.secondTimeDate,
+            time2: formData.secondTimeHour,
+            date3: formData.thirdTimeDate,
+            time3: formData.thirdTimeHour,
+            visitorCount: formData.numberOfVisitors,
+            counselorName: formData.counsellorName,
+            phoneNo: formData.counsellorPhone,
+            email: formData.counsellorEmail,
+            visitorNotes: formData.visitorNotes
+        };
+        try {
+            // Make the API call
+            const response = await api.post("/form/hsform", schoolFormData);
+    
+            // Handle the API response
+            if (response.status === 200) {
+                setFormData({
+                    schoolName: '',
+                    city: '',
+                    firstTimeDate: '',
+                    firstTimeHour: '',
+                    secondTimeDate: '',
+                    secondTimeHour: '',
+                    thirdTimeDate: '',
+                    thirdTimeHour: '',
+                    numberOfVisitors: '',
+                    counsellorName: '',
+                    counsellorPhone: '',
+                    counsellorEmail: '',
+                    visitorNotes: '',
+                    termsAccepted: false,
+                    formErrors: {}
+                });
+                alert("Form is sent!");
+            } else {
+                alert("Failed to send!");
+            }
+        } catch (error) {
+            // Handle errors from the API
+            alert("Error occurred");
         }
     };
 

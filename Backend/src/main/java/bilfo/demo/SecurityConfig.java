@@ -25,7 +25,8 @@ public class SecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.POST, "/create", "/user/login", "/changeOwnUsername","/changeOwnEmail","/changeOwnPassword").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/create", "/user/login", "/changeOwnUsername","/changeOwnEmail","/changeOwnPassword"
+                                                                    ,"/form/hsform", "/form/indform").permitAll()
                         .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfigurationSource()))

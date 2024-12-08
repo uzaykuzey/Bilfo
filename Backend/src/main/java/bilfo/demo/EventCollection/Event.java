@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Document(collection = "events")
@@ -19,8 +19,8 @@ public class Event {
     @Id
     private ObjectId id;
     private ObjectId originalForm;
-    private ObjectId[] guides;
-    private ObjectId[] trainees;
+    private List<Integer> guides; //store bilkent ids
+    private List<Integer> trainees;
     private EVENT_TYPES eventType;
     private Date date;
     private TOUR_TIMES time;

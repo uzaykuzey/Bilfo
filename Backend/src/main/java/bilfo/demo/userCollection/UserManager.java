@@ -1,7 +1,10 @@
 package bilfo.demo.userCollection;
 
+import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
+import bilfo.demo.userCollection.tokens.Token;
+import bilfo.demo.userCollection.tokens.TokenRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,12 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.DayOfWeek;
+import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping
@@ -23,6 +23,9 @@ public class UserManager {
     private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private TokenRepository tokenRepository;
+
     @GetMapping
     public ResponseEntity<List<User>> allUsers(){
         return new ResponseEntity<List<User>>(userService.allUsers(),HttpStatus.OK);
@@ -38,11 +41,11 @@ public class UserManager {
         USER_STATUS status = USER_STATUS.valueOf(userRequest.get("status").toUpperCase());
         DEPARTMENT department = DEPARTMENT.valueOf(userRequest.get("department").toUpperCase());
 
-        DayOfWeek day = DayOfWeek.MONDAY;
+        DAY day = DAY.NOT_ASSIGNED;
         boolean trainee = false;
         if(status != USER_STATUS.GUIDE)
         {
-            day = DayOfWeek.valueOf(userRequest.get("dayOfAdvisor").toUpperCase());
+            day = DAY.valueOf(userRequest.get("dayOfAdvisor").toUpperCase());
         }
         else
         {
@@ -73,7 +76,16 @@ public class UserManager {
 
         if (user.isPresent()) {
             // You can return a JWT token or any other response after successful login
-            return new ResponseEntity<String>(user.get().getStatus().toString(), HttpStatus.OK);
+            SecureRandom secureRandom = new SecureRandom();
+            Base64.Encoder base64Encoder = Base64.getUrlEncoder();
+
+            byte[] randomBytes = new byte[64];
+            secureRandom.nextBytes(randomBytes);
+            String token = base64Encoder.encodeToString(randomBytes);
+
+            tokenRepository.save(new Token(new ObjectId(), passwordEncoder.encode(token), userId));
+
+            return new ResponseEntity<String>(token, HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
@@ -139,7 +151,34 @@ public class UserManager {
     @PostMapping("/getAdvisorsOfTheDay")
     public ResponseEntity<List<Advisor>> getAdvisorsOfTheDay()
     {
-        return new ResponseEntity<>(userService.getAdvisorsOfTheDay(LocalDate.now().getDayOfWeek()), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAdvisorsOfTheDay(getCurrentDay()), HttpStatus.OK);
+    }
+
+    private DAY getCurrentDay() {
+        return switch (LocalDate.now().getDayOfWeek()) {
+            case MONDAY -> DAY.MONDAY;
+            case TUESDAY -> DAY.TUESDAY;
+            case WEDNESDAY -> DAY.WEDNESDAY;
+            case THURSDAY -> DAY.THURSDAY;
+            case FRIDAY -> DAY.FRIDAY;
+            case SATURDAY -> DAY.SATURDAY;
+            case SUNDAY -> DAY.SUNDAY;
+        };
+    }
+
+    @PostMapping("/promoteUser")
+    public ResponseEntity<String> promoteUser(@RequestBody Map<String,String> promoteRequest) {
+        int bilkentId = Integer.parseInt(promoteRequest.get("bilkentId"));
+        DAY day=DAY.NOT_ASSIGNED;
+        if(promoteRequest.containsKey("day"))
+        {
+            day=DAY.valueOf(promoteRequest.get("day").toUpperCase());
+        }
+        if(userService.promote(bilkentId, day))
+        {
+            return new ResponseEntity<>("successful promotion!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("user can't be promoted", HttpStatus.BAD_REQUEST);
     }
 }
 

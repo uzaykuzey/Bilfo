@@ -1,5 +1,6 @@
 package bilfo.demo.formCollection;
 
+import bilfo.demo.EventCollection.Event;
 import bilfo.demo.counselorCollection.Counselor;
 import bilfo.demo.counselorCollection.CounselorRepository;
 import bilfo.demo.counselorCollection.CounselorService;
@@ -69,7 +70,7 @@ public class FormManager {
         int visitorCount=Integer.parseInt(formApplication.get("visitorCount"));
         String visitorNotes=formApplication.get("visitorNotes");
 
-        Optional<Form> newForm = formService.createForm(EVENT_TYPES.HIGHSCHOOL_TOUR, false, dates, city, schoolId, visitorCount, visitorNotes, counselorId, null, DEPARTMENT.CS);
+        Optional<Form> newForm = formService.createForm(EVENT_TYPES.HIGHSCHOOL_TOUR, FORM_STATES.NOT_REVIEWED, dates, city, schoolId, visitorCount, visitorNotes, counselorId, null, DEPARTMENT.CS);
         if(newForm.isPresent())
         {
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
@@ -91,7 +92,7 @@ public class FormManager {
 
         List<Pair<Date, TOUR_TIMES>> dates=createPossibleTimes(formApplication);
 
-        Optional<Form> newForm = formService.createForm(EVENT_TYPES.INDIVIDUAL_TOUR, false, dates, CITIES.ANKARA, null, visitorCount, visitorNotes, null, names, department);
+        Optional<Form> newForm = formService.createForm(EVENT_TYPES.INDIVIDUAL_TOUR, FORM_STATES.NOT_REVIEWED, dates, CITIES.ANKARA, null, visitorCount, visitorNotes, null, names, department);
         if(newForm.isPresent())
         {
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
@@ -115,13 +116,13 @@ public class FormManager {
             schoolId = s.getId();
         }
 
-        TOUR_TIMES time = stringToEnum(formApplication.get("time"));
+        TOUR_TIMES time = stringToTourTime(formApplication.get("time"));
         Date date = stringToDate(formApplication.get("date"));
 
         List<Pair<Date, TOUR_TIMES>> dates=new ArrayList<>();
         dates.add(Pair.of(date, time));
 
-        Optional<Form> newForm=formService.createForm(EVENT_TYPES.FAIR, false, dates, city, schoolId, 0, "", null, null, DEPARTMENT.CS);
+        Optional<Form> newForm=formService.createForm(EVENT_TYPES.FAIR, FORM_STATES.NOT_REVIEWED, dates, city, schoolId, 0, "", null, null, DEPARTMENT.CS);
         if(newForm.isPresent())
         {
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
@@ -129,10 +130,28 @@ public class FormManager {
         return new ResponseEntity<String>("Form creation failed", HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/evaluateForm")
+    public ResponseEntity<String> evaluateForm(@RequestBody Map<String, String> evaluation)
+    {
+        ObjectId formId = new ObjectId(evaluation.get("formId"));
+        FORM_STATES state=FORM_STATES.valueOf(evaluation.get("state").toUpperCase());
+        TOUR_TIMES time = stringToTourTime(evaluation.get("time"));
+        Date date = stringToDate(evaluation.get("date"));
+        String rejectionMessage = evaluation.get("rejectionMessage");
+
+        Optional<Event> event = formService.evaluateForm(formId, state, date, time, rejectionMessage);
+        if(event.isPresent())
+        {
+            return new ResponseEntity<String>("Form evaluated.", HttpStatus.OK);
+        }
+        return new ResponseEntity<String>("Form evaluation failed.", HttpStatus.BAD_REQUEST);
+    }
+
+
     private List<Pair<Date, TOUR_TIMES>> createPossibleTimes(Map<String, String> formApplication) {
-        TOUR_TIMES time1 = stringToEnum(formApplication.get("time1"));
-        TOUR_TIMES time2 = stringToEnum(formApplication.get("time2"));
-        TOUR_TIMES time3 = stringToEnum(formApplication.get("time3"));
+        TOUR_TIMES time1 = stringToTourTime(formApplication.get("time1"));
+        TOUR_TIMES time2 = stringToTourTime(formApplication.get("time2"));
+        TOUR_TIMES time3 = stringToTourTime(formApplication.get("time3"));
 
         Date date1 = stringToDate(formApplication.get("date1"));
         Date date2 = stringToDate(formApplication.get("date2"));
@@ -145,7 +164,7 @@ public class FormManager {
         return dates;
     }
 
-    public static TOUR_TIMES stringToEnum(String timeString) {
+    private static TOUR_TIMES stringToTourTime(String timeString) {
         switch (timeString) {
             case  "9.00" -> {return TOUR_TIMES.NINE_AM;}
             case "11.00" -> {return TOUR_TIMES.ELEVEN_AM;}
@@ -155,7 +174,7 @@ public class FormManager {
         throw new IllegalArgumentException("Unknown time: " + timeString);
     }
 
-    public static Date stringToDate(String dateString) {
+    private static Date stringToDate(String dateString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date date = sdf.parse(dateString);

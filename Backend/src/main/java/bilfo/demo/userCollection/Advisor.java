@@ -1,5 +1,6 @@
 package bilfo.demo.userCollection;
 
+import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import org.bson.types.ObjectId;
@@ -8,18 +9,18 @@ import java.time.DayOfWeek;
 import java.util.List;
 
 public class Advisor extends Guide {
-    private DayOfWeek dayOfAdvisor;
+    private DAY dayOfAdvisor;
 
-    public Advisor(ObjectId id, int bilkentId, USER_STATUS status, String username, String email, String password, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean[] availability, DayOfWeek dayOfAdvisor) {
+    public Advisor(ObjectId id, int bilkentId, USER_STATUS status, String username, String email, String password, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean[] availability, DAY dayOfAdvisor) {
         super(id, bilkentId, status, username, email, password, department, logs, suggestedEvents, false, availability);
         this.dayOfAdvisor = dayOfAdvisor;
     }
 
-    public DayOfWeek getDayOfAdvisor() {
+    public DAY getDayOfAdvisor() {
         return dayOfAdvisor;
     }
 
-    public void setDayOfAdvisor(DayOfWeek dayOfAdvisor) {
+    public void setDayOfAdvisor(DAY dayOfAdvisor) {
         this.dayOfAdvisor = dayOfAdvisor;
     }
 }

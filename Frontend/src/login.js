@@ -16,14 +16,13 @@ export default function LoginForm() {
     }
   
     const loginData = { userId, password };
-    console.log("Sending login data:", loginData);
   
     try {
       const response = await api.post("/user/login", loginData);
       console.log("Response received:", response);
   
       if (response.status == 200) {
-        navigate(`/userHome/${userId}`);
+        navigate(`/userHome/${userId}`, { state: { statusUser:response.data, zort:'zort' } });
       } else {
         alert(response.data.message || "Invalid credentials. Please try again.");
       }

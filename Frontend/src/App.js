@@ -7,6 +7,7 @@ import UserSettingsLayout from './userSettings';
 import SchoolToursLayout from './school_tours';
 import IndividualToursLayout from './individual_tours';
 import FairApplicationLayout from './fair_application';
+import GuideListLayout from './guide_list';
 
 function  App() {
   return (
@@ -19,6 +20,7 @@ function  App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/userHome/:bilkentId" element={<UserHomeLayout/>} />
         <Route path="/userHome/:bilkentId/settings" element={<UserSettingsLayout/>} />
+        <Route path="/userHome/:bilkentId/guide_list" element={<GuideListLayout/>} />
         {/* Redirect unknown routes */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

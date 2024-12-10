@@ -172,6 +172,10 @@ public class UserService {
         };
     }
 
+    public Optional<List<User>> getGuides(){
+        Optional<List<User>> guides = userRepository.findUsersByStatus(USER_STATUS.GUIDE);
+        return guides;
+    }
     private boolean promoteToAdvisor(Guide guide, DAY day)
     {
         int bilkentId = guide.getBilkentId();
@@ -208,4 +212,6 @@ public class UserService {
         this.createUser(bilkentId, username, email, password, USER_STATUS.COORDINATOR, department, logs, suggestedEvents, false, availability, DAY.NOT_ASSIGNED);
         return true;
     }
+
+
 }

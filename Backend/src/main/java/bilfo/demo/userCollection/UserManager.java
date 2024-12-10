@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -73,7 +72,7 @@ public class UserManager {
         if (user.isPresent()) {
             // You can return a JWT token or any other response after successful login
 
-            return new ResponseEntity<String>("Successful login", HttpStatus.OK);
+            return new ResponseEntity<String>(user.get().getStatus().toString(), HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
@@ -167,6 +166,18 @@ public class UserManager {
             return new ResponseEntity<>("successful promotion!", HttpStatus.OK);
         }
         return new ResponseEntity<>("user can't be promoted", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/getGuides")
+    public ResponseEntity<List<User>> getGuideList() {
+        Optional<List<User>> guides = userService.getGuides();
+        System.out.println(guides);
+        if (guides.isPresent() && !guides.get().isEmpty()) {
+            System.out.println(guides);
+            return ResponseEntity.ok(guides.get()); // 200 OK with the guide list
+        } else {
+            return ResponseEntity.noContent().build(); // 204 No Content
+        }
     }
 }
 

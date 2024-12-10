@@ -2,6 +2,7 @@ import "./guide_list.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import Popup from 'reactjs-popup';
 import api from "./api/axios_config";
 
 export default function GuideListLayout() {
@@ -12,6 +13,9 @@ export default function GuideListLayout() {
 
   const [guides, setGuides] = useState([]);
   const [error, setError] = useState("");
+  const [showPopup, setShowPopup] = useState(false); // To manage popup visibility
+  const [selectedGuideId, setSelectedGuideId] = useState(null); // Store the selected guide's ID
+  const [selectedDay, setSelectedDay] = useState(""); // Store the selected day for promotion
 
   // Fetch guides when the component loads
   useEffect(() => {
@@ -37,21 +41,40 @@ export default function GuideListLayout() {
     navigate(`/userHome/${bilkentId}/guide_list`, { state: { statusUser } });
   };
 
-  const handlePromote = async (id) => {
-    try {
-      const response = await api.post("/promoteUser",)
-    } catch (error) {
-      console.log(error)
+  const handlePromote = (id) => {
+    setSelectedGuideId(id); // Set the guide to be promoted
+    setShowPopup(true); // Show the popup when promote button is clicked
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false); // Close the popup
+    setSelectedGuideId(null); // Reset selected guide ID
+    setSelectedDay(""); // Reset selected day
+  };
+
+  const handleConfirmPromotion = async () => {
+    if (selectedGuideId && selectedDay) {
+      try {
+        const response = await api.post("/promoteUser", {
+          bilkentId: selectedGuideId,
+          day: selectedDay, // Pass the selected day to the API
+        });
+        console.log("Promotion successful:", response.data);
+        handlePopupClose(); // Close the popup after successful promotion
+        goToGuideList();
+      } catch (error) {
+        console.error("Error promoting guide:", error);
+        handlePopupClose(); // Close the popup even if promotion fails
+      }
     }
-    
   };
 
   const handleRemove = (id) => {
-    
+    // Logic for removing guide
   };
 
   const handleLogs = (id) => {
-    
+    // Logic for viewing logs
   };
 
   return (
@@ -77,7 +100,7 @@ export default function GuideListLayout() {
           <a href="/tours-fairs" className="nav-link">Tours and Fairs</a>
 
           {/* Conditionally render Guide List link for Advisors */}
-          {statusUser === "ADVISOR" && (
+          {statusUser !== "GUIDE" && (
             <a className="nav-link" onClick={goToGuideList}>
               Guide List
             </a>
@@ -129,12 +152,14 @@ export default function GuideListLayout() {
                       >
                         See Logs
                       </button>
-                      <button
-                        className="action-btn promote-btn"
-                        onClick={() => handlePromote(guide.bilkentId)}
-                      >
-                        Promote
-                      </button>
+                      {(statusUser !== "ADVISOR" && statusUser !== "GUIDE") && (
+                        <button
+                          className="action-btn promote-btn"
+                          onClick={() => handlePromote(guide.bilkentId)}
+                        >
+                          Promote
+                        </button>
+                      )}
                       <button
                         className="action-btn remove-btn"
                         onClick={() => handleRemove(guide.bilkentId)}
@@ -153,7 +178,44 @@ export default function GuideListLayout() {
           </table>
           <button className="add-guide-btn">Add Guide</button>
         </div>
-        </div>
+
+        {/* Popup for Promotion Confirmation */}
+        <Popup
+          open={showPopup}
+          onClose={handlePopupClose}
+          position="right center"
+          contentStyle={{ width: "400px", padding: "20px", borderRadius: "8px", backgroundColor: "#fff", boxShadow: "0 4px 8px rgba(0,0,0,0.2)" }}
+        >
+          <div className="popup-content">
+            <h3>Are you sure you want to promote this guide?</h3>
+            <div className="day-selection">
+              <label>Select Day:</label>
+              <select
+                value={selectedDay}
+                onChange={(e) => setSelectedDay(e.target.value)}
+                className="day-select"
+              >
+                <option value="">--Select a day--</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+              </select>
+            </div>
+            <div className="modal-buttons">
+              <button className="confirm-btn" onClick={handleConfirmPromotion}>
+                Yes
+              </button>
+              <button className="cancel-btn" onClick={handlePopupClose}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </Popup>
+      </div>
     </div>
   );
 }

@@ -166,8 +166,8 @@ public class UserService {
         }
 
         return switch (user.get().getStatus()) {
-            case GUIDE -> promoteToAdvisor((Guide) user.get(), day);
-            case ADVISOR -> promoteToCoordinator((Advisor) user.get());
+            case GUIDE -> promoteToAdvisor(user.get(), day);
+            case ADVISOR -> promoteToCoordinator(user.get());
             default -> false;
         };
     }
@@ -176,7 +176,7 @@ public class UserService {
         Optional<List<User>> guides = userRepository.findUsersByStatus(USER_STATUS.GUIDE);
         return guides;
     }
-    private boolean promoteToAdvisor(Guide guide, DAY day)
+    private boolean promoteToAdvisor(User guide, DAY day)
     {
         int bilkentId = guide.getBilkentId();
         String username = guide.getUsername();
@@ -192,7 +192,7 @@ public class UserService {
         return true;
     }
 
-    private boolean promoteToCoordinator(Advisor advisor)
+    private boolean promoteToCoordinator(User advisor)
     {
         Optional<List<User>> coordinators = userRepository.findUsersByStatus(USER_STATUS.COORDINATOR);
         if(coordinators.isPresent() && !coordinators.get().isEmpty())

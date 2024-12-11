@@ -166,8 +166,8 @@ public class UserService {
         }
 
         return switch (user.get().getStatus()) {
-            case GUIDE -> promoteToAdvisor(user.get(), day);
-            case ADVISOR -> promoteToCoordinator(user.get());
+            case GUIDE -> promoteGuide(user.get(), day);
+            case ADVISOR -> promoteAdvisor(user.get());
             default -> false;
         };
     }
@@ -176,8 +176,14 @@ public class UserService {
         Optional<List<User>> guides = userRepository.findUsersByStatus(USER_STATUS.GUIDE);
         return guides;
     }
-    private boolean promoteToAdvisor(User guide, DAY day)
+    private boolean promoteGuide(User guide, DAY day)
     {
+        if(guide.isTrainee())
+        {
+            guide.setTrainee(false);
+            userRepository.save(guide);
+            return true;
+        }
         int bilkentId = guide.getBilkentId();
         String username = guide.getUsername();
         String email = guide.getEmail();
@@ -188,11 +194,11 @@ public class UserService {
         boolean[] availability = guide.getAvailability();
 
         userRepository.deleteById(guide.getId());
-        this.createUser(bilkentId, username, email, password, USER_STATUS.ADVISOR, department, logs, suggestedEvents, false, availability, day);
-        return true;
+        Optional<User> user=this.createUser(bilkentId, username, email, password, USER_STATUS.ADVISOR, department, logs, suggestedEvents, false, availability, day);
+        return user.isPresent();
     }
 
-    private boolean promoteToCoordinator(User advisor)
+    private boolean promoteAdvisor(User advisor)
     {
         Optional<List<User>> coordinators = userRepository.findUsersByStatus(USER_STATUS.COORDINATOR);
         if(coordinators.isPresent() && !coordinators.get().isEmpty())

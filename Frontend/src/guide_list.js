@@ -40,7 +40,10 @@ export default function GuideListLayout() {
     e.preventDefault(); // Prevent the default anchor behavior
     navigate(`/userHome/${bilkentId}/guide_list`, { state: { statusUser } });
   };
-
+  const goToTourFairList = (e) => {
+    e.preventDefault();
+    navigate(`/userHome/${bilkentId}/tour_fair_list`, { state: { statusUser } });
+  }
   const handlePromote = (id) => {
     setSelectedGuideId(id); // Set the guide to be promoted
     setShowPopup(true); // Show the popup when promote button is clicked
@@ -97,7 +100,7 @@ export default function GuideListLayout() {
 
         <div className="nav-links">
           <a href="/profile" className="nav-link">Profile</a>
-          <a href="/tours-fairs" className="nav-link">Tours and Fairs</a>
+          <a className="nav-link" onClick={goToTourFairList}>Tours and Fairs</a>
 
           {/* Conditionally render Guide List link for Advisors */}
           {statusUser !== "GUIDE" && (

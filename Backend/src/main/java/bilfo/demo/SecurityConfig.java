@@ -27,7 +27,7 @@ public class SecurityConfig{
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST, "/create", "/user/login", "/changeOwnUsername","/changeOwnEmail","/changeOwnPassword"
                                                                     ,"/form/hsform", "/form/indform", "/form/fairform", "/promoteUser").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/getGuides").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/getGuides", "/event", "/form").permitAll()
                         .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfigurationSource()))

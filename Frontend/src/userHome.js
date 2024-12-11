@@ -14,6 +14,10 @@ export default function UserHomeLayout() {
     e.preventDefault(); // Prevent the default anchor behavior
     navigate(`/userHome/${bilkentId}/guide_list`, { state: { statusUser } });
   };
+  const goToTourFairList = (e) => {
+    e.preventDefault();
+    navigate(`/userHome/${bilkentId}/tour_fair_list`, { state: { statusUser } });
+  }
   return (
     <div className="home-layout">
       {/* Sidebar Navigation */}
@@ -34,7 +38,7 @@ export default function UserHomeLayout() {
 
         <div className="nav-links">
           <a href="/profile" className="nav-link">Profile</a>
-          <a href="/tours-fairs" className="nav-link">Tours and Fairs</a>
+          <a className="nav-link" onClick={goToTourFairList}>Tours and Fairs</a>
           
           {/* Conditionally render Guide List link for Advisors */}
           {statusUser == "ADVISOR" && (

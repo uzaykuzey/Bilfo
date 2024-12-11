@@ -20,18 +20,29 @@ public class EventManager {
         return new ResponseEntity<List<Event>>(eventService.allEvents(), HttpStatus.OK);
     }
 
-    @PostMapping("/claimTour")
-    public ResponseEntity<String> claimTour(@RequestBody Map<String, String> eventClaimRequest)
+    @PostMapping("/claimEvent")
+    public ResponseEntity<String> claimEvent(@RequestBody Map<String, String> eventClaimRequest)
     {
         int bilkentId = Integer.parseInt(eventClaimRequest.get("bilkentId"));
         ObjectId eventId = new ObjectId(eventClaimRequest.get("eventId"));
-        if(eventService.claimEvent(bilkentId, eventId))
+        if(eventService.claimEvent(bilkentId, eventId, true))
         {
             return new ResponseEntity<>("Claimed event", HttpStatus.OK);
         }
         return new ResponseEntity<>("Unsuccesful claim", HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/offerEvent")
+    public ResponseEntity<String> offerEvent(@RequestBody Map<String, String> eventOfferRequest)
+    {
+        int bilkentId = Integer.parseInt(eventOfferRequest.get("bilkentId"));
+        ObjectId eventId = new ObjectId(eventOfferRequest.get("eventId"));
+        if(eventService.claimEvent(bilkentId, eventId, false))
+        {
+            return new ResponseEntity<>("Claimed event", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Unsuccesful claim", HttpStatus.BAD_REQUEST);
+    }
 }
 
 

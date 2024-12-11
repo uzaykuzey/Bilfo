@@ -61,7 +61,7 @@ public class EventService {
         return Optional.of(savedEvent);
     }
 
-    public boolean claimEvent(int bilkentId, ObjectId eventId)
+    public boolean claimEvent(int bilkentId, ObjectId eventId, boolean claim)
     {
         Optional<User> optionalUser=userService.getUser(bilkentId);
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
@@ -83,12 +83,10 @@ public class EventService {
             return false;
         }
 
-        return user.isTrainee() ? claimEventTrainee(user, event, form): claimEventGuide(user, event, form);
-
-
+        return user.isTrainee() ? claimEventTrainee(user, event, form, claim): claimEventGuide(user, event, form, claim);
     }
 
-    private boolean claimEventGuide(User user, Event event, Form form)
+    private boolean claimEventGuide(User user, Event event, Form form, boolean claim)
     {
         int guideCount=Integer.MAX_VALUE;
         if(form.getType()!=EVENT_TYPES.FAIR)
@@ -101,12 +99,21 @@ public class EventService {
             return false;
         }
 
-        event.getGuides().add(user.getBilkentId());
-        userService.saveUser(user);
+        if(claim)
+        {
+            event.getGuides().add(user.getBilkentId());
+            eventRepository.save(event);
+        }
+        else
+        {
+            user.getSuggestedEvents().add(event.getId());
+            userService.saveUser(user);
+        }
+
         return true;
     }
 
-    private boolean claimEventTrainee(User user, Event event, Form form)
+    private boolean claimEventTrainee(User user, Event event, Form form, boolean claim)
     {
         int traineeCount = 5;
         if(event.getTrainees().size()>traineeCount)
@@ -114,8 +121,16 @@ public class EventService {
             return false;
         }
 
-        event.getTrainees().add(user.getBilkentId());
-        userService.saveUser(user);
+        if(claim)
+        {
+            event.getTrainees().add(user.getBilkentId());
+            eventRepository.save(event);
+        }
+        else
+        {
+            user.getSuggestedEvents().add(event.getId());
+            userService.saveUser(user);
+        }
         return true;
     }
 }

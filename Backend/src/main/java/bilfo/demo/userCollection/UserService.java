@@ -62,6 +62,23 @@ public class UserService {
             newUser = new User(new ObjectId(), bilkentId, status, username, email, phoneNo, hashedPassword, department, logs, suggestedEvents, trainee, availability);
         }
 
+        if(status == USER_STATUS.COORDINATOR)
+        {
+            var coordinators=userRepository.findUsersByStatus(USER_STATUS.COORDINATOR);
+            if(!coordinators.isEmpty())
+            {
+                return Optional.empty();
+            }
+        }
+        else if(status == USER_STATUS.ACTING_DIRECTOR)
+        {
+            var coordinators=userRepository.findUsersByStatus(USER_STATUS.ACTING_DIRECTOR);
+            if(!coordinators.isEmpty())
+            {
+                return Optional.empty();
+            }
+        }
+
         // Save the user in the database
         User savedUser = userRepository.save(newUser);
         logger.info("User with ID {} created successfully.", bilkentId);

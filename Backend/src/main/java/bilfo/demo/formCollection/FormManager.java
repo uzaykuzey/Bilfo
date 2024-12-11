@@ -35,7 +35,8 @@ public class FormManager {
 
     @GetMapping
     public ResponseEntity<List<Form>> allForms() {
-        return new ResponseEntity<List<Form>>(formService.allForms(), HttpStatus.OK);
+        List<Form> forms = formService.allForms();
+        return ResponseEntity.ok(forms);
     }
 
     @PostMapping("/hsform")

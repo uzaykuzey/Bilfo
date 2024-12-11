@@ -2,6 +2,8 @@ package bilfo.demo.formCollection;
 import bilfo.demo.enums.EVENT_TYPES;
 import bilfo.demo.enums.FORM_STATES;
 import bilfo.demo.enums.TOUR_TIMES;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

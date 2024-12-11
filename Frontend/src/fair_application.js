@@ -69,7 +69,7 @@ export default function FairApplicationLayout() {
             const response = await api.post("/form/fairform", fairFormData);
     
             // Handle the API response
-            if (response.status === 201) {
+            if (response.status === 200) {
                 setFormData({
                     organization: '',
                     date: '',

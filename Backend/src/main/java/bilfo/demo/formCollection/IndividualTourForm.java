@@ -4,16 +4,15 @@ import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.EVENT_TYPES;
 import bilfo.demo.enums.FORM_STATES;
 import bilfo.demo.enums.TOUR_TIMES;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.util.Pair;
 
 import java.util.Date;
 import java.util.List;
-
+@Getter
+@Setter
 @TypeAlias("individualTourForm")
 public class IndividualTourForm extends TourForm {
     private String[] names;

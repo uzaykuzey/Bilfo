@@ -21,7 +21,7 @@ public class Form {
     @Id
     private ObjectId id;
 
-    private FORM_STATES state;
+    private FORM_STATES approved;
     private List<Pair<Date, TOUR_TIMES>> possibleTimes;
     private EVENT_TYPES type;
 }

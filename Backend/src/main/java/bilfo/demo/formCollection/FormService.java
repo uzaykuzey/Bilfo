@@ -65,7 +65,7 @@ public class FormService {
             return Optional.empty();
         }
 
-        form.get().setState(state);
+        form.get().setApproved(state);
         formRepository.save(form.get());
 
         //TODO send mail

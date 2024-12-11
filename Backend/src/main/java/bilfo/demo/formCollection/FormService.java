@@ -31,7 +31,7 @@ public class FormService {
         return formRepository.findById(id);
     }
 
-    public Optional<Form> createForm(EVENT_TYPES type, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleDates, CITIES city, ObjectId schoolId, int visitorCount, String visitorNotes, ObjectId counselorId, String[] names, DEPARTMENT department) {
+    public Optional<Form> createForm(EVENT_TYPES type, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleDates, CITIES city, String schoolName, int visitorCount, String visitorNotes, String counselorEmail, String[] names, DEPARTMENT department) {
         logger.info("Creating Form");
 
         // Check if Form already exists
@@ -45,9 +45,9 @@ public class FormService {
         Form form = new Form();
         switch (type)
         {
-            case FAIR -> form = new FairForm(new ObjectId(), approved, possibleDates, city, schoolId);
+            case FAIR -> form = new FairForm(new ObjectId(), approved, possibleDates, city, schoolName);
             case INDIVIDUAL_TOUR -> form = new IndividualTourForm(new ObjectId(), approved, possibleDates, visitorCount, visitorNotes, names, department);
-            case HIGHSCHOOL_TOUR -> form = new HighSchoolTourForm(new ObjectId(), approved, possibleDates, visitorCount, visitorNotes, schoolId, counselorId, city);
+            case HIGHSCHOOL_TOUR -> form = new HighSchoolTourForm(new ObjectId(), approved, possibleDates, visitorCount, visitorNotes, schoolName, counselorEmail, city);
             default -> throw new IllegalArgumentException("Unknown EVENT_TYPE: " + type);
         }
 

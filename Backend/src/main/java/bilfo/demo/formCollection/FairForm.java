@@ -15,11 +15,11 @@ import java.util.List;
 
 public class FairForm extends Form {
     private CITIES location;
-    private ObjectId schoolId;
+    private String schoolName;
 
-    public FairForm(ObjectId id, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, CITIES location, ObjectId schoolId) {
+    public FairForm(ObjectId id, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, CITIES location, String schoolName) {
         super(id, approved, possibleTimes, EVENT_TYPES.FAIR);
         this.location = location;
-        this.schoolId = schoolId;
+        this.schoolName = schoolName;
     }
 }

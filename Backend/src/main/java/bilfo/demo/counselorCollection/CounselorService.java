@@ -26,7 +26,7 @@ public class CounselorService {
         return counselorRepository.findById(id);
     }
 
-    public Optional<Counselor> createCounselor(String name, String email, String phoneNo, ObjectId schoolId) {
+    public Optional<Counselor> createCounselor(String name, String email, String phoneNo, String schoolName) {
         logger.info("Creating counselor with name: {}", name);
 
         // Check if counselor already exists
@@ -38,7 +38,7 @@ public class CounselorService {
         }*/
 
         // Create the new Counselor object
-        Counselor counselor = new Counselor(new ObjectId(), name, email, phoneNo, schoolId);
+        Counselor counselor = new Counselor(new ObjectId(), name, email, phoneNo, schoolName);
 
         // Save the counselor in the database
         Counselor savedcounselor = counselorRepository.save(counselor);

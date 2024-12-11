@@ -19,5 +19,5 @@ public class Counselor {
     @Indexed(unique = true)
     private String email;
     private String phoneNo;
-    private ObjectId schoolId;
+    private String schoolName;
 }

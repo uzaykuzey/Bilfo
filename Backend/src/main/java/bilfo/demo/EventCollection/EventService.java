@@ -78,7 +78,7 @@ public class EventService {
             return false;
         }
         Form form=optionalForm.get();
-        if(form.getState() == FORM_STATES.REJECTED || form.getState() == FORM_STATES.NOT_REVIEWED)
+        if(form.getApproved() == FORM_STATES.REJECTED || form.getApproved() == FORM_STATES.NOT_REVIEWED)
         {
             return false;
         }

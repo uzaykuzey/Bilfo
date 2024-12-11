@@ -10,8 +10,8 @@ import java.util.List;
 
 public class Guide extends User{
 
-    public Guide(ObjectId id, int bilkentID, USER_STATUS status, String username, String email, String password, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability) {
-        super(id, bilkentID, status, username, email, password, department, logs, suggestedEvents, trainee, availability);
+    public Guide(ObjectId id, int bilkentID, USER_STATUS status, String username, String email, String phoneNo, String password, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability) {
+        super(id, bilkentID, status, username, email, phoneNo, password, department, logs, suggestedEvents, trainee, availability);
     }
 
 }

@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.util.Pair;
 
 import java.util.Date;
 import java.util.List;
 
+@TypeAlias("highSchoolTourForm")
 public class HighSchoolTourForm extends TourForm {
     private String schoolName;
     private String counselorEmail;

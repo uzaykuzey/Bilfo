@@ -8,11 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.util.Pair;
 
 import java.util.Date;
 import java.util.List;
 
+@TypeAlias("individualTourForm")
 public class IndividualTourForm extends TourForm {
     private String[] names;
     private DEPARTMENT department;

@@ -25,6 +25,7 @@ public class User {
     private USER_STATUS status;
     private String username;
     private String email;
+    private String phoneNo;
     private String password; // Store hashed passwords
     private DEPARTMENT department;
     private List<ObjectId> logs;

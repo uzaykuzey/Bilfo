@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -32,6 +33,7 @@ public class UserManager {
         int bilkentId = Integer.parseInt(userRequest.get("bilkentId"));
         String username = userRequest.get("username");
         String email = userRequest.get("email");
+        String phoneNo = userRequest.get("phoneNo");
         String password = userRequest.get("password");
         USER_STATUS status = USER_STATUS.valueOf(userRequest.get("status").toUpperCase());
         DEPARTMENT department = DEPARTMENT.valueOf(userRequest.get("department").toUpperCase());
@@ -47,7 +49,7 @@ public class UserManager {
             trainee = Boolean.parseBoolean(userRequest.get("trainee"));
         }
         // Attempt to create the user
-        Optional<User> newUser = userService.createUser(bilkentId, username, email, password, status, department, new ArrayList<>(), new ArrayList<>(), trainee, new boolean[77], day);
+        Optional<User> newUser = userService.createUser(bilkentId, username, email, phoneNo, password, status, department, new ArrayList<>(), new ArrayList<>(), trainee, new boolean[77], day);
 
         if (newUser.isPresent()) {
             return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
@@ -179,4 +181,70 @@ public class UserManager {
             return ResponseEntity.noContent().build(); // 204 No Content
         }
     }
+
+    @PostMapping("/addGuide")
+    public ResponseEntity<String> addGuide(@RequestBody Map<String,String> addGuideRequest)
+    {
+        String name = addGuideRequest.get("name");
+        int bilkentId = Integer.parseInt(addGuideRequest.get("bilkentId"));
+        String email = addGuideRequest.get("email");
+        String phoneNo = addGuideRequest.get("phoneNo");
+        boolean trainee = Boolean.parseBoolean(addGuideRequest.get("trainee"));
+        DEPARTMENT department = DEPARTMENT.valueOf(addGuideRequest.get("department").toUpperCase());
+        String tempPassword = generatePassword(8);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.GUIDE, department, new ArrayList<>(), new ArrayList<>(), trainee, new boolean[77], DAY.NOT_ASSIGNED);
+        if(user.isPresent()) {
+            return new ResponseEntity<>("User added", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("There is already a user with that id number", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/addAdvisor")
+    public ResponseEntity<String> addAdvisor(@RequestBody Map<String,String> addAdvisorRequest)
+    {
+        String name = addAdvisorRequest.get("name");
+        int bilkentId = Integer.parseInt(addAdvisorRequest.get("bilkentId"));
+        String email = addAdvisorRequest.get("email");
+        String phoneNo = addAdvisorRequest.get("phoneNo");
+        DEPARTMENT department = DEPARTMENT.valueOf(addAdvisorRequest.get("department").toUpperCase());
+        DAY day = DAY.valueOf(addAdvisorRequest.get("day").toUpperCase());
+        String tempPassword = generatePassword(12);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ADVISOR, department, new ArrayList<>(), new ArrayList<>(), false, new boolean[77], day);
+        if(user.isPresent()) {
+            return new ResponseEntity<>("User added", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("There is already a user with that id number", HttpStatus.BAD_REQUEST);
+    }
+
+
+    private static String generatePassword(int length) {
+        String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+        String digits = "0123456789";
+        String specialCharacters = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/";
+        String allCharacters = upperCaseLetters + lowerCaseLetters + digits + specialCharacters;
+
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder();
+
+        password.append(upperCaseLetters.charAt(random.nextInt(upperCaseLetters.length())));
+        password.append(lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length())));
+        password.append(digits.charAt(random.nextInt(digits.length())));
+        password.append(specialCharacters.charAt(random.nextInt(specialCharacters.length())));
+
+        for (int i = 4; i < length; i++) {
+            password.append(allCharacters.charAt(random.nextInt(allCharacters.length())));
+        }
+
+        char[] passwordArray = password.toString().toCharArray();
+        for (int i = passwordArray.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            char temp = passwordArray[i];
+            passwordArray[i] = passwordArray[j];
+            passwordArray[j] = temp;
+        }
+
+        return new String(passwordArray);
+    }
+
 }

@@ -36,7 +36,7 @@ public class UserService {
         return userRepository.findByBilkentId(bilkentId);
     }
 
-    public Optional<User> createUser(int bilkentId, String username, String email, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability, DAY day) {
+    public Optional<User> createUser(int bilkentId, String username, String email, String phoneNo, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability, DAY day) {
         logger.info("Creating user with ID: {}", bilkentId);
 
         // Check if user already exists
@@ -55,11 +55,11 @@ public class UserService {
 
         if(status!=USER_STATUS.GUIDE)
         {
-            newUser=new Advisor(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs, suggestedEvents, availability, day);
+            newUser=new Advisor(new ObjectId(), bilkentId, status, username, email, phoneNo, hashedPassword, department, logs, suggestedEvents, availability, day);
         }
         else
         {
-            newUser = new User(new ObjectId(), bilkentId, status, username, email, hashedPassword, department, logs, suggestedEvents, trainee, availability);
+            newUser = new User(new ObjectId(), bilkentId, status, username, email, phoneNo, hashedPassword, department, logs, suggestedEvents, trainee, availability);
         }
 
         // Save the user in the database
@@ -191,6 +191,7 @@ public class UserService {
         int bilkentId = guide.getBilkentId();
         String username = guide.getUsername();
         String email = guide.getEmail();
+        String phoneNo = guide.getPhoneNo();
         String password = guide.getPassword();
         DEPARTMENT department = guide.getDepartment();
         List<ObjectId> logs = guide.getLogs();
@@ -198,7 +199,7 @@ public class UserService {
         boolean[] availability = guide.getAvailability();
 
         userRepository.deleteById(guide.getId());
-        Optional<User> user=this.createUser(bilkentId, username, email, password, USER_STATUS.ADVISOR, department, logs, suggestedEvents, false, availability, day);
+        Optional<User> user=this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.ADVISOR, department, logs, suggestedEvents, false, availability, day);
         return user.isPresent();
     }
 
@@ -213,13 +214,14 @@ public class UserService {
         int bilkentId = advisor.getBilkentId();
         String username = advisor.getUsername();
         String email = advisor.getEmail();
+        String phoneNo = advisor.getPhoneNo();
         String password = advisor.getPassword();
         DEPARTMENT department = advisor.getDepartment();
         List<ObjectId> logs = advisor.getLogs();
         List<ObjectId> suggestedEvents = advisor.getSuggestedEvents();
         boolean[] availability = advisor.getAvailability();
 
-        this.createUser(bilkentId, username, email, password, USER_STATUS.COORDINATOR, department, logs, suggestedEvents, false, availability, DAY.NOT_ASSIGNED);
+        this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.COORDINATOR, department, logs, suggestedEvents, false, availability, DAY.NOT_ASSIGNED);
         return true;
     }
 

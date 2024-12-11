@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.util.Pair;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @Document(collection = "forms")
 @AllArgsConstructor
 @NoArgsConstructor
+@TypeAlias("form")
 public class Form {
     @Id
     private ObjectId id;

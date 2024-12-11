@@ -31,4 +31,9 @@ public class User {
     private List<ObjectId> suggestedEvents;
     private boolean trainee;
     private boolean[] availability;
+
+    private void setId(int bilkentId) throws IllegalAccessException
+    {
+        throw new IllegalAccessException("Cannot modify id of a user");
+    }
 }

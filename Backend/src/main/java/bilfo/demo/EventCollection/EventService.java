@@ -2,11 +2,18 @@ package bilfo.demo.EventCollection;
 
 
 import bilfo.demo.enums.EVENT_TYPES;
+import bilfo.demo.enums.FORM_STATES;
 import bilfo.demo.enums.TOUR_TIMES;
+import bilfo.demo.formCollection.Form;
+import bilfo.demo.formCollection.FormService;
+import bilfo.demo.formCollection.TourForm;
+import bilfo.demo.userCollection.User;
+import bilfo.demo.userCollection.UserService;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +25,12 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
     private static final Logger logger = LoggerFactory.getLogger(EventService.class);
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private FormService formService;
+
+    public static EventService singleton=new EventService();
 
     public List<Event> allEvents(){
         return eventRepository.findAll();
@@ -46,5 +59,63 @@ public class EventService {
         logger.info("Event with ID {} created successfully.", event.getId());
 
         return Optional.of(savedEvent);
+    }
+
+    public boolean claimEvent(int bilkentId, ObjectId eventId)
+    {
+        Optional<User> optionalUser=userService.getUser(bilkentId);
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        if(!optionalUser.isPresent() || !optionalEvent.isPresent())
+        {
+            return false;
+        }
+        User user=optionalUser.get();
+        Event event=optionalEvent.get();
+
+        Optional<Form> optionalForm=formService.getForm(eventId);
+        if(!optionalForm.isPresent())
+        {
+            return false;
+        }
+        Form form=optionalForm.get();
+        if(form.getState() == FORM_STATES.REJECTED || form.getState() == FORM_STATES.NOT_REVIEWED)
+        {
+            return false;
+        }
+
+        return user.isTrainee() ? claimEventTrainee(user, event, form): claimEventGuide(user, event, form);
+
+
+    }
+
+    private boolean claimEventGuide(User user, Event event, Form form)
+    {
+        int guideCount=Integer.MAX_VALUE;
+        if(form.getType()!=EVENT_TYPES.FAIR)
+        {
+            guideCount = ((TourForm) form).getVisitorCount()/50;
+        }
+
+        if(event.getGuides().size()>guideCount)
+        {
+            return false;
+        }
+
+        event.getGuides().add(user.getBilkentId());
+        userService.saveUser(user);
+        return true;
+    }
+
+    private boolean claimEventTrainee(User user, Event event, Form form)
+    {
+        int traineeCount = 5;
+        if(event.getTrainees().size()>traineeCount)
+        {
+            return false;
+        }
+
+        event.getTrainees().add(user.getBilkentId());
+        userService.saveUser(user);
+        return true;
     }
 }

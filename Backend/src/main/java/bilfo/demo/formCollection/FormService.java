@@ -22,8 +22,6 @@ public class FormService {
     @Autowired
     private FormRepository formRepository;
     private static final Logger logger = LoggerFactory.getLogger(FormService.class);
-    @Autowired
-    private EventService eventService;
 
     public List<Form> allForms(){
         return formRepository.findAll();
@@ -76,7 +74,7 @@ public class FormService {
             return Optional.empty();
         }
 
-        return eventService.createEvent(formId, new ArrayList<>(), new ArrayList<>(), form.get().getType(), chosenDate, chosenTime);
+        return EventService.singleton.createEvent(formId, new ArrayList<>(), new ArrayList<>(), form.get().getType(), chosenDate, chosenTime);
     }
 
 }

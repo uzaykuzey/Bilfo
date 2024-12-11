@@ -86,6 +86,10 @@ public class UserService {
         return Optional.empty();
     }
 
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
     public void changeUsername(int bilkentId, String username){
         Optional<User> user = userRepository.findByBilkentId(bilkentId);
         if (user.isPresent()) {

@@ -26,8 +26,7 @@ public class SecurityConfig{
         http
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST, "/create", "/user/login", "/changeOwnUsername","/changeOwnEmail","/changeOwnPassword"
-                                                                    ,"/form/hsform", "/form/indform", "/form/fairform", "/promoteUser"
-                                                                    ,"/form/evaluateForm").permitAll()
+                                                                    ,"/form/hsform", "/form/indform", "/form/fairform", "/promoteUser", "/form/evaluate").permitAll()
                         .requestMatchers(HttpMethod.GET,"/getGuides", "/event", "/form").permitAll()
                         .anyRequest().authenticated()
                 )

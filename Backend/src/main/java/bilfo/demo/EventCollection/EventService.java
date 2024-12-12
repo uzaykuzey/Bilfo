@@ -22,12 +22,13 @@ import java.util.Optional;
 
 @Service
 public class EventService {
-    @Autowired
-    private EventRepository eventRepository;
+
     @Autowired
     private UserService userService;
     @Autowired
     private FormService formService;
+    @Autowired
+    private EventRepository eventRepository;
 
     private static EventService instance = null;
 

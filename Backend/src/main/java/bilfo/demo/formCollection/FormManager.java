@@ -131,7 +131,7 @@ public class FormManager {
         return new ResponseEntity<String>("Form creation failed", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/evaluateForm")
+    @PostMapping("/evaluate")
     public ResponseEntity<String> evaluateForm(@RequestBody Map<String, String> evaluation)
     {
         ObjectId formId = new ObjectId(evaluation.get("formId"));

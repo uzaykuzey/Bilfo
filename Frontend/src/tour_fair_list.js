@@ -110,7 +110,7 @@ export default function TourListLayout() {
       };
   
       // Call the backend API
-      const response = await api.post("/form/evaluateForm", payload);
+      const response = await api.post("/form/evaluate", payload);
   
       if (response.status === 200) {
         alert("Tour accepted successfully!");

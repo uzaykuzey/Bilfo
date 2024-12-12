@@ -12,7 +12,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/event")
 public class EventManager {
-    private EventService eventService = EventService.getInstance();
+    @Autowired
+    private EventService eventService;
 
     @GetMapping
     public ResponseEntity<List<Event>> allEvents() {

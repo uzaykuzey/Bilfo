@@ -16,7 +16,7 @@ import java.util.List;
 @Document(collection = "user")
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class User {
+public class User {
     // Getters and Setters
     @Id
     private ObjectId id;

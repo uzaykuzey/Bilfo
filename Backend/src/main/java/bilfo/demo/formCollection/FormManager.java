@@ -136,8 +136,10 @@ public class FormManager {
     {
         ObjectId formId = new ObjectId(evaluation.get("formId"));
         FORM_STATES state = FORM_STATES.valueOf(evaluation.get("state").toUpperCase());
-        TOUR_TIMES time = TOUR_TIMES.valueOf(evaluation.get("time").toUpperCase());
-        Date date = stringToDate(evaluation.get("date"));
+        Optional<Form> form = formService.getForm(formId);
+        int indexValue = Integer.parseInt(evaluation.get("index"));
+        TOUR_TIMES time = form.get().getPossibleTimes().get(indexValue).getSecond();
+        Date date = form.get().getPossibleTimes().get(indexValue).getFirst();
         String rejectionMessage = evaluation.get("rejectionMessage");
 
         Optional<Event> event = formService.evaluateForm(formId, state, date, time, rejectionMessage);

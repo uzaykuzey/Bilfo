@@ -99,17 +99,14 @@ export default function TourListLayout() {
   
     try {
       var index = parseInt(selectedIndex);
-      console.log(index);
-      console.log(tour);
       const payload = {
         formId: tour.id,
-        state: "ACCEPTED", // Set state as ACCEPTED
-        time: tour.possibleTimes[index].second,    // Pass the selected date here
-        date: tour.possibleTimes[index].first,    // Pass the selected date here
+        state: "ACCEPTED", 
+        index: index,  // Pass the selected date here
         rejectionMessage: "", // Empty as this is an acceptance
       };
   
-      // Call the backend API
+      console.log(payload);
       const response = await api.post("/form/evaluate", payload);
   
       if (response.status === 200) {

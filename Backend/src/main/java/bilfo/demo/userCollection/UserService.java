@@ -59,7 +59,7 @@ public class UserService {
         }
         else
         {
-            newUser = new User(new ObjectId(), bilkentId, status, username, email, phoneNo, hashedPassword, department, logs, suggestedEvents, trainee, availability);
+            newUser = new Guide(new ObjectId(), bilkentId, status, username, email, phoneNo, hashedPassword, department, logs, suggestedEvents, trainee, availability);
         }
 
         if(status == USER_STATUS.COORDINATOR)

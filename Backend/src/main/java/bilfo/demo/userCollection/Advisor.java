@@ -6,12 +6,14 @@ import bilfo.demo.enums.USER_STATUS;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.TypeAlias;
 
 import java.time.DayOfWeek;
 import java.util.List;
 
 @Getter
 @Setter
+@TypeAlias("advisor")
 public class Advisor extends Guide {
     private DAY dayOfAdvisor;
 

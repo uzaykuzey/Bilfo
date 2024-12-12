@@ -21,6 +21,7 @@ import java.util.Optional;
 public class FormService {
     @Autowired
     private FormRepository formRepository;
+    private EventService eventService=EventService.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(FormService.class);
 
     public List<Form> allForms(){
@@ -74,7 +75,7 @@ public class FormService {
             return Optional.empty();
         }
 
-        return EventService.singleton.createEvent(formId, new ArrayList<>(), new ArrayList<>(), form.get().getType(), chosenDate, chosenTime);
+        return eventService.createEvent(formId, new ArrayList<>(), new ArrayList<>(), form.get().getType(), chosenDate, chosenTime);
     }
 
 }

@@ -30,7 +30,14 @@ public class EventService {
     @Autowired
     private FormService formService;
 
-    public static EventService singleton=new EventService();
+    private static EventService instance=null;
+
+    public static EventService getInstance() {
+        if(instance==null) {
+            instance=new EventService();
+        }
+        return instance;
+    }
 
     public List<Event> allEvents(){
         return eventRepository.findAll();

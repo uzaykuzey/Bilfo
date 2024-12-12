@@ -67,3 +67,96 @@
     width: 40px;
     height: 32px;
   }
+  .tour-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+  }
+  
+  .tour-table th, .tour-table td {
+    border: 1px solid #dddddd;
+    padding: 12px 15px;
+  }
+  
+  .tour-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #333;
+  }
+  
+  .tour-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .tour-table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .tour-table tbody td {
+    color: #555;
+  }
+  
+  .tour-table .evaluate-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+  
+  .tour-table .evaluate-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .filters {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .filters label {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .filters select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  .assign-button, .claim-button, .cancel-button, .details-button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .assign-button {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .claim-button {
+    background-color: #2196F3;
+    color: white;
+  }
+  
+  .cancel-button {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .details-button {
+    background-color: #555;
+    color: white;
+  }
+  
+  

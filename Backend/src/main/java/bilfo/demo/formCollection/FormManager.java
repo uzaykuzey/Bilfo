@@ -135,8 +135,8 @@ public class FormManager {
     public ResponseEntity<String> evaluateForm(@RequestBody Map<String, String> evaluation)
     {
         ObjectId formId = new ObjectId(evaluation.get("formId"));
-        FORM_STATES state=FORM_STATES.valueOf(evaluation.get("state").toUpperCase());
-        TOUR_TIMES time = stringToTourTime(evaluation.get("time"));
+        FORM_STATES state = FORM_STATES.valueOf(evaluation.get("state").toUpperCase());
+        TOUR_TIMES time = TOUR_TIMES.valueOf(evaluation.get("time").toUpperCase());
         Date date = stringToDate(evaluation.get("date"));
         String rejectionMessage = evaluation.get("rejectionMessage");
 

@@ -1,5 +1,6 @@
 package bilfo.demo;
 
+import bilfo.demo.mailSender.MailSenderService;
 import bilfo.demo.userCollection.UserManager;
 import bilfo.demo.userCollection.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ public class BilfoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BilfoApplication.class, args);
-
 	}
 
 

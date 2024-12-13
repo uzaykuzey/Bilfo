@@ -3,6 +3,7 @@ package bilfo.demo.userCollection;
 import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
+import bilfo.demo.mailSender.MailSenderService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -73,7 +74,6 @@ public class UserManager {
 
         if (user.isPresent()) {
             // You can return a JWT token or any other response after successful login
-
             return new ResponseEntity<String>(user.get().getStatus().toString(), HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("Invalid credentials", HttpStatus.UNAUTHORIZED);

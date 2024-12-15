@@ -1,7 +1,9 @@
 package bilfo.demo.userCollection;
+import bilfo.demo.ObjectIdSerializer;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import bilfo.demo.logCollection.Log;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.List;
 public class User {
     // Getters and Setters
     @Id
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
     @Indexed(unique = true)
     private int bilkentId;

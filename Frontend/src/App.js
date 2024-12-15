@@ -9,6 +9,7 @@ import IndividualToursLayout from './individual_tours';
 import FairApplicationLayout from './fair_application';
 import GuideListLayout from './guide_list';
 import TourListLayout from './tour_fair_list';
+import AdvisorListLayout from './advisor_list';
 
 function  App() {
   return (
@@ -22,6 +23,7 @@ function  App() {
         <Route path="/userHome/:bilkentId" element={<UserHomeLayout/>} />
         <Route path="/userHome/:bilkentId/settings" element={<UserSettingsLayout/>} />
         <Route path="/userHome/:bilkentId/guide_list" element={<GuideListLayout/>} />
+        <Route path="/userHome/:bilkentId/advisor_list" element={<AdvisorListLayout/>} />
         <Route path="/userHome/:bilkentId/tour_fair_list" element={<TourListLayout/>} />
         {/* Redirect unknown routes */}
         <Route path="*" element={<Navigate to="/" />} />

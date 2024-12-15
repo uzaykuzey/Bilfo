@@ -14,6 +14,10 @@ export default function UserHomeLayout() {
     e.preventDefault(); // Prevent the default anchor behavior
     navigate(`/userHome/${bilkentId}/guide_list`, { state: { statusUser } });
   };
+  const goToAdvisorlist = (e) => {
+    e.preventDefault();
+    navigate(`/userHome/${bilkentId}/advisor_list`, { state: { statusUser } });
+  }
   const goToTourFairList = (e) => {
     e.preventDefault();
     navigate(`/userHome/${bilkentId}/tour_fair_list`, { state: { statusUser } });
@@ -40,6 +44,10 @@ export default function UserHomeLayout() {
           <a href="/profile" className="nav-link">Profile</a>
           <a className="nav-link" onClick={goToTourFairList}>Tours and Fairs</a>
           
+          {statusUser == "COORDINATOR" || statusUser == "ADVISOR"&& (
+            <a className="nav-link" onClick={goToAdvisorlist}>Advisor List</a>
+          )}
+
           {/* Conditionally render Guide List link for Advisors */}
           {statusUser == "ADVISOR" && (
             <a className="nav-link" onClick={goToGuideList}>Guide List</a>

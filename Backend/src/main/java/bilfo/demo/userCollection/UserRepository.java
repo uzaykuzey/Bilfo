@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends MongoRepository<User, ObjectId> {
     public Optional<User> findByBilkentId(int bilkentId);
-
+    public Optional<User> findById(ObjectId id);
     public Optional<List<User>> findUsersByStatus(USER_STATUS status);
     public List<User> findAll();
 }

@@ -86,6 +86,24 @@ public class UserService {
         return Optional.of(savedUser);
     }
 
+    public boolean removeUser(ObjectId userId) {
+        // Find the user by ObjectId
+        Optional<User> user = userRepository.findById(userId);
+
+        // If the user does not exist, return false
+        if (!user.isPresent()) {
+            return false;
+        }
+
+        // Remove the user from the repository
+        try {
+            userRepository.delete(user.get());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public Optional<User> authenticate(int bilkentId, String password) {
 
         Optional<User> user = userRepository.findByBilkentId(bilkentId);
@@ -197,6 +215,12 @@ public class UserService {
         Optional<List<User>> guides = userRepository.findUsersByStatus(USER_STATUS.GUIDE);
         return guides;
     }
+
+    public Optional<List<User>> getAdvisors(){
+        Optional<List<User>> advisors = userRepository.findUsersByStatus(USER_STATUS.ADVISOR);
+        return advisors;
+    }
+
     private boolean promoteGuide(User guide, DAY day)
     {
         if(guide.isTrainee())

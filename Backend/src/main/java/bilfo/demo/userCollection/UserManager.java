@@ -173,10 +173,19 @@ public class UserManager {
     @GetMapping("/getGuides")
     public ResponseEntity<List<User>> getGuideList() {
         Optional<List<User>> guides = userService.getGuides();
-        System.out.println(guides);
         if (guides.isPresent() && !guides.get().isEmpty()) {
             System.out.println(guides);
             return ResponseEntity.ok(guides.get()); // 200 OK with the guide list
+        } else {
+            return ResponseEntity.noContent().build(); // 204 No Content
+        }
+    }
+
+    @GetMapping("/getAdvisors")
+    public ResponseEntity<List<User>> getAdvisorList(){
+        Optional<List<User>> advisors = userService.getAdvisors();
+        if (advisors.isPresent() && !advisors.get().isEmpty()) {
+            return ResponseEntity.ok(advisors.get()); // 200 OK with the guide list
         } else {
             return ResponseEntity.noContent().build(); // 204 No Content
         }
@@ -216,6 +225,16 @@ public class UserManager {
         return new ResponseEntity<>("There is already a user with that id number", HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/removeAdvisor")
+    public ResponseEntity<String> removeAdvisor(@RequestBody Map<String,String> removedAdvisorId){
+        ObjectId advisorId = new ObjectId(removedAdvisorId.get("id"));
+        boolean deletion = userService.removeUser(advisorId);
+        if (deletion){
+            return new ResponseEntity<String>("Successful", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<String>("Error Occurred", HttpStatus.BAD_REQUEST);
+        }
+    }
 
     private static String generatePassword(int length) {
         String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

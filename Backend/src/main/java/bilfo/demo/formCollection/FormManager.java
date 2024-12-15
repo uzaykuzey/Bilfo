@@ -131,17 +131,17 @@ public class FormManager {
         return new ResponseEntity<String>("Form creation failed", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/evaluate")
-    public ResponseEntity<String> evaluateForm(@RequestBody Map<String, String> evaluation)
-    {
-        ObjectId formId = new ObjectId(evaluation.get("formId"));
-        FORM_STATES state = FORM_STATES.valueOf(evaluation.get("state").toUpperCase());
+
+
+    @PostMapping("/eva")
+    public ResponseEntity<String> evaForm(@RequestBody Map<String,Object> evaluationForm){
+        ObjectId formId = new ObjectId(evaluationForm.get("formId").toString());
+        FORM_STATES state = FORM_STATES.valueOf(evaluationForm.get("state").toString().toUpperCase());
         Optional<Form> form = formService.getForm(formId);
-        int indexValue = Integer.parseInt(evaluation.get("index"));
+        int indexValue = Integer.parseInt(evaluationForm.get("index").toString());
         TOUR_TIMES time = form.get().getPossibleTimes().get(indexValue).getSecond();
         Date date = form.get().getPossibleTimes().get(indexValue).getFirst();
-        String rejectionMessage = evaluation.get("rejectionMessage");
-
+        String rejectionMessage = evaluationForm.get("rejectionMessage").toString();
         Optional<Event> event = formService.evaluateForm(formId, state, date, time, rejectionMessage);
         if(event.isPresent())
         {

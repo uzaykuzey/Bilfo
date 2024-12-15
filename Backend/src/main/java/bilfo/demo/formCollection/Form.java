@@ -1,9 +1,11 @@
 package bilfo.demo.formCollection;
+import bilfo.demo.ObjectIdSerializer;
 import bilfo.demo.enums.EVENT_TYPES;
 import bilfo.demo.enums.FORM_STATES;
 import bilfo.demo.enums.TOUR_TIMES;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ import java.util.List;
 @TypeAlias("form")
 public class Form {
     @Id
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
 
     private FORM_STATES approved;

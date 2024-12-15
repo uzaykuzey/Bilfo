@@ -13,6 +13,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -25,20 +26,13 @@ public class EventService {
 
     @Autowired
     private UserService userService;
+
     @Autowired
+    @Lazy
     private FormService formService;
+
     @Autowired
     private EventRepository eventRepository;
-
-    private static EventService instance = null;
-
-    public static EventService getInstance() {
-        if (instance == null) {
-            System.out.println("New EventService created.");
-            instance = new EventService();
-        }
-        return instance;
-    }
 
     public List<Event> allEvents() {
         return eventRepository.findAll();
@@ -49,22 +43,8 @@ public class EventService {
     }
 
     public Optional<Event> createEvent(ObjectId originalForm, List<Integer> guides, List<Integer> trainees, EVENT_TYPES eventType, Date date, TOUR_TIMES time) {
-
-
-        // Check if Event already exists
-        //TODO
-        /*Optional<Event> existingUser = EventRepository.findEventById(id);
-        if (existingUser.isPresent()) {
-            logger.warn("Event with ID {} already exists. User creation failed.", id);
-            return Optional.empty();
-        }*/
-
-        // Create the new Event object
         Event event = new Event(new ObjectId(), originalForm, guides, trainees, eventType, date, time);
-
-        // Save the Event in the database
         Event savedEvent = eventRepository.save(event);
-
         return Optional.of(savedEvent);
     }
 
@@ -74,6 +54,7 @@ public class EventService {
         if (!optionalUser.isPresent() || !optionalEvent.isPresent()) {
             return false;
         }
+
         User user = optionalUser.get();
         Event event = optionalEvent.get();
 
@@ -81,6 +62,7 @@ public class EventService {
         if (!optionalForm.isPresent()) {
             return false;
         }
+
         Form form = optionalForm.get();
         if (form.getApproved() == FORM_STATES.REJECTED || form.getApproved() == FORM_STATES.NOT_REVIEWED) {
             return false;
@@ -126,3 +108,4 @@ public class EventService {
         return true;
     }
 }
+

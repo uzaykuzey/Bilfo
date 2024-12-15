@@ -96,7 +96,7 @@ export default function TourListLayout() {
       alert("Please select a date.");
       return;
     }
-  
+    console.log(tour);
     try {
       var index = parseInt(selectedIndex);
       const payload = {
@@ -107,17 +107,10 @@ export default function TourListLayout() {
       };
   
       console.log(payload);
-      const response = await api.post("/form/evaluate", payload);
+      const response = await api.post("/form/eva", payload);
   
       if (response.status === 200) {
         alert("Tour accepted successfully!");
-  
-        // Update the UI by removing the tour from pending and adding to accepted
-        setPendingTours((prev) =>
-          prev.filter((tour) => tour.id !== tour.id)
-        );
-        setAcceptedTours((prev) => [...prev, response.data]);
-        closePopup(); // Close the popup after accepting
       } else {
         alert("Failed to accept the tour.");
       }
@@ -132,18 +125,18 @@ export default function TourListLayout() {
       try {
         const responseForm = await api.get("/form");
         const responseEvent = await api.get("/event");
-
-
+        console.log(responseForm);
+        console.log(responseEvent);
         const pending = responseForm.data.filter(
           (item) => item.approved === "NOT_REVIEWED"
         );
-        const accepted = responseEvent.data.filter(
+        const accepted = responseForm.data.filter(
           (item) => item.approved === "ACCEPTED"
         );
-        const rejected = responseEvent.data.filter(
+        const rejected = responseForm.data.filter(
           (item) => item.approved === "REJECTED"
         );
-
+        console.log(accepted);
         setPendingTours(pending);
         setAcceptedTours(accepted);
         setRejectedTours(rejected);

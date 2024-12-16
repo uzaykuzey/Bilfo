@@ -27,10 +27,6 @@ export default function IndividualToursForm() {
         "ME", "MSC", "PHIL", "PHYS", "POLS", "PSYC", "THEA", "THM", "THR", "TRIN"
     ];
     
-
-    
-    
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -271,7 +267,7 @@ export default function IndividualToursForm() {
                     </label>
 
                     <label>
-                        Third time preference (hour):
+                        Third time preference (hour):  
                         <select
                             name="thirdTimeHour"
                             value={formData.thirdTimeHour}

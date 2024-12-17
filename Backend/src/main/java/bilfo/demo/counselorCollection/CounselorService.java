@@ -1,7 +1,5 @@
 package bilfo.demo.counselorCollection;
 
-
-import bilfo.demo.counselorCollection.Counselor;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

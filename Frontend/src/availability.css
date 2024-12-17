@@ -1,0 +1,67 @@
+/* Overall Layout */
+.home-layout {
+    display: flex;
+    min-height: 100vh; /* Full viewport height */
+  }
+  
+  /* Main Content */
+  .main-content {
+    flex: 1; /* Take up remaining horizontal space */
+    padding: 20px;
+    text-align: center;
+    overflow-x: auto;
+    box-sizing: border-box;
+  }
+  
+  /* Table styling */
+  .availability-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .availability-table th,
+  .availability-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .availability-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  /* Class for clickable cells */
+  .clickable-cell {
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .clickable-cell.white {
+    background-color: white;
+  }
+  
+  .clickable-cell.red {
+    background-color: red;
+  }
+  
+  .clickable-cell:hover {
+    background-color: #f0e68c; /* Optional hover effect */
+  }
+  
+  /* Save Button */
+  .save-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .save-button:hover {
+    background-color: #45a049;
+  }
+  

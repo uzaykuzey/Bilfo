@@ -20,6 +20,10 @@ export default function NavbarLayout(){
     e.preventDefault();
     navigate(`/userHome/${bilkentId}/tour_fair_list`, { state: { statusUser } });
   };
+  const goToUserHome = (e) => {
+    e.preventDefault();
+    navigate(`/userHome/${bilkentId}`, { state: { statusUser } })
+  }
 return(
 <nav className="sidebar" >
         <div className="logo-container">
@@ -37,7 +41,7 @@ return(
         </div>
 
         <div className="nav-links">
-          <a className="nav-link">Profile</a>
+          <a className="nav-link" onClick={goToUserHome}>Profile</a>
           <a className="nav-link" onClick={goToTourFairList}>Tours and Fairs</a>
 
           {statusUser === "COORDINATOR" || statusUser === "ADVISOR" && (

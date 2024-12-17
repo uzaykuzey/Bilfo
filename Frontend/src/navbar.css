@@ -40,7 +40,6 @@
 
 .nav-link {
   padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.1);
   color: white;
   text-decoration: none;
   border-radius: 1rem;
@@ -48,9 +47,7 @@
   transition: background-color 0.3s;
 }
 
-.nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
+
 
 .language-switcher {
   margin-top: auto;

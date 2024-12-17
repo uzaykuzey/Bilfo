@@ -12,7 +12,14 @@ export default function UserHomeLayout() {
   const { statusUser } = state;
 
   console.log(statusUser);
-  
+  const goToAvailability = (e) => {
+    e.preventDefault();
+    navigate(`/userHome/${bilkentId}/availability`, {state : {statusUser}});
+  }
+  const goToSchedule = (e) => {
+    e.preventDefault();
+    navigate(`/userHome/${bilkentId}/schedule`, {state : {statusUser}});
+  }
   return (
     <div className="home-layout">
       {<NavbarLayout/>}
@@ -63,8 +70,8 @@ export default function UserHomeLayout() {
 
             {/* Profile Actions */}
             <div className="profile-actions">
-              <button className="action-button">See Tour Schedule</button>
-              <button className="action-button">See Availability Schedule</button>
+              <button className="action-button" onClick={goToSchedule}>See Tour Schedule</button>
+              <button className="action-button" onClick={goToAvailability}>See Availability Schedule</button>
             </div>
           </div>
         </div>

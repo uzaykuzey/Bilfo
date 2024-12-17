@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import NavbarLayout from "./navbar";
+import { Link } from "react-router-dom";
 
 export default function UserHomeLayout() {
   const { bilkentId } = useParams();
@@ -41,8 +42,13 @@ export default function UserHomeLayout() {
               <div className="profile-header-details">
                 <h2>
                   Emir Görgülü
-                  <a href={navigate(`/userHome/${bilkentId}/settings`,{state:statusUser})} className="nav-link"><i className="fas fa-user-circle"></i> </a>
-                </h2>
+                  <Link 
+                    to={`/userHome/${bilkentId}/settings`} 
+                    state={statusUser} 
+                    className="nav-link"
+                  >
+                    <i className="fas fa-user-circle"></i>
+                  </Link></h2>
                 <h3>{statusUser == 'ADVISOR' ? "Advisor" : "Guide"}</h3>
               </div>
             </div>

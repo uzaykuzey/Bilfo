@@ -64,18 +64,21 @@ public class UserService {
 
         if(status == USER_STATUS.COORDINATOR)
         {
-            var coordinators=userRepository.findUsersByStatus(USER_STATUS.COORDINATOR);
-            if(!coordinators.isEmpty())
+            Optional<List<User>> coordinators=userRepository.findUsersByStatus(USER_STATUS.COORDINATOR);
+            if(coordinators.isPresent())
             {
-                return Optional.empty();
+                if (!coordinators.get().isEmpty()) {
+                    return Optional.empty();
+                }
             }
         }
         else if(status == USER_STATUS.ACTING_DIRECTOR)
         {
-            var coordinators=userRepository.findUsersByStatus(USER_STATUS.ACTING_DIRECTOR);
-            if(!coordinators.isEmpty())
-            {
-                return Optional.empty();
+            Optional<List<User>> coordinators=userRepository.findUsersByStatus(USER_STATUS.ACTING_DIRECTOR);
+            if (coordinators.isPresent()) {
+                if (!coordinators.get().isEmpty()) {
+                    return Optional.empty();
+                }
             }
         }
 
@@ -245,6 +248,7 @@ public class UserService {
 
     private boolean promoteAdvisor(User advisor)
     {
+        System.out.println("zort");
         Optional<List<User>> coordinators = userRepository.findUsersByStatus(USER_STATUS.COORDINATOR);
         if(coordinators.isPresent() && !coordinators.get().isEmpty())
         {
@@ -260,8 +264,8 @@ public class UserService {
         List<ObjectId> logs = advisor.getLogs();
         List<ObjectId> suggestedEvents = advisor.getSuggestedEvents();
         boolean[] availability = advisor.getAvailability();
-
-        this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.COORDINATOR, department, logs, suggestedEvents, false, availability, DAY.NOT_ASSIGNED);
+        userRepository.deleteById(advisor.getId());
+        System.out.println(this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.COORDINATOR, department, logs, suggestedEvents, false, availability, DAY.NOT_ASSIGNED));
         return true;
     }
 

@@ -8,6 +8,7 @@ export default function FairApplicationLayout() {
         date: '',
         time: '',
         city: '',
+        contactInfo: '',
         termsAccepted: false,
         formErrors: {}
     });
@@ -44,6 +45,8 @@ export default function FairApplicationLayout() {
         if (!formData.date) errors.date = 'Please select a date.';
         if (!formData.time) errors.time = 'Please select a time.';
         if (!formData.city) errors.city = 'Please select a city.';
+        if (!formData.contactInfo) errors.contactInfo = 'Please provide a contact email.';
+        else if (!/\S+@\S+\.\S+/.test(formData.contactInfo)) errors.contactInfo = 'Please enter a valid email address.';
         if (!formData.termsAccepted) errors.termsAccepted = 'You must accept the terms and conditions.';
         return errors;
     };
@@ -63,11 +66,12 @@ export default function FairApplicationLayout() {
             date: formData.date,
             time: formData.time,
             city: formData.city,
+            contactMail: formData.contactInfo
         };
         try {
             // Make the API call
             const response = await api.post("/form/fairform", fairFormData);
-    
+
             // Handle the API response
             if (response.status === 200) {
                 setFormData({
@@ -75,6 +79,7 @@ export default function FairApplicationLayout() {
                     date: '',
                     time: '',
                     city: '',
+                    contactInfo: '',
                     termsAccepted: false,
                     formErrors: {}
                 });
@@ -197,6 +202,21 @@ export default function FairApplicationLayout() {
                         </select>
                         {formData.formErrors.city && (
                             <span className="error">{formData.formErrors.city}</span>
+                        )}
+                    </label>
+
+                    {/* New Contact Info Field */}
+                    <label>
+                        Contact Info (Email):
+                        <input
+                            type="email"
+                            name="contactInfo"
+                            value={formData.contactInfo}
+                            onChange={handleChange}
+                            required
+                        />
+                        {formData.formErrors.contactInfo && (
+                            <span className="error">{formData.formErrors.contactInfo}</span>
                         )}
                     </label>
 

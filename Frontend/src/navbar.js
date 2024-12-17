@@ -37,7 +37,7 @@ return(
         </div>
 
         <div className="nav-links">
-          <a href="/profile" className="nav-link">Profile</a>
+          <a className="nav-link">Profile</a>
           <a className="nav-link" onClick={goToTourFairList}>Tours and Fairs</a>
 
           {statusUser === "COORDINATOR" || statusUser === "ADVISOR" && (

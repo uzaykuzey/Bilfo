@@ -1,23 +1,23 @@
 import "./advisor_list.css";
 import NavbarLayout from "./navbar";
-import { Route, useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import api from "./api/axios_config";
 import Popup from "reactjs-popup";
-import "reactjs-popup/dist/index.css"; // Ensure this CSS is imported
+import "reactjs-popup/dist/index.css";
 
 export default function AdvisorListLayout() {
   const { bilkentId } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
   const { statusUser } = state;
-  const [advisors, setAdvisors] = useState([]);
-  const [deleteAdvisor, setDeleteAdvisor] = useState(null); // State for selected advisor to delete
-  const [demoteAdvisor, setDemoteAdvisor] = useState(null); // State for selected advisor to demote
 
-  const [isAddPopupOpen, setIsAddPopupOpen] = useState(false); // State for add advisor popup
+  const [advisors, setAdvisors] = useState([]);
+  const [deleteAdvisor, setDeleteAdvisor] = useState(null);
+  const [demoteAdvisor, setDemoteAdvisor] = useState(null);
+  const [promoteAdvisor, setPromoteAdvisor] = useState(null);
+
+  const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
   const [newAdvisor, setNewAdvisor] = useState({
     username: "",
     bilkentId: "",
@@ -26,7 +26,7 @@ export default function AdvisorListLayout() {
     department: "CS",
     day: "Monday",
     status: "ADVISOR"
-  }); // State for new advisor data
+  });
 
   useEffect(() => {
     const fetchAdvisors = async () => {
@@ -34,56 +34,70 @@ export default function AdvisorListLayout() {
         const response = await api.get("/getAdvisors");
         if (response.status === 200) {
           setAdvisors(response.data);
-          console.log(response.data);
         } else if (response.status === 204) {
           setAdvisors([]);
         }
       } catch (err) {
-        console.error("Error fetching guides:", err);
+        console.error("Error fetching advisors:", err);
       }
     };
 
     fetchAdvisors();
   }, []);
 
-  const handleRemoveClick = (advisor) => {
-    setDeleteAdvisor(advisor); // Set the advisor data to be removed
-  };
+  const handleRemoveClick = (advisor) => setDeleteAdvisor(advisor);
 
   const handleRemoveAdvisor = async () => {
-    try {
-      if (deleteAdvisor) {
-        const response = await api.post(`/removeAdvisor`, { id: deleteAdvisor.id });
+    if (deleteAdvisor) {
+      try {
+        const response = await api.post(`/removeUser`, { bilkentId: deleteAdvisor.bilkentId });
         if (response.status === 200) {
-          setAdvisors(advisors.filter((advisor) => advisor.id !== deleteAdvisor.id)); // Update advisor list
-          setDeleteAdvisor(null); // Reset the deletion state after successful removal
+          setAdvisors(advisors.filter((a) => a.id !== deleteAdvisor.id));
+          setDeleteAdvisor(null);
         }
+      } catch (error) {
+        console.error("Error removing advisor:", error);
       }
-    } catch (error) {
-      console.error("Error removing advisor:", error);
     }
   };
 
-  const handleDemoteClick = (advisor) => {
-    setDemoteAdvisor(advisor); // Set the advisor data to be demoted
-  };
+  const handleDemoteClick = (advisor) => setDemoteAdvisor(advisor);
 
   const handleDemoteAdvisor = async () => {
-    try {
-      if (demoteAdvisor) {
+    if (demoteAdvisor) {
+      try {
         const response = await api.post(`/demoteAdvisor`, { id: demoteAdvisor.id });
         if (response.status === 200) {
-          // Update advisor role in the local state (assuming the API provides new role data)
           setAdvisors(
             advisors.map((advisor) =>
               advisor.id === demoteAdvisor.id ? { ...advisor, role: "USER" } : advisor
             )
           );
-          setDemoteAdvisor(null); // Reset the demotion state after successful demotion
+          setDemoteAdvisor(null);
         }
+      } catch (error) {
+        console.error("Error demoting advisor:", error);
       }
-    } catch (error) {
-      console.error("Error demoting advisor:", error);
+    }
+  };
+
+  const handlePromoteClick = (advisor) => setPromoteAdvisor(advisor);
+
+  const handlePromoteAdvisor = async () => {
+    if (promoteAdvisor) {
+      try {
+        const response = await api.post(`/promoteUser`, { bilkentId: promoteAdvisor.bilkentId});
+        if (response.status === 200) {
+          setAdvisors(
+            advisors.map((advisor) =>
+              advisor.id === promoteAdvisor.id ? { ...advisor, role: "SENIOR_ADVISOR" } : advisor
+            )
+          );
+          setPromoteAdvisor(null);
+        }
+      } catch (error) {
+        console.error("Error promoting advisor:", error);
+      }
     }
   };
 
@@ -98,10 +112,10 @@ export default function AdvisorListLayout() {
     const phoneRegex = /^\d{10}$/;
     const idRegex = /^\d{8}$/;
 
-    if (!username || !bilkentId || !email || !phoneNo) return false; // No field should be empty
-    if (!idRegex.test(bilkentId)) return false; // ID must be exactly 8 digits
-    if (!emailRegex.test(email)) return false; // Email format validation
-    if (!phoneRegex.test(phoneNo)) return false; // Phone number validation (10 digits)
+    if (!username || !bilkentId || !email || !phoneNo) return false;
+    if (!idRegex.test(bilkentId)) return false;
+    if (!emailRegex.test(email)) return false;
+    if (!phoneRegex.test(phoneNo)) return false;
     return true;
   };
 
@@ -113,15 +127,15 @@ export default function AdvisorListLayout() {
     try {
       const response = await api.post("/addAdvisor", newAdvisor);
       if (response.status === 200) {
-        setAdvisors([...advisors, response.data]); // Add the new advisor to the list
-        setIsAddPopupOpen(false); // Close the popup
+        setAdvisors([...advisors, response.data]);
+        setIsAddPopupOpen(false);
         setNewAdvisor({
           username: "",
           bilkentId: "",
           email: "",
           phoneNo: "",
           department: "CS",
-          day:"Monday"
+          day: "Monday"
         });
       }
     } catch (error) {
@@ -131,20 +145,13 @@ export default function AdvisorListLayout() {
 
   return (
     <div className="home-layout">
-      {/* Sidebar Navigation */}
-      {<NavbarLayout />}
-
+      <NavbarLayout />
       <div className="content">
         <h2>Advisor List</h2>
         <div className="advisor-list">
-          <div className="search-bar">
-            <button
-              className="add-advisor-btn"
-              onClick={() => setIsAddPopupOpen(true)}
-            >
-              Add Advisor
-            </button>
-          </div>
+          <button className="add-advisor-btn" onClick={() => setIsAddPopupOpen(true)}>
+            Add Advisor
+          </button>
 
           <table className="advisor-table">
             <thead>
@@ -162,7 +169,7 @@ export default function AdvisorListLayout() {
                   <td>{advisor.email}</td>
                   <td>{advisor.bilkentId}</td>
                   <td className="actions">
-                    <button>Promote</button>
+                    <button onClick={() => handlePromoteClick(advisor)}>Promote</button>
                     <button onClick={() => handleDemoteClick(advisor)}>Demote</button>
                     <button onClick={() => handleRemoveClick(advisor)}>Remove</button>
                   </td>
@@ -173,37 +180,49 @@ export default function AdvisorListLayout() {
         </div>
       </div>
 
-      {/* Popup for removal confirmation */}
-      {deleteAdvisor && (
-        <Popup open={true} onClose={() => setDeleteAdvisor(null)} position="right center">
+      {/* Promote Popup */}
+      {promoteAdvisor && (
+        <Popup open={true} onClose={() => setPromoteAdvisor(null)} position="center center">
           <div className="popup-container">
-            <h2>Confirm Deletion</h2>
+            <h2>Confirm Promotion</h2>
             <p>
-              Are you sure you want to delete Advisor{' '}
-              <strong>{deleteAdvisor.username}</strong> with Bilkent ID{' '}
-              <strong>{deleteAdvisor.bilkentId}</strong>?
+              Are you sure you want to promote <strong>{promoteAdvisor.username}</strong> to Senior Advisor?
             </p>
             <div className="popup-actions">
-              <button onClick={handleRemoveAdvisor}>Remove</button>
-              <button onClick={() => setDeleteAdvisor(null)}>Cancel</button>
+              <button onClick={handlePromoteAdvisor}>Promote</button>
+              <button onClick={() => setPromoteAdvisor(null)}>Cancel</button>
             </div>
           </div>
         </Popup>
       )}
 
-      {/* Popup for demotion confirmation */}
+      {/* Demote Popup */}
       {demoteAdvisor && (
-        <Popup open={true} onClose={() => setDemoteAdvisor(null)} position="right center">
+        <Popup open={true} onClose={() => setDemoteAdvisor(null)} position="center center">
           <div className="popup-container">
             <h2>Confirm Demotion</h2>
             <p>
-              Are you sure you want to demote Advisor{' '}
-              <strong>{demoteAdvisor.username}</strong> with Bilkent ID{' '}
-              <strong>{demoteAdvisor.bilkentId}</strong>?
+              Are you sure you want to demote <strong>{demoteAdvisor.username}</strong>?
             </p>
             <div className="popup-actions">
               <button onClick={handleDemoteAdvisor}>Demote</button>
               <button onClick={() => setDemoteAdvisor(null)}>Cancel</button>
+            </div>
+          </div>
+        </Popup>
+      )}
+
+      {/* Remove Popup */}
+      {deleteAdvisor && (
+        <Popup open={true} onClose={() => setDeleteAdvisor(null)} position="center center">
+          <div className="popup-container">
+            <h2>Confirm Deletion</h2>
+            <p>
+              Are you sure you want to remove <strong>{deleteAdvisor.username}</strong>?
+            </p>
+            <div className="popup-actions">
+              <button onClick={handleRemoveAdvisor}>Remove</button>
+              <button onClick={() => setDeleteAdvisor(null)}>Cancel</button>
             </div>
           </div>
         </Popup>

@@ -94,7 +94,6 @@ public class FormManager {
         List<Pair<Date, TOUR_TIMES>> dates=createPossibleTimes(formApplication);
 
         String contactMail = formApplication.get("contactMail");
-
         Optional<Form> newForm = formService.createForm(EVENT_TYPES.INDIVIDUAL_TOUR, FORM_STATES.NOT_REVIEWED, dates, contactMail, CITIES.ANKARA, null, visitorCount, visitorNotes, null, names, department);
         if(newForm.isPresent())
         {

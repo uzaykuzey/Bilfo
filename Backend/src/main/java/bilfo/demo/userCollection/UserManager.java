@@ -159,6 +159,7 @@ public class UserManager {
 
     @PostMapping("/promoteUser")
     public ResponseEntity<String> promoteUser(@RequestBody Map<String,String> promoteRequest) {
+
         int bilkentId = Integer.parseInt(promoteRequest.get("bilkentId"));
         DAY day=DAY.NOT_ASSIGNED;
         if(promoteRequest.containsKey("day"))

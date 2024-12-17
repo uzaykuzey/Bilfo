@@ -118,7 +118,7 @@ export default function IndividualToursForm() {
             time3: formData.thirdTimeHour,
             visitorCount: formData.numberOfVisitors,
             department: formData.majorOfInterest,
-            email: formData.contactEmail,
+            contactMail: formData.contactEmail,
             visitorNotes: formData.visitorNotes
         };
 

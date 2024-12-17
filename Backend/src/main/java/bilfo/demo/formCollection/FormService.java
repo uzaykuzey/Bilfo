@@ -4,6 +4,7 @@ package bilfo.demo.formCollection;
 import bilfo.demo.EventCollection.Event;
 import bilfo.demo.EventCollection.EventService;
 import bilfo.demo.enums.*;
+import bilfo.demo.mailSender.MailSenderService;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,8 @@ public class FormService {
     @Lazy
     private EventService eventService;
     private static final Logger logger = LoggerFactory.getLogger(FormService.class);
+    @Autowired
+    private MailSenderService mailSenderService;
 
     public List<Form> allForms(){
         return formRepository.findAll();
@@ -36,7 +39,7 @@ public class FormService {
         return formRepository.findById(id);
     }
 
-    public Optional<Form> createForm(EVENT_TYPES type, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleDates, CITIES city, String schoolName, int visitorCount, String visitorNotes, String counselorEmail, String[] names, DEPARTMENT department) {
+    public Optional<Form> createForm(EVENT_TYPES type, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleDates, String contactMail, CITIES city, String schoolName, int visitorCount, String visitorNotes, String counselorEmail, String[] names, DEPARTMENT department) {
         logger.info("Creating Form");
 
         // Check if Form already exists
@@ -50,9 +53,9 @@ public class FormService {
         Form form = new Form();
         switch (type)
         {
-            case FAIR -> form = new FairForm(new ObjectId(), approved, possibleDates, city, schoolName);
-            case INDIVIDUAL_TOUR -> form = new IndividualTourForm(new ObjectId(), approved, possibleDates, visitorCount, visitorNotes, names, department);
-            case HIGHSCHOOL_TOUR -> form = new HighSchoolTourForm(new ObjectId(), approved, possibleDates, visitorCount, visitorNotes, schoolName, counselorEmail, city);
+            case FAIR -> form = new FairForm(new ObjectId(), approved, possibleDates, contactMail, city, schoolName);
+            case INDIVIDUAL_TOUR -> form = new IndividualTourForm(new ObjectId(), approved, possibleDates, contactMail, visitorCount, visitorNotes, names, department);
+            case HIGHSCHOOL_TOUR -> form = new HighSchoolTourForm(new ObjectId(), approved, possibleDates, contactMail, visitorCount, visitorNotes, schoolName, counselorEmail, city);
             default -> throw new IllegalArgumentException("Unknown EVENT_TYPE: " + type);
         }
 
@@ -73,12 +76,12 @@ public class FormService {
         form.get().setApproved(state);
         formRepository.save(form.get());
 
-        //TODO send mail
         if(state==FORM_STATES.REJECTED)
         {
+            mailSenderService.sendEmail(form.get().getContactMail(), "Your Form has been evaluated", "Your form has been rejected.\nReason:\n"+rejectionMessage);
             return Optional.empty();
         }
-
+        mailSenderService.sendEmail(form.get().getContactMail(), "Your Form has been evaluated", "Your form has been accepted. \nAccepted time: "+chosenDate.toString()+" at "+chosenTime.toString());
         return eventService.createEvent(formId, new ArrayList<>(), new ArrayList<>(), form.get().getType(), chosenDate, chosenTime);
     }
 

@@ -71,7 +71,7 @@ public class FormManager {
         int visitorCount=Integer.parseInt(formApplication.get("visitorCount"));
         String visitorNotes=formApplication.get("visitorNotes");
 
-        Optional<Form> newForm = formService.createForm(EVENT_TYPES.HIGHSCHOOL_TOUR, FORM_STATES.NOT_REVIEWED, dates, city, schoolName, visitorCount, visitorNotes, counselorEmail, null, DEPARTMENT.NOT_APPLICABLE);
+        Optional<Form> newForm = formService.createForm(EVENT_TYPES.HIGHSCHOOL_TOUR, FORM_STATES.NOT_REVIEWED, dates, counselorEmail, city, schoolName, visitorCount, visitorNotes, counselorEmail, null, DEPARTMENT.NOT_APPLICABLE);
         if(newForm.isPresent())
         {
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
@@ -93,7 +93,9 @@ public class FormManager {
 
         List<Pair<Date, TOUR_TIMES>> dates=createPossibleTimes(formApplication);
 
-        Optional<Form> newForm = formService.createForm(EVENT_TYPES.INDIVIDUAL_TOUR, FORM_STATES.NOT_REVIEWED, dates, CITIES.ANKARA, null, visitorCount, visitorNotes, null, names, department);
+        String contactMail = formApplication.get("contactMail");
+
+        Optional<Form> newForm = formService.createForm(EVENT_TYPES.INDIVIDUAL_TOUR, FORM_STATES.NOT_REVIEWED, dates, contactMail, CITIES.ANKARA, null, visitorCount, visitorNotes, null, names, department);
         if(newForm.isPresent())
         {
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
@@ -120,10 +122,11 @@ public class FormManager {
         TOUR_TIMES time = stringToTourTime(formApplication.get("time"));
         Date date = stringToDate(formApplication.get("date"));
 
+        String contactMail = formApplication.get("contactMail");
         List<Pair<Date, TOUR_TIMES>> dates=new ArrayList<>();
         dates.add(Pair.of(date, time));
 
-        Optional<Form> newForm=formService.createForm(EVENT_TYPES.FAIR, FORM_STATES.NOT_REVIEWED, dates, city, schoolName, 0, "", null, null, DEPARTMENT.NOT_APPLICABLE);
+        Optional<Form> newForm=formService.createForm(EVENT_TYPES.FAIR, FORM_STATES.NOT_REVIEWED, dates, contactMail, city, schoolName, 0, "", null, null, DEPARTMENT.NOT_APPLICABLE);
         if(newForm.isPresent())
         {
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);

@@ -16,8 +16,8 @@ public class HighSchoolTourForm extends TourForm {
     private String counselorEmail;
     private CITIES location;
 
-    public HighSchoolTourForm(ObjectId id, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, int visitorCount, String visitorNotes, String schoolName, String counselorEmail, CITIES location) {
-        super(id, approved, possibleTimes, visitorCount, visitorNotes, EVENT_TYPES.HIGHSCHOOL_TOUR);
+    public HighSchoolTourForm(ObjectId id, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, String contactMail, int visitorCount, String visitorNotes, String schoolName, String counselorEmail, CITIES location) {
+        super(id, approved, possibleTimes, contactMail, visitorCount, visitorNotes, EVENT_TYPES.HIGHSCHOOL_TOUR);
         this.schoolName = schoolName;
         this.counselorEmail = counselorEmail;
         this.location = location;

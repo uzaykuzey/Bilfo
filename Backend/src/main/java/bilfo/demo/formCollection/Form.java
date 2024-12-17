@@ -31,4 +31,5 @@ public class Form {
     private FORM_STATES approved;
     private List<Pair<Date, TOUR_TIMES>> possibleTimes;
     private EVENT_TYPES type;
+    private String contactMail;
 }

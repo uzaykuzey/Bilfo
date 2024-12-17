@@ -1,7 +1,7 @@
-import "./navbar.css"
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import "./navbar.css"
 
 export default function NavbarLayout(){
   const { bilkentId } = useParams();

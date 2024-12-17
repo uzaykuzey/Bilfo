@@ -86,9 +86,8 @@ public class UserService {
         return Optional.of(savedUser);
     }
 
-    public boolean removeUser(ObjectId userId) {
-        // Find the user by ObjectId
-        Optional<User> user = userRepository.findById(userId);
+    public boolean removeUser(int bilkentId) {
+        Optional<User> user = userRepository.findByBilkentId(bilkentId);
 
         // If the user does not exist, return false
         if (!user.isPresent()) {

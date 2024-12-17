@@ -4,7 +4,6 @@ import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import bilfo.demo.mailSender.MailSenderManager;
-import bilfo.demo.mailSender.MailSenderService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -12,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.*;
@@ -233,13 +231,13 @@ public class UserManager {
         return new ResponseEntity<>("There is already a user with that id number", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/removeAdvisor")
-    public ResponseEntity<String> removeAdvisor(@RequestBody Map<String,String> removedAdvisorId){
-        ObjectId advisorId = new ObjectId(removedAdvisorId.get("id"));
-        boolean deletion = userService.removeUser(advisorId);
-        if (deletion){
+    @PostMapping("/removeUser")
+    public ResponseEntity<String> removeAdvisor(@RequestBody Map<String,String> removedUserId) {
+        int userId = Integer.parseInt(removedUserId.get("bilkentId"));
+        boolean deletion = userService.removeUser(userId);
+        if (deletion) {
             return new ResponseEntity<String>("Successful", HttpStatus.OK);
-        }else{
+        } else {
             return new ResponseEntity<String>("Error Occurred", HttpStatus.BAD_REQUEST);
         }
     }

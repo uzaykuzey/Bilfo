@@ -1,0 +1,95 @@
+.home-layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  /* Overall Layout */
+.feedback-page {
+    display: flex;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+ 
+  
+  /* Feedback Form */
+  .feedback-form {
+    flex: 1;
+    padding: 40px;
+    background-color: #fafafa;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 40px;
+    border-radius: 8px;
+  }
+  
+  .form-title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  .rating-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .rating-container .label {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .stars {
+    display: flex;
+  }
+  
+  .star {
+    font-size: 24px;
+    color: lightgray;
+    cursor: pointer;
+  }
+  
+  .star.selected {
+    color: gold;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .input-code {
+    width: 200px;
+    padding: 8px;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .submit-button {
+    background-color: #004085;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .submit-button:hover {
+    background-color: #003366;
+  }
+  

@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./availability.css";
 import { useParams } from "react-router-dom";
 import NavbarLayout from "./navbar";
 import api from "./api/axios_config";
 
 export default function AvailabilityLayout() {
-
   const { bilkentId } = useParams();
   const rows = [
     "8.20 – 9.20",
@@ -25,6 +24,31 @@ export default function AvailabilityLayout() {
 
   // State to store the color of each cell (red or white)
   const [tableData, setTableData] = useState({});
+
+  // Fetch availability string on page load
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      try {
+        // Make GET request to fetch the availability string
+        const response = await api.get("/getAvailability", { params: { bilkentId: bilkentId } });
+        const availabilityString = response.data;  
+        console.log(availabilityString)// assuming the response contains the availabilityString
+
+        // Initialize tableData with red (1) or white (0) based on the fetched string
+        const newTableData = {};
+        for (let i = 0; i < availabilityString.length; i++) {
+          const rowIndex = Math.floor(i / columns.length); // Determine row based on position in the string
+          const colIndex = i % columns.length; // Determine column based on position in the string
+          newTableData[`${rowIndex}-${colIndex}`] = availabilityString[i] === '1' ? 'red' : 'white';
+        }
+        setTableData(newTableData);  // Update state with the new tableData
+      } catch (error) {
+        console.error("Error fetching availability data:", error);
+      }
+    };
+
+    fetchAvailability();
+  }, [bilkentId]); // Trigger the effect when the bilkentId changes
 
   const handleCellClick = (rowIndex, colIndex) => {
     const key = `${rowIndex}-${colIndex}`;
@@ -52,8 +76,10 @@ export default function AvailabilityLayout() {
 
     // Send the string to the backend using Axios
     try {
-        console.log(saveString);
-      const response = await api.post("/changeAvailability", { bilkentId: bilkentId, availabilityString: saveString });
+      const response = await api.post("/changeAvailability", {
+        bilkentId: bilkentId,
+        availabilityString: saveString,
+      });
       console.log("Data saved:", response.data);
     } catch (error) {
       console.error("Error saving data:", error);
@@ -66,7 +92,7 @@ export default function AvailabilityLayout() {
 
       <div className="main-content">
         <h2>Availability Schedule</h2>
-        
+
         <table className="availability-table">
           <thead>
             <tr>

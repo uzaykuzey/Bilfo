@@ -12,6 +12,8 @@ import TourListLayout from './tour_fair_list';
 import AdvisorListLayout from './advisor_list';
 import AvailabilityLayout from './availability';
 import ScheduleLayout from './tour_schedule';
+import FeedbackLayout from './feedback';
+import PuantajLayout from './puantaj_table';
 
 function  App() {
   return (
@@ -21,6 +23,7 @@ function  App() {
         <Route path="/school_tours" element={<SchoolToursLayout/>} />
         <Route path="/individual_tours" element={<IndividualToursLayout/>} />
         <Route path="/fair_application" element={<FairApplicationLayout/>} />
+        <Route path="/feedback" element={<FeedbackLayout/>} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/userHome/:bilkentId" element={<UserHomeLayout/>} />
         <Route path="/userHome/:bilkentId/settings" element={<UserSettingsLayout/>} />
@@ -29,6 +32,7 @@ function  App() {
         <Route path="/userHome/:bilkentId/tour_fair_list" element={<TourListLayout/>} />
         <Route path="/userHome/:bilkentId/availability" element={<AvailabilityLayout/>} />
         <Route path="/userHome/:bilkentId/schedule" element={<ScheduleLayout/>} />
+        <Route path="/userHome/:bilkentId/puantaj" element={<PuantajLayout/>} />
         {/* Redirect unknown routes */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

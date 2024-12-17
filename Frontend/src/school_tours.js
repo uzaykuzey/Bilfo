@@ -148,6 +148,7 @@ export default function SchoolToursForm() {
                 <div className="nav-links">
                     <a href="/campus_tours" className="nav-link">Campus Tours</a>
                     <a href="/fair-application" className="nav-link">Fair Application</a>
+                    <a href="/feedback" className="nav-link">FeedBack</a>
                     <a href="/login" className="nav-link">Log In</a>
                 </div>
 

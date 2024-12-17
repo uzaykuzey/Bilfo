@@ -127,7 +127,7 @@ public class UserManager {
 
     @PostMapping("/changeAvailability")
     public ResponseEntity<String> changeAvailability(@RequestBody Map<String,String> changeUserRequest) {
-        int id = Integer.parseInt(changeUserRequest.get("id"));
+        int bilkentId = Integer.parseInt(changeUserRequest.get("bilkentId"));
         String availabilityString = changeUserRequest.get("availabilityString");
 
         if(availabilityString==null || availabilityString.length() != User.AVAILABILITY_LENGTH)
@@ -142,13 +142,31 @@ public class UserManager {
             availabilityArray[i] = availabilityString.charAt(i)=='1';
         }
 
-        Optional<User> user = userService.getUser(id);
+        Optional<User> user = userService.getUser(bilkentId);
         if(user.isPresent()) {
-            userService.changeAvailability(id, availabilityArray);
+            userService.changeAvailability(bilkentId, availabilityArray);
             return new ResponseEntity<>("Change availability successful", HttpStatus.OK);
         }
 
         return new ResponseEntity<>("No User", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/getAvailability")
+    public ResponseEntity<String> getAvailability(@RequestBody Map<String,String> userRequest)
+    {
+        int bilkentId = Integer.parseInt(userRequest.get("bilkentId").toString());
+        Optional<User> user = userService.getUser(bilkentId);
+        if (user.isEmpty()) {
+            return new ResponseEntity<>("404", HttpStatus.NOT_FOUND);
+        }
+
+        boolean[] availabilityArray=user.get().getAvailability();
+        StringBuilder availabilityString=new StringBuilder();
+        for(int i=0; i<availabilityArray.length; i++)
+        {
+            availabilityString.append(availabilityArray[i] ? "1" : "0");
+        }
+        return new ResponseEntity<>(availabilityString.toString(), HttpStatus.OK);
     }
 
     @PostMapping("/getAdvisorsOfTheDay")

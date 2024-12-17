@@ -1,5 +1,6 @@
 import "./advisor_list.css";
-import { useParams } from "react-router-dom";
+import NavbarLayout from "./navbar"
+import { Route, useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
@@ -14,6 +15,7 @@ export default function AdvisorListLayout() {
   const { statusUser } = state;
   const [advisors, setAdvisors] = useState([]);
   const [deleteAdvisor, setDeleteAdvisor] = useState(null); // State for selected advisor to delete
+  const [demoteAdvisor, setDemoteAdvisor] = useState(null); // State for selected advisor to demote
 
   useEffect(() => {
     const fetchAdvisors = async () => {
@@ -32,19 +34,7 @@ export default function AdvisorListLayout() {
     fetchAdvisors();
   }, []);
 
-  const goToGuideList = (e) => {
-    e.preventDefault();
-    navigate(`/userHome/${bilkentId}/guide_list`, { state: { statusUser } });
-  };
-  const goToAdvisorlist = (e) => {
-    e.preventDefault();
-    navigate(`/userHome/${bilkentId}/advisor_list`, { state: { statusUser } });
-  };
-  const goToTourFairList = (e) => {
-    e.preventDefault();
-    navigate(`/userHome/${bilkentId}/tour_fair_list`, { state: { statusUser } });
-  };
-
+  
   const handleRemoveClick = (advisor) => {
     setDeleteAdvisor(advisor); // Set the advisor data to be removed
   };
@@ -52,8 +42,7 @@ export default function AdvisorListLayout() {
   const handleRemoveAdvisor = async () => {
     try {
       if (deleteAdvisor) {
-        console.log(deleteAdvisor.id);
-        const response = await api.post(`/removeAdvisor`,{id : deleteAdvisor.id});
+        const response = await api.post(`/removeAdvisor`, { id: deleteAdvisor.id });
         if (response.status === 200) {
           setAdvisors(advisors.filter(advisor => advisor.id !== deleteAdvisor.id)); // Update advisor list
           setDeleteAdvisor(null); // Reset the deletion state after successful removal
@@ -64,53 +53,31 @@ export default function AdvisorListLayout() {
     }
   };
 
+  const handleDemoteClick = (advisor) => {
+    setDemoteAdvisor(advisor); // Set the advisor data to be demoted
+  };
+
+  const handleDemoteAdvisor = async () => {
+    try {
+      if (demoteAdvisor) {
+        const response = await api.post(`/demoteAdvisor`, { id: demoteAdvisor.id });
+        if (response.status === 200) {
+          // Update advisor role in the local state (assuming the API provides new role data)
+          setAdvisors(advisors.map(advisor =>
+            advisor.id === demoteAdvisor.id ? { ...advisor, role: "USER" } : advisor
+          ));
+          setDemoteAdvisor(null); // Reset the demotion state after successful demotion
+        }
+      }
+    } catch (error) {
+      console.error("Error demoting advisor:", error);
+    }
+  };
+
   return (
     <div className="home-layout">
       {/* Sidebar Navigation */}
-      <nav className="sidebar">
-        <div className="logo-container">
-          <div className="logo">
-            <img
-              src="/bilkent.png?height=60&width=60"
-              alt="University Logo"
-              className="logo-image"
-            />
-            <div className="logo-text">
-              <h1>BILFO</h1>
-              <p>Bilkent Information Office</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="nav-links">
-          <a href="/profile" className="nav-link">Profile</a>
-          <a className="nav-link" onClick={goToTourFairList}>Tours and Fairs</a>
-
-          {statusUser === "COORDINATOR" || statusUser === "ADVISOR" && (
-            <a className="nav-link" onClick={goToAdvisorlist}>Advisor List</a>
-          )}
-
-          {statusUser === "ADVISOR" && (
-            <a className="nav-link" onClick={goToGuideList}>Guide List</a>
-          )}
-
-          <a href="/puantaj" className="nav-link">Puantaj Table</a>
-          <a href="/logout" className="nav-link">Log Out</a>
-        </div>
-
-        <div className="language-switcher">
-          <img
-            src="/Flag_England.png?height=32&width=40"
-            alt="English"
-            className="language-icon"
-          />
-          <img
-            src="/Flag_of_Turkey.png?height=32&width=40"
-            alt="Turkish"
-            className="language-icon"
-          />
-        </div>
-      </nav>
+      {<NavbarLayout/>}
 
       <div className="content">
         <h2>Advisor List</h2>
@@ -136,7 +103,9 @@ export default function AdvisorListLayout() {
                   <td>{advisor.bilkentId}</td>
                   <td className="actions">
                     <button>Promote</button>
-                    <button>Demote</button>
+
+                    {/* Trigger the popup when demote button is clicked */}
+                    <button onClick={() => handleDemoteClick(advisor)}>Demote</button>
 
                     {/* Trigger the popup when remove button is clicked */}
                     <button onClick={() => handleRemoveClick(advisor)}>Remove</button>
@@ -148,26 +117,37 @@ export default function AdvisorListLayout() {
         </div>
       </div>
 
-      {/* Popup for confirmation */}
+      {/* Popup for removal confirmation */}
       {deleteAdvisor && (
         <Popup open={true} onClose={() => setDeleteAdvisor(null)} position="right center">
           <div className="popup-container">
             <h2>Confirm Deletion</h2>
             <p>
-              Are you sure you want to delete Advisor {' '}
+              Are you sure you want to delete Advisor{' '}
               <strong>{deleteAdvisor.username}</strong> with Bilkent ID{' '}
               <strong>{deleteAdvisor.bilkentId}</strong>?
             </p>
             <div className="popup-actions">
-              <button
-                onClick={() => {
-                  handleRemoveAdvisor(); // Call remove function
-                  setDeleteAdvisor(null); // Close the popup after removal
-                }}
-              >
-                Remove
-              </button>
+              <button onClick={handleRemoveAdvisor}>Remove</button>
               <button onClick={() => setDeleteAdvisor(null)}>Cancel</button>
+            </div>
+          </div>
+        </Popup>
+      )}
+
+      {/* Popup for demotion confirmation */}
+      {demoteAdvisor && (
+        <Popup open={true} onClose={() => setDemoteAdvisor(null)} position="right center">
+          <div className="popup-container">
+            <h2>Confirm Demotion</h2>
+            <p>
+              Are you sure you want to demote Advisor{' '}
+              <strong>{demoteAdvisor.username}</strong> with Bilkent ID{' '}
+              <strong>{demoteAdvisor.bilkentId}</strong>?
+            </p>
+            <div className="popup-actions">
+              <button onClick={handleDemoteAdvisor}>Demote</button>
+              <button onClick={() => setDemoteAdvisor(null)}>Cancel</button>
             </div>
           </div>
         </Popup>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./userSettings.css";
 import api from "./api/axios_config"
+import NavbarLayout from "./navbar"
 
 export default function UserSettingsLayout() {
   // State variables to handle form inputs
@@ -80,42 +81,7 @@ export default function UserSettingsLayout() {
   return (
     <div className="home-layout">
       {/* Sidebar */}
-      <nav className="sidebar">
-        <div className="logo-container">
-          <div className="logo">
-            <img
-              src="/bilkent.png?height=60&width=60"
-              alt="University Logo"
-              className="logo-image"
-            />
-            <div className="logo-text">
-              <h1>BILFO</h1>
-              <p>Bilkent Information Office</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="nav-links">
-          <a href="/profile" className="nav-link">Profile</a>
-          <a href="/tours-fairs" className="nav-link">Tours and Fairs</a>
-          <a href="/puantaj" className="nav-link">Puantaj Table</a>
-          <a href="/logout" className="nav-link">Log Out</a>
-        </div>
-
-        <div className="language-switcher">
-          <img
-            src="/Flag_England.png?height=32&width=40"
-            alt="English"
-            className="language-icon"
-          />
-          <img
-            src="/Flag_of_Turkey.png?height=32&width=40"
-            alt="Turkish"
-            className="language-icon"
-          />
-        </div>
-      </nav>
-
+      <NavbarLayout/>
       {/* Main Content */}
       <div className="main-content">
         <div className="profile-section">

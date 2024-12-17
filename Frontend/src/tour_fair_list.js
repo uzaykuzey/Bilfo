@@ -4,6 +4,7 @@ import api from "./api/axios_config";
 import Popup from "reactjs-popup";  // Make sure to import the popup component
 import "reactjs-popup/dist/index.css";  // Import styles for the popup
 import "./tour_fair_list.css";
+import NavbarLayout from "./navbar";
 
 export default function TourListLayout() {
   const { bilkentId } = useParams();
@@ -28,10 +29,7 @@ export default function TourListLayout() {
     
     setSelectedDate(index); // Store the whole selected time object
   };
-  const goToTourFairList = (e) => {
-    e.preventDefault();
-    navigate(`/userHome/${bilkentId}/tour_fair_list`, { state: { statusUser } });
-  };
+  
 
   const mapTime = (time) => {
     switch (time) {
@@ -436,46 +434,7 @@ export default function TourListLayout() {
 
   return (
     <div className="home-layout">
-      <nav className="sidebar">
-        <div className="logo-container">
-          <div className="logo">
-            <img
-              src="/bilkent.png?height=60&width=60"
-              alt="University Logo"
-              className="logo-image"
-            />
-            <div className="logo-text">
-              <h1>BILFO</h1>
-              <p>Bilkent Information Office</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="nav-links">
-          <a href="/profile" className="nav-link">Profile</a>
-          <a className="nav-link" onClick={goToTourFairList}>Tours and Fairs</a>
-
-          {statusUser !== "GUIDE" && (
-            <a className="nav-link" onClick={goToGuideList}>Guide List</a>
-          )}
-
-          <a href="/puantaj" className="nav-link">Puantaj Table</a>
-          <a href="/logout" className="nav-link">Log Out</a>
-        </div>
-
-        <div className="language-switcher">
-          <img
-            src="/Flag_England.png?height=32&width=40"
-            alt="English"
-            className="language-icon"
-          />
-          <img
-            src="/Flag_of_Turkey.png?height=32&width=40"
-            alt="Turkish"
-            className="language-icon"
-          />
-        </div>
-      </nav>
+      {<NavbarLayout/>}
 
       <div className="main-content">
         <h2>Tours and Fairs</h2>

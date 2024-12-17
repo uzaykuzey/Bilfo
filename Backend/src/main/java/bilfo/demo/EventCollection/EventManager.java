@@ -42,6 +42,22 @@ public class EventManager {
         }
         return new ResponseEntity<>("Unsuccesful claim", HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping("/feedback")
+    public ResponseEntity<String> feedback(@RequestBody Map<String, String> eventFeedbackRequest)
+    {
+        String contactMail = eventFeedbackRequest.get("contactMail");
+        String password = eventFeedbackRequest.get("password");
+        int rating = Integer.parseInt(eventFeedbackRequest.get("rating"));
+        String experience = eventFeedbackRequest.get("experience");
+        String recommendation = eventFeedbackRequest.get("recommendation");
+
+        if(eventService.sendFeedback(contactMail, password, rating, experience, recommendation))
+        {
+            return new ResponseEntity<>("Feedback sent", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Feedback send failed", HttpStatus.BAD_REQUEST);
+    }
 }
 
 

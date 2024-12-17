@@ -24,4 +24,8 @@ public class Event {
     private EVENT_TYPES eventType;
     private Date date;
     private TOUR_TIMES time;
+
+    private int rate;
+    private String experience;
+    private String recommendations;
 }

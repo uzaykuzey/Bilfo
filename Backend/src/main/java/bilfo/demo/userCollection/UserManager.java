@@ -323,7 +323,7 @@ public class UserManager {
         return new ResponseEntity<>("user can't be demoted", HttpStatus.BAD_REQUEST);
     }
 
-    private static String generatePassword(int length) {
+    public static String generatePassword(int length) {
         String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
         String digits = "0123456789";

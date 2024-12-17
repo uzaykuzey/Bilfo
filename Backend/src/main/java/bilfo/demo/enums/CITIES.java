@@ -81,5 +81,6 @@ public enum CITIES {
     VAN,
     YALOVA,
     YOZGAT,
-    ZONGULDAK
+    ZONGULDAK,
+    KIBRIS
 }

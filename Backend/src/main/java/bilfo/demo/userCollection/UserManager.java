@@ -278,6 +278,21 @@ public class UserManager {
         }
     }
 
+    @PostMapping("/demoteUser")
+    public ResponseEntity<String> demoteUser(@RequestBody Map<String,String> demoteRequest) {
+        int bilkentId = Integer.parseInt(demoteRequest.get("bilkentId"));
+        DAY day=DAY.NOT_ASSIGNED;
+        if(demoteRequest.containsKey("day"))
+        {
+            day=DAY.valueOf(demoteRequest.get("day").toUpperCase());
+        }
+        if(userService.demote(bilkentId, day))
+        {
+            return new ResponseEntity<>("successful demotion!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("user can't be demoted", HttpStatus.BAD_REQUEST);
+    }
+
     private static String generatePassword(int length) {
         String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";

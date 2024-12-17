@@ -269,5 +269,67 @@ public class UserService {
         return true;
     }
 
+    public boolean demote(int bilkentId, DAY day)
+    {
+        Optional<User> user = userRepository.findByBilkentId(bilkentId);
+        if(!user.isPresent())
+        {
+            return false;
+        }
+
+        return switch (user.get().getStatus()) {
+            case GUIDE -> demoteGuide(user.get());
+            case ADVISOR -> demoteAdvisor(user.get());
+            case COORDINATOR -> demoteCoordinator(user.get(), day);
+            default -> false;
+        };
+    }
+
+    private boolean demoteGuide(User guide)
+    {
+        if(guide.isTrainee())
+        {
+            guide.setTrainee(true);
+            userRepository.save(guide);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean demoteAdvisor(User advisor)
+    {
+        int bilkentId = advisor.getBilkentId();
+        String username = advisor.getUsername();
+        String email = advisor.getEmail();
+        String phoneNo = advisor.getPhoneNo();
+        String password = advisor.getPassword();
+        DEPARTMENT department = advisor.getDepartment();
+        List<ObjectId> logs = advisor.getLogs();
+        List<ObjectId> suggestedEvents = advisor.getSuggestedEvents();
+        boolean[] availability = advisor.getAvailability();
+
+        userRepository.deleteById(advisor.getId());
+        Optional<User> user=this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.GUIDE, department, logs, suggestedEvents, false, availability, DAY.NOT_ASSIGNED);
+        return user.isPresent();
+    }
+
+    private boolean demoteCoordinator(User coordinator, DAY day)
+    {
+        int bilkentId = coordinator.getBilkentId();
+        String username = coordinator.getUsername();
+        String email = coordinator.getEmail();
+        String phoneNo = coordinator.getPhoneNo();
+        String password = coordinator.getPassword();
+        DEPARTMENT department = coordinator.getDepartment();
+        List<ObjectId> logs = coordinator.getLogs();
+        List<ObjectId> suggestedEvents = coordinator.getSuggestedEvents();
+        boolean[] availability = coordinator.getAvailability();
+
+        userRepository.deleteById(coordinator.getId());
+        Optional<User> user=this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.ADVISOR, department, logs, suggestedEvents, false, availability, day);
+        return user.isPresent();
+    }
+
+
 
 }

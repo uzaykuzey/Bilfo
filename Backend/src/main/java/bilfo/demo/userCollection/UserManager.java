@@ -207,6 +207,8 @@ public class UserManager {
         String tempPassword = generatePassword(8);
         Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.GUIDE, department, new ArrayList<>(), new ArrayList<>(), trainee, new boolean[77], DAY.NOT_ASSIGNED);
         if(user.isPresent()) {
+            mailSenderManager.sendEmail(email,"You are a new GUIDE!!!",
+                    "Your password is " + tempPassword + ". Change it as soon as possible.");
             return new ResponseEntity<>("User added", HttpStatus.OK);
         }
         return new ResponseEntity<>("There is already a user with that id number", HttpStatus.BAD_REQUEST);
@@ -224,8 +226,8 @@ public class UserManager {
         String tempPassword = generatePassword(12);
         Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ADVISOR, department, new ArrayList<>(), new ArrayList<>(), false, new boolean[77], day);
         if(user.isPresent()) {
-            mailSenderManager.sendEmail(email,"You are the new ADVISOR!!!",
-                                        "Your password is " + tempPassword + "Change it as soon as possible.");
+            mailSenderManager.sendEmail(email,"You are a new ADVISOR!!!",
+                                        "Your password is " + tempPassword + ". Change it as soon as possible.");
             return new ResponseEntity<>("User added", HttpStatus.OK);
         }
         return new ResponseEntity<>("There is already a user with that id number", HttpStatus.BAD_REQUEST);

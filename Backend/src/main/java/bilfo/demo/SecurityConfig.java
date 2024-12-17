@@ -29,7 +29,7 @@ public class SecurityConfig{
                                                                     ,"/form/hsform", "/form/indform", "/form/fairform", "/promoteUser", "/form/evaluate",
                                                                 "/addGuide","/removeUser", "/addAdvisor", "/addCoordinator", "/addActingDirector",
                                                                 "/changeAvailability").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/event", "/form").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/event", "/form", "/getAvailability").permitAll()
                         .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfigurationSource()))

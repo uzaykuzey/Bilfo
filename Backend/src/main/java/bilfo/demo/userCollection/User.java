@@ -34,7 +34,9 @@ public class User {
     private List<ObjectId> logs;
     private List<ObjectId> suggestedEvents;
     private boolean trainee;
-    private boolean[] availability;
+    private boolean[] availability; //true means available, false means unavailable
+
+    public final static int AVAILABILITY_LENGTH = 77;
 
     private void setId(int bilkentId) throws IllegalAccessException
     {

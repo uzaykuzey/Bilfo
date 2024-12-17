@@ -149,23 +149,12 @@ public class UserService {
         }
     }
 
-    public void changeAvailability(int bilkentId, int slot, boolean availability){
+    public void changeAvailability(int bilkentId, boolean[] availabilityArray){
         Optional<User> user = userRepository.findByBilkentId(bilkentId);
         if (user.isPresent()) {
-            user.get().getAvailability()[slot] = availability;
+            user.get().setAvailability(availabilityArray);
             userRepository.save(user.get());
         }
-    }
-
-    public void addLog(ObjectId logId, int bilkentId)
-    {
-        Optional<User> user = userRepository.findByBilkentId(bilkentId);
-        if(!user.isPresent() || user.get().getLogs().contains(logId))
-        {
-            return;
-        }
-        user.get().getLogs().add(logId);
-        userRepository.save(user.get());
     }
 
     public void removeLog(ObjectId logId, int bilkentId)

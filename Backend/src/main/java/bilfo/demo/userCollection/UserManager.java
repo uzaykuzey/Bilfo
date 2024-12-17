@@ -52,7 +52,7 @@ public class UserManager {
             trainee = Boolean.parseBoolean(userRequest.get("trainee"));
         }
         // Attempt to create the user
-        Optional<User> newUser = userService.createUser(bilkentId, username, email, phoneNo, password, status, department, new ArrayList<>(), new ArrayList<>(), trainee, new boolean[77], day);
+        Optional<User> newUser = userService.createUser(bilkentId, username, email, phoneNo, password, status, department, new ArrayList<>(), new ArrayList<>(), trainee, getTrueArray(User.AVAILABILITY_LENGTH), day);
 
         if (newUser.isPresent()) {
             return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
@@ -128,15 +128,27 @@ public class UserManager {
     @PostMapping("/changeAvailability")
     public ResponseEntity<String> changeAvailability(@RequestBody Map<String,String> changeUserRequest) {
         int id = Integer.parseInt(changeUserRequest.get("id"));
-        int slot = Integer.parseInt(changeUserRequest.get("slot"));
-        boolean availability = Boolean.parseBoolean(changeUserRequest.get("availability"));
+        String availabilityString = changeUserRequest.get("availabilityString");
+
+        if(availabilityString==null || availabilityString.length() != User.AVAILABILITY_LENGTH)
+        {
+            return new ResponseEntity<>("Length of the availability string is invalid",HttpStatus.BAD_REQUEST);
+        }
+
+        boolean[] availabilityArray=new boolean[availabilityString.length()];
+
+        for(int i=0; i<availabilityString.length(); i++)
+        {
+            availabilityArray[i] = availabilityString.charAt(i)=='1';
+        }
 
         Optional<User> user = userService.getUser(id);
         if(user.isPresent()) {
-            userService.changeAvailability(id, slot, availability);
-            return new ResponseEntity<String>("Change availability successful", HttpStatus.OK);
+            userService.changeAvailability(id, availabilityArray);
+            return new ResponseEntity<>("Change availability successful", HttpStatus.OK);
         }
-        return new ResponseEntity<String>("No User", HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>("No User", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/getAdvisorsOfTheDay")
@@ -204,7 +216,7 @@ public class UserManager {
         boolean trainee = Boolean.parseBoolean(addGuideRequest.get("trainee"));
         DEPARTMENT department = DEPARTMENT.valueOf(addGuideRequest.get("department").toUpperCase());
         String tempPassword = generatePassword(8);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.GUIDE, department, new ArrayList<>(), new ArrayList<>(), trainee, new boolean[77], DAY.NOT_ASSIGNED);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.GUIDE, department, new ArrayList<>(), new ArrayList<>(), trainee, getTrueArray(User.AVAILABILITY_LENGTH), DAY.NOT_ASSIGNED);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new GUIDE!!!",
                     "Your password is " + tempPassword + ". Change it as soon as possible.");
@@ -223,7 +235,7 @@ public class UserManager {
         DEPARTMENT department = DEPARTMENT.valueOf(addAdvisorRequest.get("department").toUpperCase());
         DAY day = DAY.valueOf(addAdvisorRequest.get("day").toUpperCase());
         String tempPassword = generatePassword(12);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ADVISOR, department, new ArrayList<>(), new ArrayList<>(), false, new boolean[77], day);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ADVISOR, department, new ArrayList<>(), new ArrayList<>(), false, getTrueArray(User.AVAILABILITY_LENGTH), day);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new ADVISOR!!!",
                                         "Your password is " + tempPassword + ". Change it as soon as possible.");
@@ -241,7 +253,7 @@ public class UserManager {
         String phoneNo = addCoordinatorRequest.get("phoneNo");
         DEPARTMENT department = DEPARTMENT.valueOf(addCoordinatorRequest.get("department").toUpperCase());
         String tempPassword = generatePassword(14);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.COORDINATOR, department, new ArrayList<>(), new ArrayList<>(), false, new boolean[77], DAY.NOT_ASSIGNED);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.COORDINATOR, department, new ArrayList<>(), new ArrayList<>(), false, getTrueArray(User.AVAILABILITY_LENGTH), DAY.NOT_ASSIGNED);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new COORDINATOR!!!",
                     "Your password is " + tempPassword + ". Change it as soon as possible.");
@@ -258,7 +270,7 @@ public class UserManager {
         String email = addActingDirectorRequest.get("email");
         String phoneNo = addActingDirectorRequest.get("phoneNo");
         String tempPassword = generatePassword(16);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ACTING_DIRECTOR, DEPARTMENT.NOT_APPLICABLE, new ArrayList<>(), new ArrayList<>(), false, new boolean[77], DAY.NOT_ASSIGNED);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ACTING_DIRECTOR, DEPARTMENT.NOT_APPLICABLE, new ArrayList<>(), new ArrayList<>(), false, getTrueArray(User.AVAILABILITY_LENGTH), DAY.NOT_ASSIGNED);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new COORDINATOR!!!",
                     "Your password is " + tempPassword + ". Change it as soon as possible.");
@@ -321,6 +333,16 @@ public class UserManager {
         }
 
         return new String(passwordArray);
+    }
+
+    private boolean[] getTrueArray(int length)
+    {
+        boolean[] array = new boolean[length];
+        for(int i=0;i<length;i++)
+        {
+            array[i]=true;
+        }
+        return array;
     }
 
 }

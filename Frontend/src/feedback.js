@@ -1,9 +1,52 @@
 import React, { useState } from "react";
+import api from "./api/axios_config";
 import "./feedback.css";
 
 export default function FeedbackLayout() {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
+  const [experience, setExperience] = useState("");
+  const [recommendation, setRecommendation] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validation: Check if all fields are filled
+    if (rating === 0 || experience.trim() === "" || password.trim() === "") {
+      setError("Please fill out all required fields.");
+      return;
+    }
+
+    setError(""); // Clear any previous error messages
+
+    // Data to send
+    const feedbackData = {
+      rating,
+      experience,
+      recommendation,
+      password,
+      contactMail : "uzay.kuzay@ug.bilkent.edu.tr"
+    };
+
+    try {
+      // Replace 'YOUR_API_ENDPOINT' with the backend URL
+      const response = await api.post("/event/feedback", feedbackData);
+      console.log("Feedback submitted successfully:", response.data);
+
+      // Clear form fields on success
+      setRating(0);
+      setHover(0);
+      setExperience("");
+      setRecommendation("");
+      setPassword("");
+      alert("Feedback submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      setError("Something went wrong. Please try again.");
+    }
+  };
 
   return (
     <div className="feedback-page">
@@ -43,7 +86,7 @@ export default function FeedbackLayout() {
       </nav>
 
       {/* Feedback Form */}
-      <div className="feedback-form">
+      <form className="feedback-form" onSubmit={handleSubmit}>
         <h2 className="form-title">📝 Feedback Form</h2>
 
         {/* Star Rating */}
@@ -70,26 +113,45 @@ export default function FeedbackLayout() {
         {/* Textarea for Experiences */}
         <div className="form-group">
           <label>Please tell us about your experiences:</label>
-          <textarea rows="4" placeholder="Share your experiences..." />
+          <textarea
+            rows="4"
+            placeholder="Share your experiences..."
+            value={experience}
+            onChange={(e) => setExperience(e.target.value)}
+          />
         </div>
 
         {/* Textarea for Recommendations */}
         <div className="form-group">
           <label>Any Recommendations?</label>
-          <textarea rows="4" placeholder="Share your recommendations..." />
+          <textarea
+            rows="4"
+            placeholder="Share your recommendations..."
+            value={recommendation}
+            onChange={(e) => setRecommendation(e.target.value)}
+          />
         </div>
 
         {/* Input for Email Code */}
         <div className="form-group">
           <label>Enter the Code From Your Email:</label>
-          <input type="text" placeholder="e.g., 12345" className="input-code" />
+          <input
+            type="text"
+            placeholder="e.g., 12345"
+            className="input-code"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
+
+        {/* Error Message */}
+        {error && <p className="error-message">{error}</p>}
 
         {/* Submit Button */}
         <div className="form-group">
-          <button className="submit-button">Submit</button>
+          <button type="submit" className="submit-button">Submit</button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

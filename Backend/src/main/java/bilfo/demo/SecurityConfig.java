@@ -28,7 +28,7 @@ public class SecurityConfig{
                         .requestMatchers(HttpMethod.POST, "form/eva","/create", "/user/login", "/changeOwnUsername","/changeOwnEmail","/changeOwnPassword"
                                                                     ,"/form/hsform", "/form/indform", "/form/fairform", "/promoteUser", "/form/evaluate",
                                                                 "/addGuide","/removeUser", "/addAdvisor", "/addCoordinator", "/addActingDirector",
-                                                                "/changeAvailability").permitAll()
+                                                                "/changeAvailability", "/event/feedback").permitAll()
                         .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/event", "/form", "/getAvailability").permitAll()
                         .anyRequest().authenticated()
                 )

@@ -326,7 +326,7 @@ public class UserService {
         boolean[] availability = coordinator.getAvailability();
 
         userRepository.deleteById(coordinator.getId());
-        Optional<User> user=this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.GUIDE, department, logs, suggestedEvents, false, availability, day);
+        Optional<User> user=this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.ADVISOR, department, logs, suggestedEvents, false, availability, day);
         return user.isPresent();
     }
 

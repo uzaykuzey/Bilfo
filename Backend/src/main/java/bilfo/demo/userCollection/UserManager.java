@@ -3,9 +3,11 @@ package bilfo.demo.userCollection;
 import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
+import bilfo.demo.mailSender.MailSenderManager;
 import bilfo.demo.mailSender.MailSenderService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,9 @@ public class UserManager {
     private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Autowired
+    @Lazy
+    private MailSenderManager mailSenderManager;
     @GetMapping
     public ResponseEntity<List<User>> allUsers(){
         return new ResponseEntity<List<User>>(userService.allUsers(),HttpStatus.OK);
@@ -211,7 +215,7 @@ public class UserManager {
     @PostMapping("/addAdvisor")
     public ResponseEntity<String> addAdvisor(@RequestBody Map<String,String> addAdvisorRequest)
     {
-        String name = addAdvisorRequest.get("name");
+        String name = addAdvisorRequest.get("username");
         int bilkentId = Integer.parseInt(addAdvisorRequest.get("bilkentId"));
         String email = addAdvisorRequest.get("email");
         String phoneNo = addAdvisorRequest.get("phoneNo");
@@ -220,6 +224,8 @@ public class UserManager {
         String tempPassword = generatePassword(12);
         Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ADVISOR, department, new ArrayList<>(), new ArrayList<>(), false, new boolean[77], day);
         if(user.isPresent()) {
+            mailSenderManager.sendEmail(email,"You are the new ADVISOR!!!",
+                                        "Your password is " + tempPassword + "Change it as soon as possible.");
             return new ResponseEntity<>("User added", HttpStatus.OK);
         }
         return new ResponseEntity<>("There is already a user with that id number", HttpStatus.BAD_REQUEST);

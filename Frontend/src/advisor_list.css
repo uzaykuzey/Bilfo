@@ -77,3 +77,71 @@
   .btn:hover {
     opacity: 0.9;
   }
+  /* Center the popup on the screen */
+
+.popup-container {
+  position: relative;
+  margin: auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popup-overlay {
+  background: rgba(0, 0, 0, 0.5); /* Dark overlay for the background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.popup-actions button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.popup-actions button:first-child {
+  background-color: #007bff;
+  color: white;
+}
+
+.popup-actions button:last-child {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Style for input fields */
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box; /* Ensure padding doesn't add to width */
+}
+
+.popup-container h2 {
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 22px;
+}

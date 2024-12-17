@@ -1,14 +1,12 @@
 package bilfo.demo.logCollection;
 
-import bilfo.demo.enums.TOUR_TIMES;
 import bilfo.demo.userCollection.User;
+import bilfo.demo.userCollection.UserService;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +16,8 @@ public class LogService {
     @Autowired
     private LogRepository logRepository;
     private static final Logger logger = LoggerFactory.getLogger(LogService.class);
+    @Autowired
+    private UserService userService;
 
     public List<Log> allLogs(){
         return logRepository.findAll();
@@ -27,7 +27,7 @@ public class LogService {
         return logRepository.findById(id);
     }
 
-    public Optional<Log> createLog(int hours, ObjectId eventId, boolean paid) {
+    public Optional<Log> createLog(double hours, ObjectId eventId, boolean paid) {
         logger.info("Creating Log");
 
         // Check if Log already exists
@@ -48,5 +48,35 @@ public class LogService {
         return Optional.of(savedLog);
     }
 
+    public Optional<Log> addLog(int bilkentId, double hours, ObjectId eventId, boolean paid)
+    {
+        Optional<User> user = userService.getUser(bilkentId);
+        if(user.isEmpty())
+        {
+            return Optional.empty();
+        }
 
+        Optional<Log> log = createLog(hours, eventId, paid);
+        if(log.isEmpty())
+        {
+            return Optional.empty();
+        }
+        user.get().getLogs().add(log.get().getId());
+
+        userService.saveUser(user.get());
+        logRepository.save(log.get());
+        return log;
+    }
+
+    public boolean markAsPaid(ObjectId logId) {
+        Optional<Log> log = getLog(logId);
+        if(log.isEmpty())
+        {
+            return false;
+        }
+
+        log.get().setPaid(true);
+        logRepository.save(log.get());
+        return true;
+    }
 }

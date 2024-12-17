@@ -151,8 +151,8 @@ public class UserManager {
         return new ResponseEntity<>("No User", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/getAvailability")
-    public ResponseEntity<String> getAvailability(@RequestBody Map<String,String> userRequest)
+    @GetMapping("/getAvailability")
+    public ResponseEntity<String> getAvailability(@RequestParam Map<String,String> userRequest)
     {
         int bilkentId = Integer.parseInt(userRequest.get("bilkentId").toString());
         Optional<User> user = userService.getUser(bilkentId);
@@ -166,7 +166,7 @@ public class UserManager {
         {
             availabilityString.append(availabilityArray[i] ? "1" : "0");
         }
-        return new ResponseEntity<>(availabilityString.toString(), HttpStatus.OK);
+        return new ResponseEntity<String>(availabilityString.toString(), HttpStatus.OK);
     }
 
     @PostMapping("/getAdvisorsOfTheDay")

@@ -71,7 +71,7 @@ public class FormManager {
         int visitorCount=Integer.parseInt(formApplication.get("visitorCount"));
         String visitorNotes=formApplication.get("visitorNotes");
 
-        Optional<Form> newForm = formService.createForm(EVENT_TYPES.HIGHSCHOOL_TOUR, FORM_STATES.NOT_REVIEWED, dates, city, schoolName, visitorCount, visitorNotes, counselorEmail, null, DEPARTMENT.CS);
+        Optional<Form> newForm = formService.createForm(EVENT_TYPES.HIGHSCHOOL_TOUR, FORM_STATES.NOT_REVIEWED, dates, city, schoolName, visitorCount, visitorNotes, counselorEmail, null, DEPARTMENT.NOT_APPLICABLE);
         if(newForm.isPresent())
         {
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
@@ -123,7 +123,7 @@ public class FormManager {
         List<Pair<Date, TOUR_TIMES>> dates=new ArrayList<>();
         dates.add(Pair.of(date, time));
 
-        Optional<Form> newForm=formService.createForm(EVENT_TYPES.FAIR, FORM_STATES.NOT_REVIEWED, dates, city, schoolName, 0, "", null, null, DEPARTMENT.CS);
+        Optional<Form> newForm=formService.createForm(EVENT_TYPES.FAIR, FORM_STATES.NOT_REVIEWED, dates, city, schoolName, 0, "", null, null, DEPARTMENT.NOT_APPLICABLE);
         if(newForm.isPresent())
         {
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);

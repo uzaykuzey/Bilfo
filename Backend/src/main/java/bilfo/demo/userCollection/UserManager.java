@@ -231,8 +231,43 @@ public class UserManager {
         return new ResponseEntity<>("There is already a user with that id number", HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/addCoordinator")
+    public ResponseEntity<String> addCoordinator(@RequestBody Map<String,String> addCoordinatorRequest)
+    {
+        String name = addCoordinatorRequest.get("username");
+        int bilkentId = Integer.parseInt(addCoordinatorRequest.get("bilkentId"));
+        String email = addCoordinatorRequest.get("email");
+        String phoneNo = addCoordinatorRequest.get("phoneNo");
+        DEPARTMENT department = DEPARTMENT.valueOf(addCoordinatorRequest.get("department").toUpperCase());
+        String tempPassword = generatePassword(14);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.COORDINATOR, department, new ArrayList<>(), new ArrayList<>(), false, new boolean[77], DAY.NOT_ASSIGNED);
+        if(user.isPresent()) {
+            mailSenderManager.sendEmail(email,"You are a new COORDINATOR!!!",
+                    "Your password is " + tempPassword + ". Change it as soon as possible.");
+            return new ResponseEntity<>("User added", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("There is already a user with that id number", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/addActingDirector")
+    public ResponseEntity<String> addActingDirector(@RequestBody Map<String,String> addActingDirectorRequest)
+    {
+        String name = addActingDirectorRequest.get("username");
+        int bilkentId = Integer.parseInt(addActingDirectorRequest.get("bilkentId"));
+        String email = addActingDirectorRequest.get("email");
+        String phoneNo = addActingDirectorRequest.get("phoneNo");
+        String tempPassword = generatePassword(16);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ACTING_DIRECTOR, DEPARTMENT.NOT_APPLICABLE, new ArrayList<>(), new ArrayList<>(), false, new boolean[77], DAY.NOT_ASSIGNED);
+        if(user.isPresent()) {
+            mailSenderManager.sendEmail(email,"You are a new COORDINATOR!!!",
+                    "Your password is " + tempPassword + ". Change it as soon as possible.");
+            return new ResponseEntity<>("User added", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("There is already a user with that id number", HttpStatus.BAD_REQUEST);
+    }
+
     @PostMapping("/removeUser")
-    public ResponseEntity<String> removeAdvisor(@RequestBody Map<String,String> removedUserId) {
+    public ResponseEntity<String> removeUser(@RequestBody Map<String,String> removedUserId) {
         int userId = Integer.parseInt(removedUserId.get("bilkentId"));
         boolean deletion = userService.removeUser(userId);
         if (deletion) {

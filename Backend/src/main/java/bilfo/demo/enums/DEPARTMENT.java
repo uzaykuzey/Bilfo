@@ -1,6 +1,7 @@
 package bilfo.demo.enums;
 
 public enum DEPARTMENT {
+    NOT_APPLICABLE,
     AMER,
     ARCH,
     CHEM,

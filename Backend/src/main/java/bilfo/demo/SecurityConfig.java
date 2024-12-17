@@ -31,7 +31,7 @@ public class SecurityConfig{
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST, "form/eva","/create", "/user/login", "/changeOwnUsername","/changeOwnEmail","/changeOwnPassword"
                                                                     ,"/form/hsform", "/form/indform", "/form/fairform", "/promoteUser", "/form/evaluate",
-                                                                    "/removeUser", "/addAdvisor").permitAll()
+                                                                "/addGuide","/removeUser", "/addAdvisor", "/addCoordinator", "/addActingDirector").permitAll()
                         .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/event", "/form").permitAll()
                         .anyRequest().authenticated()
                 )

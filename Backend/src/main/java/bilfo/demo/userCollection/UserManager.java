@@ -197,7 +197,7 @@ public class UserManager {
     @PostMapping("/addGuide")
     public ResponseEntity<String> addGuide(@RequestBody Map<String,String> addGuideRequest)
     {
-        String name = addGuideRequest.get("name");
+        String name = addGuideRequest.get("username");
         int bilkentId = Integer.parseInt(addGuideRequest.get("bilkentId"));
         String email = addGuideRequest.get("email");
         String phoneNo = addGuideRequest.get("phoneNo");

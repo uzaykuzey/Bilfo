@@ -64,9 +64,9 @@ public class EventService {
         return Optional.of(savedEvent);
     }
 
-    public boolean claimEvent(int bilkentId, ObjectId eventId, boolean claim) {
+    public boolean claimEvent(int bilkentId, ObjectId formId, boolean claim) {
         Optional<User> optionalUser = userService.getUser(bilkentId);
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        Optional<Event> optionalEvent = eventRepository.findEventByOriginalForm(formId);
         if (!optionalUser.isPresent() || !optionalEvent.isPresent()) {
             return false;
         }
@@ -74,7 +74,7 @@ public class EventService {
         User user = optionalUser.get();
         Event event = optionalEvent.get();
 
-        Optional<Form> optionalForm = formService.getForm(eventId);
+        Optional<Form> optionalForm = formService.getForm(formId);
         if (!optionalForm.isPresent()) {
             return false;
         }

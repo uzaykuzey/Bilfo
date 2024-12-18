@@ -27,8 +27,8 @@ public class EventManager {
     public ResponseEntity<String> claimEvent(@RequestBody Map<String, String> eventClaimRequest)
     {
         int bilkentId = Integer.parseInt(eventClaimRequest.get("bilkentId"));
-        ObjectId eventId = new ObjectId(eventClaimRequest.get("eventId"));
-        if(eventService.claimEvent(bilkentId, eventId, true))
+        ObjectId formId = new ObjectId(eventClaimRequest.get("formId"));
+        if(eventService.claimEvent(bilkentId, formId, true))
         {
             return new ResponseEntity<>("Claimed event", HttpStatus.OK);
         }
@@ -39,8 +39,8 @@ public class EventManager {
     public ResponseEntity<String> offerEvent(@RequestBody Map<String, String> eventOfferRequest)
     {
         int bilkentId = Integer.parseInt(eventOfferRequest.get("bilkentId"));
-        ObjectId eventId = new ObjectId(eventOfferRequest.get("eventId"));
-        if(eventService.claimEvent(bilkentId, eventId, false))
+        ObjectId formId = new ObjectId(eventOfferRequest.get("formId"));
+        if(eventService.claimEvent(bilkentId, formId, false))
         {
             return new ResponseEntity<>("Claimed event", HttpStatus.OK);
         }

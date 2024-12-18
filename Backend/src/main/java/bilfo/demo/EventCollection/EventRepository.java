@@ -14,4 +14,5 @@ public interface EventRepository extends MongoRepository<Event, ObjectId> {
     public Optional<Event> findEventById(ObjectId id);
     public List<Event> findAll();
     public List<Event> findEventsByState(EVENT_STATES state);
+    public Optional<Event> findEventByOriginalForm(ObjectId originalFormId);
 }

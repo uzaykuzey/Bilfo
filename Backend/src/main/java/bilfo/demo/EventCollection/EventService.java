@@ -156,6 +156,15 @@ public class EventService {
         return false;
     }
 
+    public Optional<Feedback> getFeedback(ObjectId eventId) {
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        if(optionalEvent.isEmpty())
+        {
+            return Optional.empty();
+        }
+        return feedbackService.findFeedbackById(optionalEvent.get().getFeedback());
+    }
+
     @Scheduled(fixedRate = 30000)
     private void checkCompletedEvents()
     {

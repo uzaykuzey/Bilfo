@@ -1,5 +1,6 @@
 package bilfo.demo.EventCollection;
 
+import bilfo.demo.EventCollection.feedbackCollection.Feedback;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/event")
@@ -56,6 +58,12 @@ public class EventManager {
             return new ResponseEntity<>("Feedback sent", HttpStatus.OK);
         }
         return new ResponseEntity<>("Feedback send failed", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/getFeedback")
+    public ResponseEntity<Feedback> getFeedback(@RequestParam String eventId) {
+        Optional<Feedback> feedback = eventService.getFeedback(new ObjectId(eventId));
+        return new ResponseEntity<>(feedback.orElse(null), feedback.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 }
 

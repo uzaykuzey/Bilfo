@@ -154,7 +154,7 @@ public class UserManager {
     @GetMapping("/getAvailability")
     public ResponseEntity<String> getAvailability(@RequestParam Map<String,String> userRequest)
     {
-        int bilkentId = Integer.parseInt(userRequest.get("bilkentId").toString());
+        int bilkentId = Integer.parseInt(userRequest.get("bilkentId"));
         Optional<User> user = userService.getUser(bilkentId);
         if (user.isEmpty()) {
             return new ResponseEntity<>("404", HttpStatus.NOT_FOUND);
@@ -162,9 +162,8 @@ public class UserManager {
 
         boolean[] availabilityArray=user.get().getAvailability();
         StringBuilder availabilityString=new StringBuilder();
-        for(int i=0; i<availabilityArray.length; i++)
-        {
-            availabilityString.append(availabilityArray[i] ? "1" : "0");
+        for (boolean b : availabilityArray) {
+            availabilityString.append(b ? "1" : "0");
         }
         return new ResponseEntity<String>(availabilityString.toString(), HttpStatus.OK);
     }

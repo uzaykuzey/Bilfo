@@ -3,6 +3,6 @@ package bilfo.demo.enums;
 public enum SCHOOL_TYPES {
     STARRED,
     NURTURING,
-    MAINTANENCE,
+    MAINTENANCE,
     NON_IDEAL
 }

@@ -69,9 +69,9 @@ public class EventManager {
     }
 
     @GetMapping("/getScheduleOfWeek")
-    public ResponseEntity<String[]> getScheduleOfWeek(@RequestParam Map<String, Object> getScheduleOfWeekRequest) {
-        int bilkentId = Integer.parseInt(getScheduleOfWeekRequest.get("bilkentId").toString());
-        Date date = (Date) getScheduleOfWeekRequest.get("weekStartDate");
+    public ResponseEntity<String[]> getScheduleOfWeek(@RequestParam Map<String, String> getScheduleOfWeekRequest) {
+        int bilkentId = Integer.parseInt(getScheduleOfWeekRequest.get("bilkentId"));
+        String date = getScheduleOfWeekRequest.get("weekStartDate");
         return new ResponseEntity<>(eventService.getScheduleOfWeek(bilkentId, date), HttpStatus.OK);
     }
 }

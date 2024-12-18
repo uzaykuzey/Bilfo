@@ -184,7 +184,7 @@ public class EventService {
         }
     }
 
-    public String[] getScheduleOfWeek(int bilkentId, Date startDate)
+    public String[] getScheduleOfWeek(int bilkentId, String startDateString)
     {
         Optional<User> optionalUser = userService.getUser(bilkentId);
         if(optionalUser.isEmpty())
@@ -192,6 +192,8 @@ public class EventService {
             return null;
         }
         User user = optionalUser.get();
+
+        Date startDate = FormManager.stringToDate(startDateString);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);

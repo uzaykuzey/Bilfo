@@ -239,7 +239,6 @@ public class UserService {
 
     private boolean promoteAdvisor(User advisor)
     {
-        System.out.println("zort");
         Optional<List<User>> coordinators = userRepository.findUsersByStatus(USER_STATUS.COORDINATOR);
         if(coordinators.isPresent() && !coordinators.get().isEmpty())
         {
@@ -321,6 +320,15 @@ public class UserService {
         return user.isPresent();
     }
 
-
+    public boolean editUser(int bilkentId, String username, String email, String phoneNo)
+    {
+        Optional<User> optionalUser = userRepository.findByBilkentId(bilkentId);
+        if(optionalUser.isEmpty())
+        {
+            return false;
+        }
+        User user = optionalUser.get();
+        return true;
+    }
 
 }

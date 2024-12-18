@@ -333,6 +333,10 @@ public class UserManager {
     @PostMapping("/editUser")
     public ResponseEntity<String> editUser(@RequestBody Map<String,String> editUserRequest) {
         int bilkentId = Integer.parseInt(editUserRequest.get("bilkentId"));
+        String username = editUserRequest.get("username");
+        String email = editUserRequest.get("email");
+        String phoneNo = editUserRequest.get("phoneNo");
+
         return null;
     }
 

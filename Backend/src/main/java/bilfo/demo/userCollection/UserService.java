@@ -60,11 +60,11 @@ public class UserService {
 
         if(status!=USER_STATUS.GUIDE)
         {
-            newUser=new Advisor(new ObjectId(), bilkentId, status, username, email, phoneNo, hashedPassword, department, logs, suggestedEvents, availability, day);
+            newUser=new Advisor(new ObjectId(), bilkentId, status, username, email, phoneNo, hashedPassword, department, logs, suggestedEvents, availability, User.DEFAULT_PHOTO, day);
         }
         else
         {
-            newUser = new Guide(new ObjectId(), bilkentId, status, username, email, phoneNo, hashedPassword, department, logs, suggestedEvents, trainee, availability);
+            newUser = new Guide(new ObjectId(), bilkentId, status, username, email, phoneNo, hashedPassword, department, logs, suggestedEvents, trainee, availability, User.DEFAULT_PHOTO);
         }
 
         if(status == USER_STATUS.COORDINATOR)
@@ -158,6 +158,14 @@ public class UserService {
         Optional<User> user = userRepository.findByBilkentId(bilkentId);
         if (user.isPresent()) {
             user.get().setAvailability(availabilityArray);
+            userRepository.save(user.get());
+        }
+    }
+
+    public void changePhoto(int bilkentId, String photo){
+        Optional<User> user = userRepository.findByBilkentId(bilkentId);
+        if (user.isPresent()) {
+            user.get().setPhoto(photo);
             userRepository.save(user.get());
         }
     }

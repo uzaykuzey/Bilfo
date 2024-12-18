@@ -126,6 +126,21 @@ public class UserManager {
         }
     }
 
+    @PostMapping("/changePhoto")
+    public ResponseEntity<String> changePhoto( @RequestBody Map<String,String> changePhotoRequest) {
+        String newPhoto = changePhotoRequest.get("photo");
+        int bilkentId = Integer.parseInt(changePhotoRequest.get("bilkentId"));
+        userService.changePhoto(bilkentId, newPhoto);
+        return new ResponseEntity<String>("Change Photo successful", HttpStatus.OK);
+    }
+
+    @PostMapping("/resetPhoto")
+    public ResponseEntity<String> resetPhoto( @RequestBody Map<String,String> resetPhotoRequest) {
+        int bilkentId = Integer.parseInt(resetPhotoRequest.get("bilkentId"));
+        userService.changePhoto(bilkentId, User.DEFAULT_PHOTO);
+        return new ResponseEntity<String>("Reset Photo successful", HttpStatus.OK);
+    }
+
     @PostMapping("/changeAvailability")
     public ResponseEntity<String> changeAvailability(@RequestBody Map<String,String> changeUserRequest) {
         int bilkentId = Integer.parseInt(changeUserRequest.get("bilkentId"));

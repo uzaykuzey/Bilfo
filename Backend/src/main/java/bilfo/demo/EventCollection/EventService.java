@@ -17,7 +17,6 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +66,7 @@ public class EventService {
     public boolean claimEvent(int bilkentId, ObjectId formId, boolean claim) {
         Optional<User> optionalUser = userService.getUser(bilkentId);
         Optional<Event> optionalEvent = eventRepository.findEventByOriginalForm(formId);
-        if (!optionalUser.isPresent() || !optionalEvent.isPresent()) {
+        if (optionalUser.isEmpty() || optionalEvent.isEmpty()) {
             return false;
         }
 
@@ -75,7 +74,7 @@ public class EventService {
         Event event = optionalEvent.get();
 
         Optional<Form> optionalForm = formService.getForm(formId);
-        if (!optionalForm.isPresent()) {
+        if (optionalForm.isEmpty()) {
             return false;
         }
 
@@ -216,10 +215,6 @@ public class EventService {
             }
             int daysDifference = (int) ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), event.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
             int[] indexOfTourTime = getIndexOfTourTimes(event.getTime());
-            if(indexOfTourTime == null)
-            {
-                continue;
-            }
 
             if(event.getEventType()==EVENT_TYPES.FAIR)
             {
@@ -262,7 +257,6 @@ public class EventService {
             case ELEVEN_AM -> new int[]{2, 3, 4};
             case ONE_THIRTY_PM -> new int[]{4, 5, 6};
             case FOUR_PM -> new int[]{6, 7, 8};
-            default -> null;
         };
     }
 

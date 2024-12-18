@@ -17,19 +17,48 @@
 
   
   /* Advisor Section */
-  .advisor-section {
-    background-color: #1e5aa8;
-    color: white;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    position: absolute;
-    top: 1rem;
-    right: 2rem; /* Adjust for better alignment */
-    width: 300px;
-    text-align: center;
-    font-size: 1rem;
-    z-index: 10; /* Ensure it stays on top of other elements */
+  /* Advisor Section */
+.advisor-section {
+  background-color: #1e5aa8;
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  width: 400px;
+  text-align: left; /* Align text to the left */
+  font-size: 1rem;
+  z-index: 10;
 }
+
+.advisor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Space between each advisor */
+  margin: 0;
+  padding: 0;
+}
+
+.advisor-item {
+  display: flex;
+  justify-content: space-between; /* Name and email side by side */
+  align-items: center;
+  font-size: 0.9rem; /* Adjust font size */
+}
+
+.advisor-name {
+  font-weight: bold;
+}
+
+.advisor-email a {
+  text-decoration: none;
+}
+
+.advisor-email a:hover {
+  text-decoration: underline;
+}
+
 
   
   /* Profile Section */

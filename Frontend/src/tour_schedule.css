@@ -1,0 +1,64 @@
+.home-layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  .schedule-container {
+    padding: 2rem;
+    text-align: center;
+    flex-grow: 1; /* Take available space below the navbar */
+  }
+  
+  .calendar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .calendar-header h2 {
+    margin: 0;
+  }
+  
+  .calendar-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .calendar-dropdown {
+    position: absolute;
+    top: 100%; /* Ensure the calendar appears below the icon */
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  }
+  
+  .react-datepicker__triangle {
+    display: none; /* Hide the triangle pointing to the icon */
+  }
+  
+  /* Table styles */
+  .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem; /* Add some margin between the calendar and the table */
+  }
+  
+  .schedule-table th,
+  .schedule-table td {
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    text-align: center;
+  }
+  
+  .schedule-table th {
+    background-color: #1e5aa8;
+    color: white;
+  }
+  
+  .schedule-event {
+    background-color: #1e5aa8;
+    color: white;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+  }

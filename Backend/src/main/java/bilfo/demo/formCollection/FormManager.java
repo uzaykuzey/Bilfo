@@ -179,7 +179,7 @@ public class FormManager {
         throw new IllegalArgumentException("Unknown time: " + timeString);
     }
 
-    private static Date stringToDate(String dateString) {
+    public static Date stringToDate(String dateString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date date = sdf.parse(dateString);

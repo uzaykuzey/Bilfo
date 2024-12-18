@@ -6,9 +6,7 @@ import bilfo.demo.enums.EVENT_STATES;
 import bilfo.demo.enums.EVENT_TYPES;
 import bilfo.demo.enums.FORM_STATES;
 import bilfo.demo.enums.TOUR_TIMES;
-import bilfo.demo.formCollection.Form;
-import bilfo.demo.formCollection.FormService;
-import bilfo.demo.formCollection.TourForm;
+import bilfo.demo.formCollection.*;
 import bilfo.demo.mailSender.MailSenderService;
 import bilfo.demo.passwordCollection.eventPasswordCollection.EventPassword;
 import bilfo.demo.passwordCollection.eventPasswordCollection.EventPasswordService;
@@ -25,10 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 
 @Service
@@ -186,6 +182,93 @@ public class EventService {
                 eventPasswordService.saveEventPassword(eventPassword);
             }
         }
+    }
+
+    public String[] getScheduleOfWeek(int bilkentId, Date startDate)
+    {
+        Optional<User> optionalUser = userService.getUser(bilkentId);
+        if(optionalUser.isEmpty())
+        {
+            return null;
+        }
+        User user = optionalUser.get();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DAY_OF_YEAR, 7);
+        Date endDate = calendar.getTime();
+
+        List<Event> events = getEventsBetween(startDate, endDate);
+        String[] schedule = new String[User.AVAILABILITY_LENGTH];
+        for(int i=0; i<schedule.length; i++)
+        {
+            schedule[i]="";
+        }
+
+        for(Event event: events)
+        {
+            if(!event.getGuides().contains(user.getBilkentId()) && !event.getTrainees().contains(user.getBilkentId()))
+            {
+                continue;
+            }
+            int daysDifference = (int) ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), event.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            int[] indexOfTourTime = getIndexOfTourTimes(event.getTime());
+            if(indexOfTourTime == null)
+            {
+                continue;
+            }
+
+            for(int i: indexOfTourTime)
+            {
+                schedule[daysDifference+i*7] = eventToString(event);
+            }
+        }
+        return schedule;
+    }
+
+    private List<Event> getEventsBetween(Date startDate, Date endDate)
+    {
+        List<Event> events = eventRepository.findAll();
+        List<Event> result = new ArrayList<>();
+        for(Event event: events)
+        {
+            if(event.getDate().before(endDate) && event.getDate().after(startDate) && event.getState() != EVENT_STATES.CANCELLED)
+            {
+                result.add(event);
+            }
+        }
+        return result;
+    }
+
+    private static int[] getIndexOfTourTimes(TOUR_TIMES time)
+    {
+        return switch (time)
+        {
+            case NINE_AM -> new int[]{0, 1, 2};
+            case ELEVEN_AM -> new int[]{2, 3, 4};
+            case ONE_THIRTY_PM -> new int[]{4, 5, 6};
+            case FOUR_PM -> new int[]{6, 7, 8};
+            default -> null;
+        };
+    }
+
+    private String eventToString(Event event)
+    {
+        Optional<Form> optionalForm = formService.getForm(event.getOriginalForm());
+        if(optionalForm.isEmpty())
+        {
+            return "";
+        }
+
+        Form form = optionalForm.get();
+
+        return switch (form.getType())
+        {
+            case FAIR -> ((FairForm) form).getSchoolName() + " (Fair)";
+            case HIGHSCHOOL_TOUR -> ((HighSchoolTourForm) form).getSchoolName() + " (Tour)";
+            case INDIVIDUAL_TOUR -> "Individual Tour";
+            default -> "";
+        };
     }
 }
 

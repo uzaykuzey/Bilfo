@@ -3,6 +3,7 @@ package bilfo.demo.userCollection;
 import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
+import bilfo.demo.formCollection.Form;
 import bilfo.demo.mailSender.MailSenderManager;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -327,6 +328,12 @@ public class UserManager {
             return new ResponseEntity<>("successful demotion!", HttpStatus.OK);
         }
         return new ResponseEntity<>("user can't be demoted", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/editUser")
+    public ResponseEntity<String> editUser(@RequestBody Map<String,String> editUserRequest) {
+        int bilkentId = Integer.parseInt(editUserRequest.get("bilkentId"));
+        return null;
     }
 
     public static String generatePassword(int length) {

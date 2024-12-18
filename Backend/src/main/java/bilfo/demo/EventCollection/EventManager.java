@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -64,6 +66,13 @@ public class EventManager {
     public ResponseEntity<Feedback> getFeedback(@RequestParam String eventId) {
         Optional<Feedback> feedback = eventService.getFeedback(new ObjectId(eventId));
         return new ResponseEntity<>(feedback.orElse(null), feedback.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+    }
+
+    @GetMapping("/getScheduleOfWeek")
+    public ResponseEntity<String[]> getScheduleOfWeek(@RequestParam Map<String, Object> getScheduleOfWeekRequest) {
+        int bilkentId = Integer.parseInt(getScheduleOfWeekRequest.get("bilkentId").toString());
+        Date date = (Date) getScheduleOfWeekRequest.get("weekStartDate");
+        return new ResponseEntity<>(eventService.getScheduleOfWeek(bilkentId, date), HttpStatus.OK);
     }
 }
 

@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableScheduling
 @RestController
 public class BilfoApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(BilfoApplication.class, args);
 	}
-
-
 }

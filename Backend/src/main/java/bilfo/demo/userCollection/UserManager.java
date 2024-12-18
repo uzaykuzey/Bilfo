@@ -174,6 +174,13 @@ public class UserManager {
         return new ResponseEntity<>(userService.getAdvisorsOfTheDay(getCurrentDay()), HttpStatus.OK);
     }
 
+    @GetMapping("/getUserInfo")
+    public ResponseEntity<User> getUser(@RequestParam int bilkentId)
+    {
+        Optional<User> user=userService.getUser(bilkentId);
+        return new ResponseEntity<>(user.orElse(null), user.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+    }
+
     private DAY getCurrentDay() {
         return switch (LocalDate.now().getDayOfWeek()) {
             case MONDAY -> DAY.MONDAY;

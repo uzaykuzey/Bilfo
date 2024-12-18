@@ -21,10 +21,9 @@ export default function TourListLayout() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTour, setSelectedTour] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-  const goToGuideList = (e) => {
-    e.preventDefault();
-    navigate(`/userHome/${bilkentId}/guide_list`, { state: { statusUser } });
-  };
+  const [claimPopupOpen, setClaimPopupOpen] = useState(false);
+  const [selectedClaimTour, setSelectedClaimTour] = useState(null);
+  
   const handleDateChange = (e, index) => {
     
     setSelectedDate(index); // Store the whole selected time object
@@ -64,6 +63,8 @@ export default function TourListLayout() {
     return `${names.slice(0, 3).join(", ")}...`;
   };
 
+  
+
   const openPopup = (tour) => {
     setSelectedTour(tour);
     setPopupOpen(true);
@@ -81,9 +82,26 @@ export default function TourListLayout() {
   
   const claimTour = (tour) => {
     console.log("Claim clicked for:", tour);
-    // Implement the functionality here
+    setSelectedClaimTour(tour);  // Set the selected tour to display in the claim popup
+    setClaimPopupOpen(true);  // Open the claim popup
   };
   
+  const confirmClaim = async (tour) => {
+    try {
+      console.log(selectedClaimTour.id);
+      const response = await api.post("/event/claimEvent", { bilkentId : bilkentId, formId:selectedClaimTour.id });
+      if (response.status === 200) {
+        alert("Tour claimed successfully!");
+        setClaimPopupOpen(false); // Close the popup
+      } else {
+        alert("Failed to claim the tour.");
+      }
+    } catch (error) {
+      console.error("Error claiming tour:", error);
+      alert("An error occurred while claiming the tour.");
+    }
+  };
+
   const cancelTour = (tour) => {
     console.log("Cancel clicked for:", tour);
     // Implement the functionality here
@@ -322,6 +340,60 @@ export default function TourListLayout() {
       );
     }
   };
+  const renderClaimPopupContent = () => {
+    if (!selectedClaimTour) return null;
+    
+    const popupStyles = {
+      container: {
+        width: "90%",
+        margin: "20px auto",
+        padding: "20px",
+        borderRadius: "8px",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        backgroundColor: "#f9f9f9",
+        fontFamily: "Arial, sans-serif",
+      },
+      heading: {
+        fontSize: "20px",
+        fontWeight: "bold",
+        marginBottom: "10px",
+        color: "#333",
+        borderBottom: "2px solid #ddd",
+        paddingBottom: "5px",
+      },
+      paragraph: {
+        fontSize: "16px",
+        margin: "10px 0",
+        color: "#555",
+      },
+      section: {
+        marginBottom: "15px",
+      },
+    };
+  
+    const renderDetails = (title, details) => (
+      <div style={popupStyles.section}>
+        <h3 style={popupStyles.heading}>{title}</h3>
+        {details.map((detail, index) => (
+          <p key={index} style={popupStyles.paragraph}>
+            {detail}
+          </p>
+        ))}
+      </div>
+    );
+  
+    return (
+      <div style={popupStyles.container}>
+        {renderDetails("Claim Tour Details", [
+          `School Name: ${selectedClaimTour.schoolName}`,
+          `City: ${selectedClaimTour.location}`,
+          `Visitor Count: ${selectedClaimTour.visitorCount}`,
+        ])}
+        <button onClick={() => confirmClaim(selectedClaimTour)}>Confirm Claim</button>
+        <button onClick={() => setClaimPopupOpen(false)}>Cancel</button>
+      </div>
+    );
+  };
   
 
   const renderPopupContent = () => {
@@ -367,31 +439,31 @@ export default function TourListLayout() {
     );
   
     if (selectedTour.type === "HIGHSCHOOL_TOUR") {
-  return (
-    <div style={popupStyles.container}>
-      {renderDetails("High School Tour Details", [
-        `School Name: ${selectedTour.schoolName}`,
-        `City: ${selectedTour.location}`,
-        `Visitor Count: ${selectedTour.visitorCount}`,
-      ])}
-      {selectedTour.possibleTimes.map((time, index) => (
-        <div key={index}>
-          <label>
-            <input 
-              type="radio" 
-              name="selectedDate" 
-              value={time.first} 
-              onChange={(e) => handleDateChange(e, index)} // Pass index directly
-            />
-            {time.first}
-          </label>
+      return (
+        <div style={popupStyles.container}>
+          {renderDetails("High School Tour Details", [
+            `School Name: ${selectedTour.schoolName}`,
+            `City: ${selectedTour.location}`,
+            `Visitor Count: ${selectedTour.visitorCount}`,
+          ])}
+          {selectedTour.possibleTimes.map((time, index) => (
+            <div key={index}>
+              <label>
+                <input 
+                  type="radio" 
+                  name="selectedDate" 
+                  value={time.first} 
+                  onChange={(e) => handleDateChange(e, index)} // Pass index directly
+                />
+                {time.first}
+              </label>
+            </div>
+          ))}
+          <button onClick={() => acceptHighSchoolTour(selectedTour, selectedDate)}>Accept</button>
+          <button>Reject</button>
         </div>
-      ))}
-      <button onClick={() => acceptHighSchoolTour(selectedTour, selectedDate)}>Accept</button>
-      <button>Reject</button>
-    </div>
-  );
-}
+      );
+    }
   
     if (selectedTour.type === "INDIVIDUAL_TOUR") {
       return (
@@ -470,6 +542,10 @@ export default function TourListLayout() {
 
       <Popup open={popupOpen} onClose={closePopup} modal>
         {renderPopupContent()}
+      </Popup>
+
+      <Popup open={claimPopupOpen} onClose={() => setClaimPopupOpen(false)} modal>
+        {renderClaimPopupContent()}
       </Popup>
     </div>
   );

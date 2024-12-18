@@ -1,13 +1,12 @@
 import NavbarLayout from "./navbar";
 import "./tour_schedule.css";
-import { useState, useEffect} from "react";
-import { useParams} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import api from "./api/axios_config";
 import { FaChevronLeft, FaChevronRight, FaCalendarAlt } from "react-icons/fa";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
 
 export default function ScheduleLayout() {
   const [currentWeekStart, setCurrentWeekStart] = useState(getWeekStartDate(new Date()));
@@ -19,6 +18,7 @@ export default function ScheduleLayout() {
     setCurrentWeekStart(date);
     setShowCalendar(false); // Close calendar after date selection
   };
+
   // Function to get the Monday of a given date's week
   function getWeekStartDate(date) {
     const day = date.getDay();
@@ -49,6 +49,7 @@ export default function ScheduleLayout() {
       return `${formatDayMonthYear(startDate)} - ${formatDayMonthYear(endDate)}`;
     }
   }
+
   // Function to format date to 'YYYY-MM-DD' for API requests
   function formatDateToYYYYMMDD(date) {
     return date.toISOString().split("T")[0];
@@ -116,10 +117,9 @@ export default function ScheduleLayout() {
                         onChange={handleDateChange}
                         inline // Makes the calendar appear without input field
                     />
-                    </div>
-                )}
                 </div>
-         
+            )}
+          </div>
         </div>
 
         {/* Tour Schedule Table */}
@@ -137,12 +137,14 @@ export default function ScheduleLayout() {
             </tr>
           </thead>
           <tbody>
-            {generateTimeSlots().map((timeSlot) => (
+            {generateTimeSlots().map((timeSlot, timeIndex) => (
               <tr key={timeSlot}>
                 <td>{timeSlot}</td>
                 {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(
-                  (day) => (
-                    <td key={day}>{renderScheduleForDay(timeSlot, day)}</td>
+                  (day, dayIndex) => (
+                    <td key={day} style={getCellStyle(timeIndex, dayIndex)}>
+                      {renderScheduleForDay(timeIndex, dayIndex)}
+                    </td>
                   )
                 )}
               </tr>
@@ -178,9 +180,27 @@ export default function ScheduleLayout() {
     return times;
   }
 
-  function renderScheduleForDay(timeSlot, day) {
-    const event = tourSchedule.find((item) => item.time === timeSlot && item.day === day);
-    return event ? <div className="schedule-event">{event.location}</div> : null;
+  function renderScheduleForDay(timeIndex, dayIndex) {
+    const event = tourSchedule[timeIndex * 7 + dayIndex]; // Flattened index
+    return event ? (
+      <div className="schedule-event">{event}</div>
+    ) : null; // Render event if exists
+  }
+
+  function getCellStyle(timeIndex, dayIndex) {
+    const event = tourSchedule[timeIndex * 7 + dayIndex]; // Flattened index
+    // If there's an event, apply the blue background
+    if (event && event.trim() !== "") {
+      return {
+        backgroundColor: "blue",
+        color: "white",
+        textAlign: "center",
+        padding: "0.5rem",
+        borderRadius: "5px"
+      };
+    }
+
+    // Default style when there's no event
+    return {};
   }
 }
-

@@ -8,13 +8,19 @@ export default function FeedbackLayout() {
   const [experience, setExperience] = useState("");
   const [recommendation, setRecommendation] = useState("");
   const [password, setPassword] = useState("");
+  const [contactMail, setContactMail] = useState(""); // Added state for contactMail
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation: Check if all fields are filled
-    if (rating === 0 || experience.trim() === "" || password.trim() === "") {
+    if (
+      rating === 0 ||
+      experience.trim() === "" ||
+      password.trim() === "" ||
+      contactMail.trim() === ""
+    ) {
       setError("Please fill out all required fields.");
       return;
     }
@@ -27,11 +33,10 @@ export default function FeedbackLayout() {
       experience,
       recommendation,
       password,
-      contactMail : "uzay.kuzey@ug.bilkent.edu.tr"
+      contactMail, // Use the email provided by the user
     };
 
     try {
-      // Replace 'YOUR_API_ENDPOINT' with the backend URL
       const response = await api.post("/event/feedback", feedbackData);
       console.log("Feedback submitted successfully:", response.data);
 
@@ -41,6 +46,7 @@ export default function FeedbackLayout() {
       setExperience("");
       setRecommendation("");
       setPassword("");
+      setContactMail("");
       alert("Feedback submitted successfully!");
     } catch (error) {
       console.error("Error submitting feedback:", error);
@@ -132,6 +138,18 @@ export default function FeedbackLayout() {
           />
         </div>
 
+        {/* Input for Contact Email */}
+        <div className="form-group">
+          <label>Enter Your Email:</label>
+          <input
+            type="email"
+            placeholder="e.g., yourname@example.com"
+            className="input-code"
+            value={contactMail}
+            onChange={(e) => setContactMail(e.target.value)}
+          />
+        </div>
+
         {/* Input for Email Code */}
         <div className="form-group">
           <label>Enter the Code From Your Email:</label>
@@ -144,12 +162,16 @@ export default function FeedbackLayout() {
           />
         </div>
 
+
+
         {/* Error Message */}
         {error && <p className="error-message">{error}</p>}
 
         {/* Submit Button */}
         <div className="form-group">
-          <button type="submit" className="submit-button">Submit</button>
+          <button type="submit" className="submit-button">
+            Submit
+          </button>
         </div>
       </form>
     </div>

@@ -194,6 +194,10 @@ public class EventService {
         User user = optionalUser.get();
 
         Date startDate = FormManager.stringToDate(startDateString);
+        if(startDate==null)
+        {
+            return null;
+        }
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);

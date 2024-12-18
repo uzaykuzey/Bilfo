@@ -5,6 +5,7 @@ import bilfo.demo.EventCollection.Event;
 import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
+import bilfo.demo.mailSender.MailSenderService;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,8 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    @Autowired
+    private MailSenderService mailSenderService;
 
     public List<User> allUsers(){
         return userRepository.findAll();
@@ -328,6 +331,39 @@ public class UserService {
             return false;
         }
         User user = optionalUser.get();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPhoneNo(phoneNo);
+        userRepository.save(user);
+        return true;
+    }
+
+    public boolean shufflePassword(int bilkentId)
+    {
+        Optional<User> optionalUser = userRepository.findByBilkentId(bilkentId);
+        if(optionalUser.isEmpty())
+        {
+            return false;
+        }
+        User user = optionalUser.get();
+
+        int passwordLength = switch (user.getStatus())
+        {
+            case GUIDE -> User.DEFAULT_GUIDE_PASSWORD_LENGTH;
+            case ADVISOR -> User.DEFAULT_ADVISOR_PASSWORD_LENGTH;
+            case COORDINATOR -> User.DEFAULT_COORDINATOR_PASSWORD_LENGTH;
+            case ACTING_DIRECTOR -> User.DEFAULT_ACTING_DIRECTOR_PASSWORD_LENGTH;
+            default -> 8;
+        };
+
+        String password = UserManager.generatePassword(passwordLength);
+
+        user.setPassword(passwordEncoder.encode(password));
+
+        mailSenderService.sendEmail(user.getEmail(),"Your password has been changed.",
+                "Your password is " + password + ". Change it as soon as possible.");
+
+        userRepository.save(user);
         return true;
     }
 

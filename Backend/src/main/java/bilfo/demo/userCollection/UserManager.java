@@ -337,7 +337,20 @@ public class UserManager {
         String email = editUserRequest.get("email");
         String phoneNo = editUserRequest.get("phoneNo");
 
-        return null;
+        if(userService.editUser(bilkentId, username, email, phoneNo))
+        {
+            return new ResponseEntity<>("successful editing!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Error Occurred", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<String> shufflePassword(@RequestBody int bilkentId) {
+        if(userService.shufflePassword(bilkentId))
+        {
+            return new ResponseEntity<>("successful shuffling!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Error Occurred", HttpStatus.BAD_REQUEST);
     }
 
     public static String generatePassword(int length) {

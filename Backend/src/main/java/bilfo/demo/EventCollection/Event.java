@@ -1,5 +1,6 @@
 package bilfo.demo.EventCollection;
 
+import bilfo.demo.enums.EVENT_STATES;
 import bilfo.demo.enums.EVENT_TYPES;
 import bilfo.demo.enums.TOUR_TIMES;
 import lombok.AllArgsConstructor;
@@ -24,8 +25,6 @@ public class Event {
     private EVENT_TYPES eventType;
     private Date date;
     private TOUR_TIMES time;
-
-    private int rate;
-    private String experience;
-    private String recommendations;
+    private EVENT_STATES state;
+    private ObjectId feedback;
 }

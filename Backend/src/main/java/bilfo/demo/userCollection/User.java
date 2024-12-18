@@ -37,6 +37,10 @@ public class User {
     private boolean[] availability; //true means available, false means unavailable
 
     public final static int AVAILABILITY_LENGTH = 77;
+    public final static int DEFAULT_GUIDE_PASSWORD_LENGTH = 8;
+    public final static int DEFAULT_ADVISOR_PASSWORD_LENGTH = 12;
+    public final static int DEFAULT_COORDINATOR_PASSWORD_LENGTH = 14;
+    public final static int DEFAULT_ACTING_DIRECTOR_PASSWORD_LENGTH = 16;
 
     private void setId(int bilkentId) throws IllegalAccessException
     {

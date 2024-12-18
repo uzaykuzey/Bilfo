@@ -1,5 +1,6 @@
 package bilfo.demo.EventCollection;
 
+import bilfo.demo.enums.EVENT_STATES;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -12,4 +13,5 @@ import java.util.Optional;
 public interface EventRepository extends MongoRepository<Event, ObjectId> {
     public Optional<Event> findEventById(ObjectId id);
     public List<Event> findAll();
+    public List<Event> findEventsByState(EVENT_STATES state);
 }

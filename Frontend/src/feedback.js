@@ -27,7 +27,7 @@ export default function FeedbackLayout() {
       experience,
       recommendation,
       password,
-      contactMail : "uzay.kuzay@ug.bilkent.edu.tr"
+      contactMail : "uzay.kuzey@ug.bilkent.edu.tr"
     };
 
     try {

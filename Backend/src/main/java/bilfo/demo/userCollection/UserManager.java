@@ -168,7 +168,7 @@ public class UserManager {
         return new ResponseEntity<String>(availabilityString.toString(), HttpStatus.OK);
     }
 
-    @PostMapping("/getAdvisorsOfTheDay")
+    @GetMapping("/getAdvisorsOfTheDay")
     public ResponseEntity<List<Advisor>> getAdvisorsOfTheDay()
     {
         return new ResponseEntity<>(userService.getAdvisorsOfTheDay(getCurrentDay()), HttpStatus.OK);

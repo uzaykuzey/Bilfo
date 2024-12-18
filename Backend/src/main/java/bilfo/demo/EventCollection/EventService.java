@@ -200,10 +200,7 @@ public class EventService {
 
         List<Event> events = getEventsBetween(startDate, endDate);
         String[] schedule = new String[User.AVAILABILITY_LENGTH];
-        for(int i=0; i<schedule.length; i++)
-        {
-            schedule[i]="";
-        }
+        Arrays.fill(schedule, "");
 
         for(Event event: events)
         {
@@ -218,10 +215,21 @@ public class EventService {
                 continue;
             }
 
-            for(int i: indexOfTourTime)
+            if(event.getEventType()==EVENT_TYPES.FAIR)
             {
-                schedule[daysDifference+i*7] = eventToString(event);
+                for(int i=0;i<9;i++)
+                {
+                    schedule[daysDifference+i*7] = eventToString(event);
+                }
             }
+            else
+            {
+                for(int i: indexOfTourTime)
+                {
+                    schedule[daysDifference+i*7] = eventToString(event);
+                }
+            }
+
         }
         return schedule;
     }

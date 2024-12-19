@@ -15,7 +15,7 @@ export default function TourListLayout() {
   const [filteredTours, setFilteredTours] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTour, setSelectedTour] = useState(null);
-  const [selectedDate, setSelectedDate] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [claimPopupOpen, setClaimPopupOpen] = useState(false);
   const [selectedClaimTour, setSelectedClaimTour] = useState(null);
 
@@ -90,8 +90,8 @@ export default function TourListLayout() {
   };
 
   const acceptHighSchoolTour = async (tour, selectedIndex) => {
-    if (!selectedDate) {
-      alert("Please select a date.");
+    if (selectedDate === null || selectedDate === undefined) {
+      alert("Please select a time.");
       return;
     }
     try {
@@ -274,9 +274,9 @@ export default function TourListLayout() {
         case "HIGHSCHOOL_TOUR":
           return ["School Name", "City", "Date", "Day", "Time", "Visitor Count", "Actions"];
         case "INDIVIDUAL_TOUR":
-          return ["Visitor Name", "Contact Info", "Date", "Day", "Time", "Purpose", "Actions"];
+          return ["Names", "Department", "Date", "Day", "Time", "Visitor Count", "Actions"];
         case "FAIR":
-          return ["Fair Name", "Location", "Date", "Day", "Time", "Exhibitors", "Actions"];
+          return ["School Name", "Location", "Date", "Day", "Time", "Actions"];
         default:
           return [];
       }
@@ -304,11 +304,36 @@ export default function TourListLayout() {
               </>
             );
           }else{
-            console.log(tour.second.visitorCount);
+            var firstPossibleTime = tour.first?.date;
+            var date = firstPossibleTime ? new Date(firstPossibleTime) : null;
+            var rawTime = tour.first?.time || "N/A";
+            var formattedTime = mapTime(rawTime);
+            var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+            var formattedDate = formatDate(date);
             return (
               <>
-                <td>{tour.schoolName}</td>
-                <td>{tour.location}</td>
+                <td>{tour.second?.schoolName}</td>
+                <td>{tour.second?.location}</td>
+                <td>{formattedDate}</td>
+                <td>{day}</td>
+                <td>{formattedTime}</td>
+                <td>{tour.second?.visitorCount}</td>
+                <td>{renderActions(tour)}</td>
+              </>
+            );
+          }
+        case "INDIVIDUAL_TOUR":
+          if(selectedStatus != "Accepted"){
+            var firstPossibleTime = tour.possibleTimes?.[0];
+            var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
+            var rawTime = firstPossibleTime?.second || "N/A";
+            var formattedTime = mapTime(rawTime);
+            var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+            var formattedDate = formatDate(date);
+            return (
+              <>
+                <td>{tour.names}</td>
+                <td>{tour.department}</td>
                 <td>{formattedDate}</td>
                 <td>{day}</td>
                 <td>{formattedTime}</td>
@@ -316,43 +341,61 @@ export default function TourListLayout() {
                 <td>{renderActions(tour)}</td>
               </>
             );
+          }else{
+            var firstPossibleTime = tour.first?.date;
+            var date = firstPossibleTime ? new Date(firstPossibleTime) : null;
+            var rawTime = tour.first?.time || "N/A";
+            var formattedTime = mapTime(rawTime);
+            var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+            var formattedDate = formatDate(date);
+            return (
+              <>
+                <td>{tour.second?.names}</td>
+                <td>{tour.second?.department}</td>
+                <td>{formattedDate}</td>
+                <td>{day}</td>
+                <td>{formattedTime}</td>
+                <td>{tour.second?.visitorCount}</td>
+                <td>{renderActions(tour)}</td>
+              </>
+            );
           }
-        case "INDIVIDUAL_TOUR":
-          var firstPossibleTime = tour.possibleTimes?.[0];
-          var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
-          var rawTime = firstPossibleTime?.second || "N/A";
-          var formattedTime = mapTime(rawTime);
-          var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
-          var formattedDate = formatDate(date);
-          return (
-            <>
-              <td>{tour.visitorName}</td>
-              <td>{tour.contactInfo}</td>
-              <td>{formattedDate}</td>
-              <td>{day}</td>
-              <td>{formattedTime}</td>
-              <td>{tour.purpose}</td>
-              <td>{renderActions(tour)}</td>
-            </>
-          );
         case "FAIR":
-          var firstPossibleTime = tour.possibleTimes?.[0];
-          var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
-          var rawTime = firstPossibleTime?.second || "N/A";
-          var formattedTime = mapTime(rawTime);
-          var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
-          var formattedDate = formatDate(date);
-          return (
-            <>
-              <td>{tour.fairName}</td>
-              <td>{tour.location}</td>
-              <td>{formattedDate}</td>
-              <td>{day}</td>
-              <td>{formattedTime}</td>
-              <td>{tour.exhibitors}</td>
-              <td>{renderActions(tour)}</td>
-            </>
-          );
+          if(selectedStatus != "Accepted"){
+            var firstPossibleTime = tour.possibleTimes?.[0];
+            var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
+            var rawTime = firstPossibleTime?.second || "N/A";
+            var formattedTime = mapTime(rawTime);
+            var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+            var formattedDate = formatDate(date);
+            return (
+              <>
+                <td>{tour.schoolName}</td>
+                <td>{tour.location}</td>
+                <td>{formattedDate}</td>
+                <td>{day}</td>
+                <td>{formattedTime}</td>
+                <td>{renderActions(tour)}</td>
+              </>
+            );
+          }else{
+            var firstPossibleTime = tour.first?.date;
+            var date = firstPossibleTime ? new Date(firstPossibleTime) : null;
+            var rawTime = tour.first?.time || "N/A";
+            var formattedTime = mapTime(rawTime);
+            var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+            var formattedDate = formatDate(date);
+            return (
+              <>
+                <td>{tour.second?.schoolName}</td>
+                <td>{tour.second?.location}</td>
+                <td>{formattedDate}</td>
+                <td>{day}</td>
+                <td>{formattedTime}</td>
+                <td>{renderActions(tour)}</td>
+              </>
+            );
+          }
         default:
           return null;
       }
@@ -371,7 +414,7 @@ export default function TourListLayout() {
         </thead>
         <tbody>
           {filteredTours.map((tour) => (
-            <tr key={tour.id}>{renderRowData(tour)}</tr>
+            <tr key={tour.first?.id}>{renderRowData(tour)}</tr>
           ))}
         </tbody>
       </table>

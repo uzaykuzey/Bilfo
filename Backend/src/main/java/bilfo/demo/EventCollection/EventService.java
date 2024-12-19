@@ -2,10 +2,7 @@ package bilfo.demo.EventCollection;
 
 import bilfo.demo.EventCollection.feedbackCollection.Feedback;
 import bilfo.demo.EventCollection.feedbackCollection.FeedbackService;
-import bilfo.demo.enums.EVENT_STATES;
-import bilfo.demo.enums.EVENT_TYPES;
-import bilfo.demo.enums.FORM_STATES;
-import bilfo.demo.enums.TOUR_TIMES;
+import bilfo.demo.enums.*;
 import bilfo.demo.formCollection.*;
 import bilfo.demo.mailSender.MailSenderService;
 import bilfo.demo.passwordCollection.eventPasswordCollection.EventPassword;
@@ -20,6 +17,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Indexed;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -83,6 +81,11 @@ public class EventService {
 
         Form form = optionalForm.get();
         if (form.getApproved() == FORM_STATES.REJECTED || form.getApproved() == FORM_STATES.NOT_REVIEWED) {
+            return false;
+        }
+
+        if(!isUserAvailable(user, event.getDate(), event.getTime(), !voluntary))
+        {
             return false;
         }
 
@@ -203,10 +206,12 @@ public class EventService {
             return null;
         }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        calendar.add(Calendar.DAY_OF_YEAR, 7);
-        Date endDate = calendar.getTime();
+        return getScheduleOfWeek(user, startDate);
+    }
+
+    private String[] getScheduleOfWeek(User user, Date startDate)
+    {
+        Date endDate = DAY.add(startDate, 7);
 
         List<Event> events = getEventsBetween(startDate, endDate);
         String[] schedule = new String[User.AVAILABILITY_LENGTH];
@@ -218,23 +223,14 @@ public class EventService {
             {
                 continue;
             }
-            int daysDifference = (int) ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), event.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
             int[] indexOfTourTime = getIndexOfTourTimes(event.getTime());
+            int daysDifference = DAY.dayDifference(startDate, event.getDate());
 
-            if(event.getEventType()==EVENT_TYPES.FAIR)
+            for(int i: indexOfTourTime)
             {
-                for(int i=0;i<9;i++)
-                {
-                    schedule[daysDifference+i*7] = eventToString(event);
-                }
+                schedule[daysDifference+i*7] = eventToString(event);
             }
-            else
-            {
-                for(int i: indexOfTourTime)
-                {
-                    schedule[daysDifference+i*7] = eventToString(event);
-                }
-            }
+
 
         }
         return schedule;
@@ -262,6 +258,7 @@ public class EventService {
             case ELEVEN_AM -> new int[]{2, 3, 4};
             case ONE_THIRTY_PM -> new int[]{4, 5, 6};
             case FOUR_PM -> new int[]{6, 7, 8};
+            case WHOLE_DAY -> new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
         };
     }
 
@@ -335,6 +332,36 @@ public class EventService {
             return false;
         }
         return !optionalUser.get().getSuggestedEvents().isEmpty();
+    }
+
+    public boolean isUserAvailable(User user, Date date, TOUR_TIMES time, boolean checkUnavailabilityList)
+    {
+        Date weekStart=DAY.getStartOfWeek(date);
+        int dayIndex = DAY.dayDifference(date, weekStart);
+        int[] indexOfTourTimes = getIndexOfTourTimes(time);
+
+        if(checkUnavailabilityList)
+        {
+            boolean[] availability = user.getAvailability();
+            for(int i: indexOfTourTimes)
+            {
+                if(!availability[dayIndex + i*7])
+                {
+                    return false;
+                }
+            }
+        }
+
+        String[] tourSchedule = getScheduleOfWeek(user, weekStart);
+        for(int i: indexOfTourTimes)
+        {
+            if(tourSchedule[dayIndex + i*7] != "")
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 

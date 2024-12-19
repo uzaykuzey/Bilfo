@@ -118,12 +118,11 @@ public class FormManager {
             schoolName = s.getName();
         }
 
-        TOUR_TIMES time = stringToTourTime(formApplication.get("time"));
         Date date = stringToDate(formApplication.get("date"));
 
         String contactMail = formApplication.get("contactMail");
         List<Pair<Date, TOUR_TIMES>> dates=new ArrayList<>();
-        dates.add(Pair.of(date, time));
+        dates.add(Pair.of(date, TOUR_TIMES.WHOLE_DAY));
 
         Optional<Form> newForm=formService.createForm(EVENT_TYPES.FAIR, FORM_STATES.NOT_REVIEWED, dates, contactMail, city, schoolName, 0, "", null, null, DEPARTMENT.NOT_APPLICABLE);
         if(newForm.isPresent())

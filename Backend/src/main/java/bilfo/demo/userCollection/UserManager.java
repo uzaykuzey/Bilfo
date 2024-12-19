@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @RestController
@@ -189,7 +190,7 @@ public class UserManager {
     @GetMapping("/getAdvisorsOfTheDay")
     public ResponseEntity<List<Advisor>> getAdvisorsOfTheDay()
     {
-        return new ResponseEntity<>(userService.getAdvisorsOfTheDay(getCurrentDay()), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAdvisorsOfTheDay(DAY.getCurrentDay()), HttpStatus.OK);
     }
 
     @GetMapping("/getUserInfo")
@@ -199,17 +200,7 @@ public class UserManager {
         return new ResponseEntity<>(user.orElse(null), user.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
-    private DAY getCurrentDay() {
-        return switch (LocalDate.now().getDayOfWeek()) {
-            case MONDAY -> DAY.MONDAY;
-            case TUESDAY -> DAY.TUESDAY;
-            case WEDNESDAY -> DAY.WEDNESDAY;
-            case THURSDAY -> DAY.THURSDAY;
-            case FRIDAY -> DAY.FRIDAY;
-            case SATURDAY -> DAY.SATURDAY;
-            case SUNDAY -> DAY.SUNDAY;
-        };
-    }
+
 
     @PostMapping("/promoteUser")
     public ResponseEntity<String> promoteUser(@RequestBody Map<String,String> promoteRequest) {

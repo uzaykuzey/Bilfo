@@ -94,6 +94,11 @@ public class EventManager {
     public ResponseEntity<List<Pair<Event, Form>>> getSuggestedEvents(@RequestParam int bilkentId) {
         return new ResponseEntity<>(eventService.getSuggestedEvents(bilkentId), HttpStatus.OK);
     }
+
+    @GetMapping("/hasSuggestedEvents")
+    public ResponseEntity<Boolean> hasSuggestedEvents(@RequestParam int bilkentId) {
+        return new ResponseEntity<>(eventService.hasSuggestedEvents(bilkentId), HttpStatus.OK);
+    }
 }
 
 

@@ -327,5 +327,14 @@ public class EventService {
         }
         return result;
     }
+
+    public boolean hasSuggestedEvents(int bilkentId) {
+        Optional<User> optionalUser = userService.getUser(bilkentId);
+        if(optionalUser.isEmpty())
+        {
+            return false;
+        }
+        return !optionalUser.get().getSuggestedEvents().isEmpty();
+    }
 }
 

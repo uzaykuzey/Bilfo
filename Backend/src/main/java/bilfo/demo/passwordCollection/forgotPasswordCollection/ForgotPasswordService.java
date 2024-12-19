@@ -20,7 +20,7 @@ public class ForgotPasswordService {
     }
 
     public List<ForgotPassword> getForgotPasswordsByBilkentId(int bilkent) {
-        return forgotPasswordRepository.findByBilkentId(bilkent);
+        return forgotPasswordRepository.findAllByBilkentId(bilkent);
     }
 
     @Scheduled(fixedRate = 900000)

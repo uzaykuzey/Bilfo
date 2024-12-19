@@ -6,6 +6,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +18,6 @@ public interface EventRepository extends MongoRepository<Event, ObjectId> {
     public List<Event> findAll();
     public List<Event> findEventsByState(EVENT_STATES state);
     public List<Event> findEventsByEventTypeAndState(EVENT_TYPES eventType, EVENT_STATES state);
+    public List<Event> findEventsByDateBetween(Date start, Date end);
     public Optional<Event> findEventByOriginalForm(ObjectId originalFormId);
 }

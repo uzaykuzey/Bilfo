@@ -213,13 +213,13 @@ public class EventService {
     {
         Date endDate = DAY.add(startDate, 7);
 
-        List<Event> events = getEventsBetween(startDate, endDate);
+        List<Event> events = eventRepository.findEventsByDateBetween(startDate, endDate);
         String[] schedule = new String[User.AVAILABILITY_LENGTH];
         Arrays.fill(schedule, "");
 
         for(Event event: events)
         {
-            if(!event.getGuides().contains(user.getBilkentId()) && !event.getTrainees().contains(user.getBilkentId()))
+            if(event.getState() == EVENT_STATES.CANCELLED || (!event.getGuides().contains(user.getBilkentId()) && !event.getTrainees().contains(user.getBilkentId())))
             {
                 continue;
             }
@@ -237,19 +237,6 @@ public class EventService {
         return schedule;
     }
 
-    private List<Event> getEventsBetween(Date startDate, Date endDate)
-    {
-        List<Event> events = eventRepository.findAll();
-        List<Event> result = new ArrayList<>();
-        for(Event event: events)
-        {
-            if(event.getDate().before(endDate) && event.getDate().after(startDate) && event.getState() != EVENT_STATES.CANCELLED)
-            {
-                result.add(event);
-            }
-        }
-        return result;
-    }
 
     private static int[] getIndexOfTourTimes(TOUR_TIMES time)
     {

@@ -50,7 +50,7 @@ public class FormManager {
         }
         else
         {
-            School s=schoolService.createSchool(formApplication.get("schoolName"), city).get();
+            School s=schoolService.createSchool(formApplication.get("schoolName"), city, 0).get();
             schoolName = s.getName();
         }
 
@@ -114,7 +114,7 @@ public class FormManager {
         }
         else
         {
-            School s=schoolService.createSchool(formApplication.get("schoolName"), city).get();
+            School s=schoolService.createSchool(formApplication.get("schoolName"), city, 0).get();
             schoolName = s.getName();
         }
 

@@ -18,4 +18,5 @@ public class School {
     @Indexed(unique = true)
     private String name;
     private CITIES location;
+    private int bilkentAdmissions;
 }

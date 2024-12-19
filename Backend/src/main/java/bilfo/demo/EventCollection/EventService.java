@@ -17,9 +17,11 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.util.Pair;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -64,7 +66,7 @@ public class EventService {
         return Optional.of(savedEvent);
     }
 
-    public boolean claimEvent(int bilkentId, ObjectId formId, boolean claim) {
+    public boolean claimEvent(int bilkentId, ObjectId formId, boolean voluntary) {
         Optional<User> optionalUser = userService.getUser(bilkentId);
         Optional<Event> optionalEvent = eventRepository.findEventByOriginalForm(formId);
         if (optionalUser.isEmpty() || optionalEvent.isEmpty()) {
@@ -84,10 +86,10 @@ public class EventService {
             return false;
         }
 
-        return user.isTrainee() ? claimEventTrainee(user, event, form, claim) : claimEventGuide(user, event, form, claim);
+        return user.isTrainee() ? claimEventTrainee(user, event, form, voluntary) : claimEventGuide(user, event, form, voluntary);
     }
 
-    private boolean claimEventGuide(User user, Event event, Form form, boolean claim) {
+    private boolean claimEventGuide(User user, Event event, Form form, boolean voluntary) {
         int guideCount = Integer.MAX_VALUE;
         if (form.getType() != EVENT_TYPES.FAIR) {
             guideCount = ((TourForm) form).getVisitorCount() / 50;
@@ -97,30 +99,32 @@ public class EventService {
             return false;
         }
 
-        if (claim) {
+        if (voluntary) {
+            user.getSuggestedEvents().remove(event.getId());
             event.getGuides().add(user.getBilkentId());
             eventRepository.save(event);
         } else {
             user.getSuggestedEvents().add(event.getId());
-            userService.saveUser(user);
         }
+        userService.saveUser(user);
 
         return true;
     }
 
-    private boolean claimEventTrainee(User user, Event event, Form form, boolean claim) {
+    private boolean claimEventTrainee(User user, Event event, Form form, boolean voluntary) {
         int traineeCount = 5;
         if (event.getTrainees().size() > traineeCount) {
             return false;
         }
 
-        if (claim) {
+        if (voluntary) {
+            user.getSuggestedEvents().remove(event.getId());
             event.getTrainees().add(user.getBilkentId());
             eventRepository.save(event);
         } else {
             user.getSuggestedEvents().add(event.getId());
-            userService.saveUser(user);
         }
+        userService.saveUser(user);
         return true;
     }
 
@@ -287,6 +291,33 @@ public class EventService {
         List<Pair<Event, Form>> result = new ArrayList<>();
         for(Event event: events)
         {
+            Optional<Form> optionalForm = formService.getForm(event.getOriginalForm());
+            if(optionalForm.isEmpty())
+            {
+                continue;
+            }
+            result.add(Pair.of(event, optionalForm.get()));
+        }
+        return result;
+    }
+
+    public List<Pair<Event, Form>> getSuggestedEvents(int bilkentId) {
+        Optional<User> optionalUser = userService.getUser(bilkentId);
+        if(optionalUser.isEmpty())
+        {
+            return null;
+        }
+        List<Pair<Event, Form>> result = new ArrayList<>();
+
+        for(ObjectId eventId: optionalUser.get().getSuggestedEvents())
+        {
+            Optional<Event> optionalEvent = eventRepository.findEventById(eventId);
+            if(optionalEvent.isEmpty())
+            {
+                continue;
+            }
+            Event event = optionalEvent.get();
+
             Optional<Form> optionalForm = formService.getForm(event.getOriginalForm());
             if(optionalForm.isEmpty())
             {

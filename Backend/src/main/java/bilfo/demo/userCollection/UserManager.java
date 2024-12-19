@@ -1,5 +1,6 @@
 package bilfo.demo.userCollection;
 
+import bilfo.demo.EventCollection.Event;
 import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
@@ -8,6 +9,7 @@ import bilfo.demo.mailSender.MailSenderManager;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.util.Pair;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

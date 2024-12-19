@@ -34,7 +34,7 @@ public class EventManager {
         ObjectId formId = new ObjectId(eventClaimRequest.get("formId"));
         if(eventService.claimEvent(bilkentId, formId, true))
         {
-            return new ResponseEntity<>("Claimed event", HttpStatus.OK);
+            return new ResponseEntity<>("Successfully claimed event", HttpStatus.OK);
         }
         return new ResponseEntity<>("Unsuccesful claim", HttpStatus.BAD_REQUEST);
     }
@@ -46,7 +46,7 @@ public class EventManager {
         ObjectId formId = new ObjectId(eventOfferRequest.get("formId"));
         if(eventService.claimEvent(bilkentId, formId, false))
         {
-            return new ResponseEntity<>("Claimed event", HttpStatus.OK);
+            return new ResponseEntity<>("Successfully claimed event", HttpStatus.OK);
         }
         return new ResponseEntity<>("Unsuccesful claim", HttpStatus.BAD_REQUEST);
     }
@@ -88,6 +88,11 @@ public class EventManager {
             state = EVENT_STATES.valueOf(getEventRequest.get("state"));
         }
         return new ResponseEntity<>(eventService.getEvents(type, state), HttpStatus.OK);
+    }
+
+    @GetMapping("/getSuggestedEvents")
+    public ResponseEntity<List<Pair<Event, Form>>> getSuggestedEvents(@RequestParam int bilkentId) {
+        return new ResponseEntity<>(eventService.getSuggestedEvents(bilkentId), HttpStatus.OK);
     }
 }
 

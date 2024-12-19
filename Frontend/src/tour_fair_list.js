@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import api from "./api/axios_config";
-import Popup from "reactjs-popup";  // Make sure to import the popup component
-import "reactjs-popup/dist/index.css";  // Import styles for the popup
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
 import "./tour_fair_list.css";
 import NavbarLayout from "./navbar";
 
@@ -12,23 +12,28 @@ export default function TourListLayout() {
   const { statusUser } = state;
   const navigate = useNavigate();
 
-  const [pendingTours, setPendingTours] = useState([]);
-  const [acceptedTours, setAcceptedTours] = useState([]);
-  const [rejectedTours, setRejectedTours] = useState([]);
   const [filteredTours, setFilteredTours] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState("Pending");
-  const [selectedType, setSelectedType] = useState("All");
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTour, setSelectedTour] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [claimPopupOpen, setClaimPopupOpen] = useState(false);
   const [selectedClaimTour, setSelectedClaimTour] = useState(null);
-  
+
+  const [selectedStatus, setSelectedStatus] = useState("Pending");
+  const [selectedType, setSelectedType] = useState("HIGHSCHOOL_TOUR");
+
+  // Set initial state based on the user role
+  useEffect(() => {
+    if (statusUser === "GUIDE") {
+      setSelectedStatus("Accepted");
+    } else {
+      setSelectedStatus("Pending");
+    }
+  }, [statusUser]);
+
   const handleDateChange = (e, index) => {
-    
-    setSelectedDate(index); // Store the whole selected time object
+    setSelectedDate(index);
   };
-  
 
   const mapTime = (time) => {
     switch (time) {
@@ -41,7 +46,7 @@ export default function TourListLayout() {
       case "FOUR_PM":
         return "16.00";
       default:
-        return "N/A"; // Default fallback if time doesn't match
+        return "N/A";
     }
   };
 
@@ -55,15 +60,13 @@ export default function TourListLayout() {
 
   const formatNames = (names) => {
     if (!Array.isArray(names) || names.length === 0) {
-      return "N/A"; // Return a fallback value if names is undefined or empty
+      return "N/A";
     }
     if (names.length <= 3) {
       return names.join(", ");
     }
     return `${names.slice(0, 3).join(", ")}...`;
   };
-
-  
 
   const openPopup = (tour) => {
     setSelectedTour(tour);
@@ -75,24 +78,17 @@ export default function TourListLayout() {
     setPopupOpen(false);
   };
 
-  const assignGuide = (tour) => {
-    console.log("Assign Guide clicked for:", tour);
-    // Implement the functionality here
-  };
-  
   const claimTour = (tour) => {
-    console.log("Claim clicked for:", tour);
-    setSelectedClaimTour(tour);  // Set the selected tour to display in the claim popup
-    setClaimPopupOpen(true);  // Open the claim popup
+    setSelectedClaimTour(tour);
+    setClaimPopupOpen(true);
   };
-  
+
   const confirmClaim = async (tour) => {
     try {
-      console.log(selectedClaimTour.id);
-      const response = await api.post("/event/claimEvent", { bilkentId : bilkentId, formId:selectedClaimTour.id });
+      const response = await api.post("/event/claimEvent", { bilkentId: bilkentId, formId: selectedClaimTour.id });
       if (response.status === 200) {
         alert("Tour claimed successfully!");
-        setClaimPopupOpen(false); // Close the popup
+        setClaimPopupOpen(false);
       } else {
         alert("Failed to claim the tour.");
       }
@@ -102,103 +98,119 @@ export default function TourListLayout() {
     }
   };
 
-  const cancelTour = (tour) => {
-    console.log("Cancel clicked for:", tour);
-    // Implement the functionality here
-  };
-  
-  const acceptHighSchoolTour = async (tour,selectedIndex) => {
+  const acceptHighSchoolTour = async (tour, selectedIndex) => {
     if (!selectedDate) {
       alert("Please select a date.");
       return;
     }
-    console.log(tour);
     try {
       var index = parseInt(selectedIndex);
       const payload = {
         formId: tour.id,
-        state: "ACCEPTED", 
-        index: index,  // Pass the selected date here
+        state: "ACCEPTED",
+        index: index,
         rejectionMessage: "", // Empty as this is an acceptance
       };
-  
-      console.log(payload);
       const response = await api.post("/form/eva", payload);
-  
       if (response.status === 200) {
         alert("Tour accepted successfully!");
       } else {
         alert("Failed to accept the tour.");
       }
     } catch (error) {
-      console.error("Error accepting tour:", error);
       alert("An error occurred while accepting the tour.");
     }
   };
-  
-  useEffect(() => {
-    const fetchToursFairs = async () => {
-      try {
-        const responseForm = await api.get("/form");
-        const responseEvent = await api.get("/event");
-        console.log(responseForm);
-        console.log(responseEvent);
-        const pending = responseForm.data.filter(
-          (item) => item.approved === "NOT_REVIEWED"
-        );
-        const accepted = responseForm.data.filter(
-          (item) => item.approved === "ACCEPTED"
-        );
-        const rejected = responseForm.data.filter(
-          (item) => item.approved === "REJECTED"
-        );
-        console.log(accepted);
-        setPendingTours(pending);
-        setAcceptedTours(accepted);
-        setRejectedTours(rejected);
 
-        if (statusUser === "GUIDE") {
-          setSelectedStatus("Accepted");
-          setSelectedType("High School Tours");
-          setFilteredTours(
-            accepted.filter((tour) => tour.type === "HIGHSCHOOL_TOUR")
-          );
-        } else {
-          setSelectedStatus("Pending");
-          setSelectedType("High School Tours");
-          setFilteredTours(
-            pending.filter((tour) => tour.type === "HIGHSCHOOL_TOUR")
-          );
+  const assignGuide = async (tour) => {
+    // Assign a guide to the tour
+    try {
+      const response = await api.post("/form/assignGuide", { formId: tour.id, bilkentId });
+      if (response.status === 200) {
+        alert("Guide assigned successfully!");
+      } else {
+        alert("Failed to assign guide.");
+      }
+    } catch (error) {
+      alert("An error occurred while assigning the guide.");
+    }
+  };
+
+  const cancelTour = async (tour) => {
+    // Cancel the tour
+    try {
+      const response = await api.post("/form/cancelTour", { formId: tour.id });
+      if (response.status === 200) {
+        alert("Tour canceled successfully!");
+      } else {
+        alert("Failed to cancel the tour.");
+      }
+    } catch (error) {
+      alert("An error occurred while canceling the tour.");
+    }
+  };
+
+  const renderPopupContent = () => {
+    if (!selectedTour) return null;
+    const date = new Date(selectedTour.date);
+    const formattedDate = formatDate(date);
+    const formattedNames = formatNames(selectedTour.guides);
+
+    return (
+      <div className="popup-content">
+        <h3>Tour Details</h3>
+        <p><strong>Tour Name:</strong> {selectedTour.name}</p>
+        <p><strong>Location:</strong> {selectedTour.location}</p>
+        <p><strong>Date:</strong> {formattedDate}</p>
+        <p><strong>Guides:</strong> {formattedNames}</p>
+        <button onClick={closePopup}>Close</button>
+      </div>
+    );
+  };
+
+  const renderClaimPopupContent = () => {
+    return (
+      <div className="claim-popup-content">
+        <h3>Claim Tour</h3>
+        <p>Are you sure you want to claim this tour?</p>
+        <button onClick={() => confirmClaim(selectedClaimTour)}>Confirm Claim</button>
+        <button onClick={() => setClaimPopupOpen(false)}>Cancel</button>
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    const fetchTours = async () => {
+      try {
+        let tours;
+        if(selectedStatus == "Pending"){
+          const response = await api.get("/form/getForms", { params: { type: selectedType, state: "NOT_REVIEWED" } });
+          tours = response.data;
+          setFilteredTours(tours);
+        }else if(selectedStatus == "Accepted"){
+          const response = await api.get("/event/getEvents", { params: { type: selectedType, state: "ONGOING" } });
+          tours = response.data;
+          setFilteredTours(tours);
+        }else{
+          const response = await api.get("/event/getEvents", { params: { type: selectedType, state: "CANCELLED" } });
+          tours = response.data;
+          setFilteredTours(tours);
         }
+
+        setFilteredTours(tours);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching filtered tours:", error);
       }
     };
 
-    fetchToursFairs();
-  }, [statusUser]);
-
-  useEffect(() => {
-    let tours = [];
-    if (selectedStatus === "Pending") tours = pendingTours;
-    else if (selectedStatus === "Accepted") tours = acceptedTours;
-    else if (selectedStatus === "Rejected") tours = rejectedTours;
-
-    if (selectedType === "High School Tours") 
-      tours = tours.filter((tour) => tour.type === "HIGHSCHOOL_TOUR");
-    else if (selectedType === "Individual Tours")
-      tours = tours.filter((tour) => tour.type === "INDIVIDUAL_TOUR");
-    else if (selectedType === "Fairs")
-      tours = tours.filter((tour) => tour.type === "FAIR");
-
-    setFilteredTours(tours);
-  }, [selectedStatus, selectedType, pendingTours, acceptedTours, rejectedTours]);
+    fetchTours();
+  }, [selectedStatus, selectedType, statusUser]);
 
   const renderTable = () => {
     if (filteredTours.length === 0) {
       return <p>No data available for the selected type.</p>;
     }
-  
+
     const renderActions = (tour) => {
       if (selectedStatus === "Accepted") {
         return (
@@ -215,302 +227,51 @@ export default function TourListLayout() {
         );
       }
     };
-  
-    if (selectedType === "High School Tours") {
-      return (
-        <table className="tour-table">
-          <thead>
-            <tr>
-              <th>School Name</th>
-              <th>City</th>
-              <th>Date</th>
-              <th>Day</th>
-              <th>Time</th>
-              <th>Participant Count</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredTours.map((tour) => {
-              const firstPossibleTime = tour.possibleTimes?.[0];
-              const date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
-              const rawTime = firstPossibleTime?.second || "N/A";
-              const formattedTime = mapTime(rawTime);
-              const day = date
-                ? date.toLocaleDateString("en-US", { weekday: "long" })
-                : "N/A";
-              const formattedDate = formatDate(date);
-  
-              return (
-                <tr key={tour.id}>
-                  <td>{tour.schoolName}</td>
-                  <td>{tour.location}</td>
-                  <td>{formattedDate}</td>
-                  <td>{day}</td>
-                  <td>{formattedTime}</td>
-                  <td>{tour.visitorCount}</td>
-                  <td>{renderActions(tour)}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      );
-    }
-  
-    if (selectedType === "Individual Tours") {
-      return (
-        <table className="tour-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Department</th>
-              <th>Date</th>
-              <th>Day</th>
-              <th>Time</th>
-              <th>Visitor Count</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredTours.map((tour) => {
-              const firstPossibleTime = tour.possibleTimes?.[0];
-              const date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
-              const rawTime = firstPossibleTime?.second || "N/A";
-              const formattedTime = mapTime(rawTime);
-              const day = date
-                ? date.toLocaleDateString("en-US", { weekday: "long" })
-                : "N/A";
-              const formattedDate = formatDate(date);
-  
-              return (
-                <tr key={tour.id}>
-                  <td>{formatNames(tour.names)}</td>
-                  <td>{tour.department}</td>
-                  <td>{formattedDate}</td>
-                  <td>{day}</td>
-                  <td>{formattedTime}</td>
-                  <td>{tour.visitorCount}</td>
-                  <td>{renderActions(tour)}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      );
-    }else if (selectedType === "Fairs") {
-      return (
-        <table className="tour-table">
-          <thead>
-            <tr>
-              <th>School Name</th>
-              <th>Location</th>
-              <th>Date</th>
-              <th>Day</th>
-              <th>Time</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredTours.map((fair) => {
-              const firstPossibleTime = fair.possibleTimes?.[0];
-              const date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
-              const rawTime = firstPossibleTime?.second || "N/A";
-              const formattedTime = mapTime(rawTime);
-              const day = date
-                ? date.toLocaleDateString("en-US", { weekday: "long" })
-                : "N/A";
-              const formattedDate = formatDate(date);
-  
-              return (
-                <tr key={fair.id}>
-                  <td>{fair.schoolName}</td>
-                  <td>{fair.location}</td>
-                  <td>{formattedDate}</td>
-                  <td>{formattedTime}</td>
-                  <td>{day}</td>
-                  <td>
-                    <button className="evaluate-button" onClick={() => openPopup(fair)}>Evaluate</button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      );
-    }
-  };
-  const renderClaimPopupContent = () => {
-    if (!selectedClaimTour) return null;
-    
-    const popupStyles = {
-      container: {
-        width: "90%",
-        margin: "20px auto",
-        padding: "20px",
-        borderRadius: "8px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        backgroundColor: "#f9f9f9",
-        fontFamily: "Arial, sans-serif",
-      },
-      heading: {
-        fontSize: "20px",
-        fontWeight: "bold",
-        marginBottom: "10px",
-        color: "#333",
-        borderBottom: "2px solid #ddd",
-        paddingBottom: "5px",
-      },
-      paragraph: {
-        fontSize: "16px",
-        margin: "10px 0",
-        color: "#555",
-      },
-      section: {
-        marginBottom: "15px",
-      },
-    };
-  
-    const renderDetails = (title, details) => (
-      <div style={popupStyles.section}>
-        <h3 style={popupStyles.heading}>{title}</h3>
-        {details.map((detail, index) => (
-          <p key={index} style={popupStyles.paragraph}>
-            {detail}
-          </p>
-        ))}
-      </div>
-    );
-  
-    return (
-      <div style={popupStyles.container}>
-        {renderDetails("Claim Tour Details", [
-          `School Name: ${selectedClaimTour.schoolName}`,
-          `City: ${selectedClaimTour.location}`,
-          `Visitor Count: ${selectedClaimTour.visitorCount}`,
-        ])}
-        <button onClick={() => confirmClaim(selectedClaimTour)}>Confirm Claim</button>
-        <button onClick={() => setClaimPopupOpen(false)}>Cancel</button>
-      </div>
-    );
-  };
-  
 
-  const renderPopupContent = () => {
-    if (!selectedTour) return null;
-  
-    const popupStyles = {
-      container: {
-        width: "90%",
-        margin: "20px auto",
-        padding: "20px",
-        borderRadius: "8px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        backgroundColor: "#f9f9f9",
-        fontFamily: "Arial, sans-serif",
-      },
-      heading: {
-        fontSize: "20px",
-        fontWeight: "bold",
-        marginBottom: "10px",
-        color: "#333",
-        borderBottom: "2px solid #ddd",
-        paddingBottom: "5px",
-      },
-      paragraph: {
-        fontSize: "16px",
-        margin: "10px 0",
-        color: "#555",
-      },
-      section: {
-        marginBottom: "15px",
-      },
-    };
-  
-    const renderDetails = (title, details) => (
-      <div style={popupStyles.section}>
-        <h3 style={popupStyles.heading}>{title}</h3>
-        {details.map((detail, index) => (
-          <p key={index} style={popupStyles.paragraph}>
-            {detail}
-          </p>
-        ))}
-      </div>
+    return (
+      <table className="tour-table">
+        <thead>
+          <tr>
+            <th>{selectedType === "Fairs" ? "Fair Name" : "School Name"}</th>
+            <th>{selectedType === "Fairs" ? "Location" : "City"}</th>
+            <th>Date</th>
+            <th>Day</th>
+            <th>Time</th>
+            <th>Visitor Count</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredTours.map((tour) => {
+            const firstPossibleTime = tour.possibleTimes?.[0];
+            const date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
+            const rawTime = firstPossibleTime?.second || "N/A";
+            const formattedTime = mapTime(rawTime);
+            const day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+            const formattedDate = formatDate(date);
+
+            return (
+              <tr key={tour.id}>
+                <td>{tour.schoolName || tour.fairName}</td>
+                <td>{tour.location}</td>
+                <td>{formattedDate}</td>
+                <td>{day}</td>
+                <td>{formattedTime}</td>
+                <td>{tour.visitorCount}</td>
+                <td>{renderActions(tour)}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     );
-  
-    if (selectedTour.type === "HIGHSCHOOL_TOUR") {
-      return (
-        <div style={popupStyles.container}>
-          {renderDetails("High School Tour Details", [
-            `School Name: ${selectedTour.schoolName}`,
-            `City: ${selectedTour.location}`,
-            `Visitor Count: ${selectedTour.visitorCount}`,
-          ])}
-          {selectedTour.possibleTimes.map((time, index) => (
-            <div key={index}>
-              <label>
-                <input 
-                  type="radio" 
-                  name="selectedDate" 
-                  value={time.first} 
-                  onChange={(e) => handleDateChange(e, index)} // Pass index directly
-                />
-                {time.first}
-              </label>
-            </div>
-          ))}
-          <button onClick={() => acceptHighSchoolTour(selectedTour, selectedDate)}>Accept</button>
-          <button>Reject</button>
-        </div>
-      );
-    }
-  
-    if (selectedTour.type === "INDIVIDUAL_TOUR") {
-      return (
-        <div style={popupStyles.container}>
-          {renderDetails("Individual Tour Details", [
-            `Visitor Names: ${selectedTour.names.join(", ")}`,
-            `Department: ${selectedTour.department}`,
-            `Visitor Count: ${selectedTour.visitorCount}`,
-          ])}
-          {selectedTour.possibleTimes.map((time, index) => (
-              <div key={index}>
-                <label>
-                  <input 
-                    type="radio" 
-                    name="selectedDate" 
-                    value={time.first} 
-                  />
-                  {time.first}
-                </label>
-              </div>
-            ))}
-          <button>Accept</button>
-          <button>Reject</button>
-        </div>
-      );
-    }
-  
-    if (selectedTour.type === "FAIR") {
-      return (
-        <div style={popupStyles.container}>
-          {renderDetails("Fair Details", [
-            `Fair Name: ${selectedTour.schoolName}`,
-            `Location: ${selectedTour.location}`,
-          ])}
-        </div>
-      );
-    }
   };
-  
 
   return (
     <div className="home-layout">
-      {<NavbarLayout/>}
-
+      <NavbarLayout />
       <div className="main-content">
         <h2>Tours and Fairs</h2>
-
         <div className="filters">
           <label htmlFor="status">Status: </label>
           <select
@@ -529,12 +290,11 @@ export default function TourListLayout() {
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
           >
-            <option value="High School Tours">High School Tours</option>
-            <option value="Individual Tours">Individual Tours</option>
-            <option value="Fairs">Fairs</option>
+            <option value="HIGHSCHOOL_TOUR">High School Tours</option>
+            <option value="INDIVIDUAL_TOUR">Individual Tours</option>
+            <option value="FAIR">Fairs</option>
           </select>
         </div>
-
         <div className="tour-list">
           {renderTable()}
         </div>

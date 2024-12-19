@@ -16,7 +16,7 @@ import java.util.List;
 @Document(collection = "events")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Event {
+public class Event implements Comparable<Event> {
     @Id
     private ObjectId id;
     private ObjectId originalForm;
@@ -27,4 +27,9 @@ public class Event {
     private TOUR_TIMES time;
     private EVENT_STATES state;
     private ObjectId feedback;
+
+    @Override
+    public int compareTo(Event o) {
+        return this.date.compareTo(o.date) == 0 ? this.time.compareTo(o.time) : this.date.compareTo(o.date);
+    }
 }

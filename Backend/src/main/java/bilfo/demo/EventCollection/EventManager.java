@@ -1,8 +1,12 @@
 package bilfo.demo.EventCollection;
 
 import bilfo.demo.EventCollection.feedbackCollection.Feedback;
+import bilfo.demo.enums.EVENT_STATES;
+import bilfo.demo.enums.EVENT_TYPES;
+import bilfo.demo.formCollection.Form;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +77,17 @@ public class EventManager {
         int bilkentId = Integer.parseInt(getScheduleOfWeekRequest.get("bilkentId"));
         String date = getScheduleOfWeekRequest.get("weekStartDate");
         return new ResponseEntity<>(eventService.getScheduleOfWeek(bilkentId, date), HttpStatus.OK);
+    }
+
+    @GetMapping("/getEvents")
+    public ResponseEntity<List<Pair<Event, Form>>> getEvents(@RequestParam Map<String, String> getEventRequest) {
+        EVENT_TYPES type = EVENT_TYPES.valueOf(getEventRequest.get("type"));
+        EVENT_STATES state = EVENT_STATES.ONGOING;
+        if(getEventRequest.containsKey("state"))
+        {
+            state = EVENT_STATES.valueOf(getEventRequest.get("state"));
+        }
+        return new ResponseEntity<>(eventService.getEvents(type, state), HttpStatus.OK);
     }
 }
 

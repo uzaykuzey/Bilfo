@@ -1,5 +1,7 @@
 package bilfo.demo.formCollection;
 
+import bilfo.demo.enums.EVENT_TYPES;
+import bilfo.demo.enums.FORM_STATES;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -13,4 +15,6 @@ import java.util.Optional;
 public interface FormRepository extends MongoRepository<Form, ObjectId> {
     public Optional<Form> findFormById(ObjectId id);
     public List<Form> findAll();
+
+    List<Form> findAllByTypeAndApproved(EVENT_TYPES type, FORM_STATES approved);
 }

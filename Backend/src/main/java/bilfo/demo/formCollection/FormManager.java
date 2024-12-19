@@ -152,6 +152,19 @@ public class FormManager {
         return new ResponseEntity<String>("Form evaluation failed.", HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/getForms")
+    public ResponseEntity<List<Form>> getForms(@RequestParam Map<String, String> getFormsRequest)
+    {
+        EVENT_TYPES type = EVENT_TYPES.valueOf(getFormsRequest.get("type"));
+        FORM_STATES state = FORM_STATES.valueOf(getFormsRequest.get("state"));
+
+        if(state==FORM_STATES.ACCEPTED)
+        {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(formService.getForms(type, state), HttpStatus.OK);
+    }
+
 
     private List<Pair<Date, TOUR_TIMES>> createPossibleTimes(Map<String, String> formApplication) {
         TOUR_TIMES time1 = stringToTourTime(formApplication.get("time1"));

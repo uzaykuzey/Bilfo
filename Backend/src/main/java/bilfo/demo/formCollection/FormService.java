@@ -85,4 +85,9 @@ public class FormService {
         return eventService.createEvent(formId, new ArrayList<>(), new ArrayList<>(), form.get().getType(), chosenDate, chosenTime);
     }
 
+    public List<Form> getForms(EVENT_TYPES type, FORM_STATES state)
+    {
+        return formRepository.findAllByTypeAndApproved(type, state);
+    }
+
 }

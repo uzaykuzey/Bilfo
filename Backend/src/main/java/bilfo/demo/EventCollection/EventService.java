@@ -16,6 +16,7 @@ import bilfo.demo.userCollection.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.util.Pair;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -277,6 +278,23 @@ public class EventService {
             case INDIVIDUAL_TOUR -> "Individual Tour";
             default -> "";
         };
+    }
+
+    public List<Pair<Event, Form>> getEvents(EVENT_TYPES type, EVENT_STATES state)
+    {
+        List<Event> events = eventRepository.findEventsByEventTypeAndState(type, state);
+        events.sort(null);
+        List<Pair<Event, Form>> result = new ArrayList<>();
+        for(Event event: events)
+        {
+            Optional<Form> optionalForm = formService.getForm(event.getOriginalForm());
+            if(optionalForm.isEmpty())
+            {
+                continue;
+            }
+            result.add(Pair.of(event, optionalForm.get()));
+        }
+        return result;
     }
 }
 

@@ -1,33 +1,33 @@
 import React, { useState } from "react";
 import "./login.css";
 import { useNavigate } from "react-router-dom";
-import api from "./api/axios_config"
+import api from "./api/axios_config";
 
 export default function LoginForm() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
   const handleLogin = async (event) => {
     event.preventDefault();
-  
+
     if (!userId || !password) {
       alert("Please fill in both fields.");
       return;
     }
-  
+
     const loginData = { userId, password };
-  
+
     try {
       const response = await api.post("/user/login", loginData);
       console.log("Response received:", response);
-  
-      if (response.status == 200) {
-        navigate(`/userHome/${userId}`, { state: { statusUser:response.data, zort:'zort' } });
+
+      if (response.status === 200) {
+        navigate(`/userHome/${userId}`, { state: { statusUser: response.data, zort: "zort" } });
       } else {
         alert(response.data.message || "Invalid credentials. Please try again.");
       }
     } catch (error) {
-      
       if (error.response) {
         alert(`Error: ${error.response.data.message || "An error occurred. Please try again later."}`);
       } else if (error.request) {
@@ -37,16 +37,19 @@ export default function LoginForm() {
       }
     }
   };
+
+  const handleClose = () => {
+    navigate("/");
+  };
+
   return (
     <div className="login-container">
       <div className="login-box">
-        <button className="close-button">×</button>
+        <button className="close-button" onClick={handleClose}>
+          ×
+        </button>
         <div className="logo-section">
-          <img
-            src="/bilkent.png"
-            alt="Bilkent Logo"
-            className="university-logo"
-          />
+          <img src="/bilkent.png" alt="Bilkent Logo" className="university-logo" />
         </div>
         <form className="login-form" onSubmit={handleLogin}>
           <div className="form-group">

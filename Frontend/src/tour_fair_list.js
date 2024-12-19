@@ -15,7 +15,7 @@ export default function TourListLayout() {
   const [filteredTours, setFilteredTours] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedTour, setSelectedTour] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState([]);
   const [claimPopupOpen, setClaimPopupOpen] = useState(false);
   const [selectedClaimTour, setSelectedClaimTour] = useState(null);
 
@@ -58,15 +58,6 @@ export default function TourListLayout() {
     return `${day}.${month}.${year}`;
   };
 
-  const formatNames = (names) => {
-    if (!Array.isArray(names) || names.length === 0) {
-      return "N/A";
-    }
-    if (names.length <= 3) {
-      return names.join(", ");
-    }
-    return `${names.slice(0, 3).join(", ")}...`;
-  };
 
   const openPopup = (tour) => {
     setSelectedTour(tour);
@@ -85,7 +76,7 @@ export default function TourListLayout() {
 
   const confirmClaim = async (tour) => {
     try {
-      const response = await api.post("/event/claimEvent", { bilkentId: bilkentId, formId: selectedClaimTour.id });
+      const response = await api.post("/event/claimEvent", { bilkentId: bilkentId, formId: selectedClaimTour.second.id });
       if (response.status === 200) {
         alert("Tour claimed successfully!");
         setClaimPopupOpen(false);
@@ -152,21 +143,67 @@ export default function TourListLayout() {
 
   const renderPopupContent = () => {
     if (!selectedTour) return null;
+  
+    // Format the tour date
     const date = new Date(selectedTour.date);
     const formattedDate = formatDate(date);
-    const formattedNames = formatNames(selectedTour.guides);
-
+  
+    // Handle the time selection (radio buttons)
+    const handleTimeChange = (timeIndex) => {
+      setSelectedDate(timeIndex); // Store only one selected index
+    };
+  
+    // Handle evaluation accept
+    const handleEvaluateAccept = () => {
+      if (selectedDate === null || selectedDate === undefined) {
+        alert("Please select a time.");
+        return;
+      }
+  
+      // Send the evaluation data (update with real API call)
+      acceptHighSchoolTour(selectedTour, selectedDate); // Pass the selected index
+      closePopup();
+    };
+  
+    // Handle canceling the popup
+    const handleCancel = () => {
+      closePopup();
+    };
+  
     return (
       <div className="popup-content">
-        <h3>Tour Details</h3>
+        <h3>Evaluate Tour</h3>
         <p><strong>Tour Name:</strong> {selectedTour.name}</p>
         <p><strong>Location:</strong> {selectedTour.location}</p>
         <p><strong>Date:</strong> {formattedDate}</p>
-        <p><strong>Guides:</strong> {formattedNames}</p>
-        <button onClick={closePopup}>Close</button>
+  
+        <div className="possible-times">
+          <h4>Select Time:</h4>
+          {selectedTour.possibleTimes && selectedTour.possibleTimes.map((time, index) => (
+            <div key={index} className="time-radio">
+              <input
+                type="radio"
+                id={`time-${index}`}
+                name="time-selection" // Ensures only one can be selected
+                checked={selectedDate === index}
+                onChange={() => handleTimeChange(index)}
+              />
+              <label htmlFor={`time-${index}`}>
+                {mapTime(time.second)} - {formatDate(new Date(time.first))}
+              </label>
+            </div>
+          ))}
+        </div>
+  
+        <div className="popup-actions">
+          <button onClick={handleEvaluateAccept} className="accept-button">Accept</button>
+          <button onClick={handleCancel} className="cancel-button">Cancel</button>
+        </div>
       </div>
     );
   };
+  
+  
 
   const renderClaimPopupContent = () => {
     return (
@@ -196,7 +233,9 @@ export default function TourListLayout() {
           tours = response.data;
           setFilteredTours(tours);
         }
-
+        console.log(selectedStatus);
+        console.log(selectedType);
+        console.log(tours);
         setFilteredTours(tours);
       } catch (error) {
         console.error("Error fetching filtered tours:", error);
@@ -207,7 +246,7 @@ export default function TourListLayout() {
   }, [selectedStatus, selectedType, statusUser]);
 
   const renderTable = () => {
-    if (filteredTours.length === 0) {
+    if (!filteredTours || filteredTours == []) {
       return <p>No data available for the selected type.</p>;
     }
 

@@ -23,7 +23,7 @@ public class ForgotPasswordService {
         return forgotPasswordRepository.findAllByBilkentId(bilkent);
     }
 
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 300000) //called every 5 minutes
     public void autoDeleteForgotPassword() {
         List<ForgotPassword> forgotPasswords = forgotPasswordRepository.findAll();
         for (ForgotPassword forgotPassword : forgotPasswords)

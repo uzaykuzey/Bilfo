@@ -14,6 +14,7 @@ import AvailabilityLayout from './availability';
 import ScheduleLayout from './tour_schedule';
 import FeedbackLayout from './feedback';
 import PuantajLayout from './puantaj_table';
+import ForgotPasswordLayout from './forgot_password';
 
 function  App() {
   return (
@@ -25,6 +26,7 @@ function  App() {
         <Route path="/fair_application" element={<FairApplicationLayout/>} />
         <Route path="/feedback" element={<FeedbackLayout/>} />
         <Route path="/login" element={<LoginForm />} />
+        <Route path="/forgot_password" element={<ForgotPasswordLayout/>} />
         <Route path="/userHome/:bilkentId" element={<UserHomeLayout/>} />
         <Route path="/userHome/:bilkentId/settings" element={<UserSettingsLayout/>} />
         <Route path="/userHome/:bilkentId/guide_list" element={<GuideListLayout/>} />

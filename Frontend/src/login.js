@@ -75,7 +75,7 @@ export default function LoginForm() {
           <button type="submit" className="login-button">
             Log in
           </button>
-          <a href="/forgot-password" className="forgot-password-link">
+          <a href="/forgot_password" className="forgot-password-link">
             Forgot Password
           </a>
         </form>

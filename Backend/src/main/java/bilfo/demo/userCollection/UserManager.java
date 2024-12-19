@@ -359,11 +359,35 @@ public class UserManager {
         return new ResponseEntity<>("Error Occurred", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/changePassword")
-    public ResponseEntity<String> shufflePassword(@RequestBody int bilkentId) {
-        if(userService.shufflePassword(bilkentId))
+    @PostMapping("/resetPassword")
+    public ResponseEntity<String> resetPassword(@RequestBody int bilkentId) {
+        if(userService.resetPassword(bilkentId))
         {
             return new ResponseEntity<>("successful shuffling!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Error Occurred", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/forgotPasswordMail")
+    public ResponseEntity<String> forgotPasswordMail(@RequestBody Map<String,String> forgotPasswordMailRequest) {
+        int bilkentId = Integer.parseInt(forgotPasswordMailRequest.get("bilkentId"));
+
+        if(userService.forgotPasswordMail(bilkentId))
+        {
+            return new ResponseEntity<>("successful forgot password!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Error Occurred", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/forgotPasswordChangeRequest")
+    public ResponseEntity<String> forgotPasswordChangeRequest(@RequestBody Map<String,String> forgotPasswordChangeRequest) {
+        int bilkentId = Integer.parseInt(forgotPasswordChangeRequest.get("bilkentId"));
+        String newPassword = forgotPasswordChangeRequest.get("newPassword");
+        String forgotPassword = forgotPasswordChangeRequest.get("forgotPassword");
+
+        if(userService.forgotPasswordChangeRequest(bilkentId, newPassword, forgotPassword))
+        {
+            return new ResponseEntity<>("successful forgot password!", HttpStatus.OK);
         }
         return new ResponseEntity<>("Error Occurred", HttpStatus.BAD_REQUEST);
     }

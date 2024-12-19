@@ -4,6 +4,8 @@ import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import bilfo.demo.mailSender.MailSenderService;
+import bilfo.demo.passwordCollection.forgotPasswordCollection.ForgotPassword;
+import bilfo.demo.passwordCollection.forgotPasswordCollection.ForgotPasswordService;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,8 @@ public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Autowired
     private MailSenderService mailSenderService;
+    @Autowired
+    private ForgotPasswordService forgotPasswordService;
 
     public List<User> allUsers(){
         return userRepository.findAll();
@@ -343,7 +347,7 @@ public class UserService {
         return true;
     }
 
-    public boolean shufflePassword(int bilkentId)
+    public boolean resetPassword(int bilkentId)
     {
         Optional<User> optionalUser = userRepository.findByBilkentId(bilkentId);
         if(optionalUser.isEmpty())
@@ -370,6 +374,46 @@ public class UserService {
 
         userRepository.save(user);
         return true;
+    }
+
+    public boolean forgotPasswordMail(int bilkentId)
+    {
+        Optional<User> optionalUser = userRepository.findByBilkentId(bilkentId);
+        if(optionalUser.isEmpty())
+        {
+            return false;
+        }
+        User user = optionalUser.get();
+
+        String forgotPasswordCode = UserManager.generatePassword(12);
+        mailSenderService.sendEmail(user.getEmail(), "Forgot Password Request", "You can reset your password with this code: \n" + forgotPasswordCode);
+        forgotPasswordService.saveForgotPassword(new ForgotPassword(new ObjectId(), passwordEncoder.encode(forgotPasswordCode), bilkentId, false));
+
+        return true;
+    }
+
+    public boolean forgotPasswordChangeRequest(int bilkentId, String newPassword, String code)
+    {
+        Optional<User> optionalUser = userRepository.findByBilkentId(bilkentId);
+        if(optionalUser.isEmpty())
+        {
+            return false;
+        }
+        User user = optionalUser.get();
+
+        List<ForgotPassword> forgotPasswords = forgotPasswordService.getForgotPasswordsByBilkentId(bilkentId);
+
+        for(ForgotPassword forgotPassword : forgotPasswords)
+        {
+            if(passwordEncoder.matches(code, forgotPassword.getCode()))
+            {
+                user.setPassword(passwordEncoder.encode(newPassword));
+                userRepository.save(user);
+                forgotPasswordService.deleteForgotPassword(forgotPassword);
+                return true;
+            }
+        }
+        return false;
     }
 
 }

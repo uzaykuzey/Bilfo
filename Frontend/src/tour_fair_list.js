@@ -226,10 +226,11 @@ export default function TourListLayout() {
           setFilteredTours(tours);
         }else if(selectedStatus == "Accepted"){
           const response = await api.get("/event/getEvents", { params: { type: selectedType, state: "ONGOING" } });
+          console.log(response.data);
           tours = response.data;
           setFilteredTours(tours);
         }else{
-          const response = await api.get("/event/getEvents", { params: { type: selectedType, state: "CANCELLED" } });
+          const response = await api.get("/form/getForms", { params: { type: selectedType, state: "REJECTED" } });
           tours = response.data;
           setFilteredTours(tours);
         }
@@ -246,10 +247,10 @@ export default function TourListLayout() {
   }, [selectedStatus, selectedType, statusUser]);
 
   const renderTable = () => {
-    if (!filteredTours || filteredTours == []) {
+    if (!filteredTours || filteredTours.length === 0) {
       return <p>No data available for the selected type.</p>;
     }
-
+  
     const renderActions = (tour) => {
       if (selectedStatus === "Accepted") {
         return (
@@ -266,45 +267,117 @@ export default function TourListLayout() {
         );
       }
     };
-
-    return (
-      <table className="tour-table">
-        <thead>
-          <tr>
-            <th>{selectedType === "Fairs" ? "Fair Name" : "School Name"}</th>
-            <th>{selectedType === "Fairs" ? "Location" : "City"}</th>
-            <th>Date</th>
-            <th>Day</th>
-            <th>Time</th>
-            <th>Visitor Count</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTours.map((tour) => {
-            const firstPossibleTime = tour.possibleTimes?.[0];
-            const date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
-            const rawTime = firstPossibleTime?.second || "N/A";
-            const formattedTime = mapTime(rawTime);
-            const day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
-            const formattedDate = formatDate(date);
-
+  
+    // Define column headers and rows dynamically based on `selectedType`
+    const getTableHeaders = () => {
+      switch (selectedType) {
+        case "HIGHSCHOOL_TOUR":
+          return ["School Name", "City", "Date", "Day", "Time", "Visitor Count", "Actions"];
+        case "INDIVIDUAL_TOUR":
+          return ["Visitor Name", "Contact Info", "Date", "Day", "Time", "Purpose", "Actions"];
+        case "FAIR":
+          return ["Fair Name", "Location", "Date", "Day", "Time", "Exhibitors", "Actions"];
+        default:
+          return [];
+      }
+    };
+  
+    const renderRowData = (tour) => {
+      switch (selectedType) {
+        case "HIGHSCHOOL_TOUR":
+          if(selectedStatus != "Accepted"){
+            var firstPossibleTime = tour.possibleTimes?.[0];
+            var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
+            var rawTime = firstPossibleTime?.second || "N/A";
+            var formattedTime = mapTime(rawTime);
+            var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+            var formattedDate = formatDate(date);
             return (
-              <tr key={tour.id}>
-                <td>{tour.schoolName || tour.fairName}</td>
+              <>
+                <td>{tour.schoolName}</td>
                 <td>{tour.location}</td>
                 <td>{formattedDate}</td>
                 <td>{day}</td>
                 <td>{formattedTime}</td>
                 <td>{tour.visitorCount}</td>
                 <td>{renderActions(tour)}</td>
-              </tr>
+              </>
             );
-          })}
+          }else{
+            console.log(tour.second.visitorCount);
+            return (
+              <>
+                <td>{tour.schoolName}</td>
+                <td>{tour.location}</td>
+                <td>{formattedDate}</td>
+                <td>{day}</td>
+                <td>{formattedTime}</td>
+                <td>{tour.visitorCount}</td>
+                <td>{renderActions(tour)}</td>
+              </>
+            );
+          }
+        case "INDIVIDUAL_TOUR":
+          var firstPossibleTime = tour.possibleTimes?.[0];
+          var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
+          var rawTime = firstPossibleTime?.second || "N/A";
+          var formattedTime = mapTime(rawTime);
+          var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+          var formattedDate = formatDate(date);
+          return (
+            <>
+              <td>{tour.visitorName}</td>
+              <td>{tour.contactInfo}</td>
+              <td>{formattedDate}</td>
+              <td>{day}</td>
+              <td>{formattedTime}</td>
+              <td>{tour.purpose}</td>
+              <td>{renderActions(tour)}</td>
+            </>
+          );
+        case "FAIR":
+          var firstPossibleTime = tour.possibleTimes?.[0];
+          var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
+          var rawTime = firstPossibleTime?.second || "N/A";
+          var formattedTime = mapTime(rawTime);
+          var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+          var formattedDate = formatDate(date);
+          return (
+            <>
+              <td>{tour.fairName}</td>
+              <td>{tour.location}</td>
+              <td>{formattedDate}</td>
+              <td>{day}</td>
+              <td>{formattedTime}</td>
+              <td>{tour.exhibitors}</td>
+              <td>{renderActions(tour)}</td>
+            </>
+          );
+        default:
+          return null;
+      }
+    };
+  
+    const headers = getTableHeaders();
+  
+    return (
+      <table className="tour-table">
+        <thead>
+          <tr>
+            {headers.map((header, index) => (
+              <th key={index}>{header}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {filteredTours.map((tour) => (
+            <tr key={tour.id}>{renderRowData(tour)}</tr>
+          ))}
         </tbody>
       </table>
     );
   };
+  
 
   return (
     <div className="home-layout">

@@ -226,9 +226,10 @@ public class EventService {
             int[] indexOfTourTime = getIndexOfTourTimes(event.getTime());
             int daysDifference = DAY.dayDifference(startDate, event.getDate());
 
+            String eventString = eventToString(event);
             for(int i: indexOfTourTime)
             {
-                schedule[daysDifference+i*7] = eventToString(event);
+                schedule[daysDifference+i*7] = eventString;
             }
 
 
@@ -277,7 +278,6 @@ public class EventService {
             case FAIR -> ((FairForm) form).getSchoolName() + " (Fair)";
             case HIGHSCHOOL_TOUR -> ((HighSchoolTourForm) form).getSchoolName() + " (Tour)";
             case INDIVIDUAL_TOUR -> "Individual Tour";
-            default -> "";
         };
     }
 

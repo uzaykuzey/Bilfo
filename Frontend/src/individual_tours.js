@@ -338,7 +338,7 @@ export default function IndividualToursForm() {
                         />
                     </label>
 
-                    <label>
+                    <div className="checkbox-container">
                         <input
                             type="checkbox"
                             name="termsAccepted"
@@ -346,11 +346,11 @@ export default function IndividualToursForm() {
                             onChange={handleCheckboxChange}
                             required
                         />
-                        I have read and accepted the <a href="/terms-conditions">Terms & Conditions</a>
+                        <span>I have read and accepted the <a href="/terms-conditions">Terms & Conditions</a></span>
                         {formData.formErrors.termsAccepted && (
                             <span className="error">{formData.formErrors.termsAccepted}</span>
                         )}
-                    </label>
+                    </div>
 
                     <button type="submit" className="submit-button">
                         Submit

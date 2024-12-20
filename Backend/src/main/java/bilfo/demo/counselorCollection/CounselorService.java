@@ -27,13 +27,11 @@ public class CounselorService {
     public Optional<Counselor> createCounselor(String name, String email, String phoneNo, String schoolName) {
         logger.info("Creating counselor with name: {}", name);
 
-        // Check if counselor already exists
-        //TODO
-        /*Optional<Counselor> existingUser = counselorRepository.findCounselorById(id);
-        if (existingUser.isPresent()) {
-            logger.warn("Counselor with ID {} already exists. User creation failed.", id);
+        Optional<Counselor> existingUser = counselorRepository.findCounselorByEmail(email);
+        if(existingUser.isPresent()) {
+            logger.warn("Counselor with ID {} already exists. User creation failed.", email);
             return Optional.empty();
-        }*/
+        }
 
         // Create the new Counselor object
         Counselor counselor = new Counselor(new ObjectId(), name, email, phoneNo, schoolName);

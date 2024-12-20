@@ -69,7 +69,7 @@ public class FormService {
     public Optional<Event> evaluateForm(ObjectId formId, FORM_STATES state, Date chosenDate, TOUR_TIMES chosenTime, String rejectionMessage)
     {
         Optional<Form> form = formRepository.findById(formId);
-        if (!form.isPresent()) {
+        if (form.isEmpty()) {
             return Optional.empty();
         }
 

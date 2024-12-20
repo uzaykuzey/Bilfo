@@ -102,5 +102,3 @@ public class EventManager {
         return new ResponseEntity<>(eventService.hasSuggestedEvents(bilkentId), HttpStatus.OK);
     }
 }
-
-

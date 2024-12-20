@@ -42,7 +42,13 @@ public class FormManager {
         String counselorEmail;
         if(counselorOptional.isPresent())
         {
-            counselorEmail=counselorOptional.get().getEmail();
+            Counselor counselor=counselorOptional.get();
+            counselor.setEmail(formApplication.get("email"));
+            counselor.setName(formApplication.get("counselorName"));
+            counselor.setPhoneNo(formApplication.get("phoneNo"));
+            counselorRepository.save(counselor);
+
+            counselorEmail=counselor.getEmail();
         }
         else
         {
@@ -139,9 +145,9 @@ public class FormManager {
 
 
     private List<Pair<Date, TOUR_TIMES>> createPossibleTimes(Map<String, String> formApplication) {
-        TOUR_TIMES time1 = stringToTourTime(formApplication.get("time1"));
-        TOUR_TIMES time2 = stringToTourTime(formApplication.get("time2"));
-        TOUR_TIMES time3 = stringToTourTime(formApplication.get("time3"));
+        TOUR_TIMES time1 = TOUR_TIMES.stringToTourTime(formApplication.get("time1"));
+        TOUR_TIMES time2 = TOUR_TIMES.stringToTourTime(formApplication.get("time2"));
+        TOUR_TIMES time3 = TOUR_TIMES.stringToTourTime(formApplication.get("time3"));
 
         Date date1 = stringToDate(formApplication.get("date1"));
         Date date2 = stringToDate(formApplication.get("date2"));
@@ -154,21 +160,10 @@ public class FormManager {
         return dates;
     }
 
-    private static TOUR_TIMES stringToTourTime(String timeString) {
-        switch (timeString) {
-            case  "9.00" -> {return TOUR_TIMES.NINE_AM;}
-            case "11.00" -> {return TOUR_TIMES.ELEVEN_AM;}
-            case "13.30" -> {return TOUR_TIMES.ONE_THIRTY_PM;}
-            case "16.00" -> {return TOUR_TIMES.FOUR_PM;}
-        }
-        throw new IllegalArgumentException("Unknown time: " + timeString);
-    }
-
     public static Date stringToDate(String dateString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Date date = sdf.parse(dateString);
-            return date;
+            return sdf.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
             return null;

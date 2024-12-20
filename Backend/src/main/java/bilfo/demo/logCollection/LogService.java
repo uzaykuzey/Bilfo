@@ -3,12 +3,16 @@ package bilfo.demo.logCollection;
 import bilfo.demo.EventCollection.Event;
 import bilfo.demo.EventCollection.EventService;
 import bilfo.demo.enums.TOUR_TIMES;
+import bilfo.demo.enums.USER_STATUS;
+import bilfo.demo.formCollection.Form;
+import bilfo.demo.formCollection.FormService;
 import bilfo.demo.userCollection.User;
 import bilfo.demo.userCollection.UserService;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,6 +31,8 @@ public class LogService {
     private UserService userService;
     @Autowired
     private EventService eventService;
+    @Autowired
+    private FormService formService;
 
     public List<Log> allLogs(){
         return logRepository.findAll();
@@ -108,7 +114,18 @@ public class LogService {
         return true;
     }
 
-    public List<Log> getLogs(int bilkentId, Date startDate)
+    public List<Pair<Log, Form>> getLogs(int bilkentId, Date startDate)
+    {
+        Optional<User> optionalUser = userService.getUser(bilkentId);
+        if(optionalUser.isEmpty())
+        {
+            return new ArrayList<>();
+        }
+
+        return getLogs(optionalUser.get(), startDate);
+    }
+
+    public List<Pair<Log, Form>> getLogs(User user, Date startDate)
     {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
@@ -118,13 +135,7 @@ public class LogService {
 
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date endOfMonth = calendar.getTime();
-        List<Log> result=new ArrayList<>();
-        Optional<User> optionalUser = userService.getUser(bilkentId);
-        if(optionalUser.isEmpty())
-        {
-            return new ArrayList<>();
-        }
-        User user = optionalUser.get();
+        List<Pair<Log, Form>> result=new ArrayList<>();
 
         for(ObjectId id: user.getLogs())
         {
@@ -134,11 +145,70 @@ public class LogService {
                 continue;
             }
             Log log = optionalLog.get();
+
+            Optional<Event> optionalEvent=eventService.getEvent(log.getEventId());
+            if(optionalEvent.isEmpty())
+            {
+                continue;
+            }
+            Event event = optionalEvent.get();
+
+            Optional<Form> optionalForm = formService.getForm(event.getOriginalForm());
+            if(optionalForm.isEmpty())
+            {
+                continue;
+            }
+            Form form=optionalForm.get();
+
             if(log.getDate().after(startOfMonth) && log.getDate().before(endOfMonth))
             {
-                result.add(log);
+                result.add(Pair.of(log, form));
             }
         }
         return result;
+    }
+
+    public List<Pair<User, Double>> getAllGuidesLogTable(Date startDate)
+    {
+        userService.allUsers();
+        List<Pair<User, Double>> result=new ArrayList<>();
+        for(User user: userService.allUsers())
+        {
+            if(user.getStatus()== USER_STATUS.ACTING_DIRECTOR)
+            {
+                continue;
+            }
+            double hours=0;
+            for(Pair<Log, Form> logFormPair: getLogs(user, startDate))
+            {
+                hours+=logFormPair.getFirst().getHours();
+            }
+            result.add(Pair.of(user, hours));
+        }
+        return result;
+    }
+
+    public void markAllLogsAsPaid(Date monthDate)
+    {
+        List<User> allUsers = userService.allUsers();
+        for(User user: allUsers)
+        {
+            for(Pair<Log, Form> logFormPair: getLogs(user, monthDate))
+            {
+                Log log=logFormPair.getFirst();
+                log.setPaid(true);
+                logRepository.save(log);
+            }
+        }
+    }
+
+    public void markAllLogsAsPaid(int bilkentId, Date monthDate)
+    {
+        for(Pair<Log, Form> logFormPair: getLogs(bilkentId, monthDate))
+        {
+            Log log=logFormPair.getFirst();
+            log.setPaid(true);
+            logRepository.save(log);
+        }
     }
 }

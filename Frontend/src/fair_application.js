@@ -114,7 +114,7 @@ export default function FairApplicationLayout() {
                 <div className="nav-links">
                     <a href="/" className="nav-link">Campus Tours</a>
                     <a href="/fair_application" className="nav-link">Fair Application</a>
-                    <a href="/feedback" className="nav-link">FeedBack</a>
+                    <a href="/feedback" className="nav-link">Feedback</a>
                     <a href="/login" className="nav-link">Log In</a>
                 </div>
 
@@ -221,7 +221,7 @@ export default function FairApplicationLayout() {
                         )}
                     </label>
 
-                    <label class = "checkboxrow">
+                    <div class = "checkboxrow">
                         
                         <input
                             type="checkbox"
@@ -236,7 +236,7 @@ export default function FairApplicationLayout() {
                             <span className="error">{formData.formErrors.termsAccepted}</span>
                         )}
                         
-                    </label>
+                    </div>
 
                     <button type="submit" className="submit-button">
                         Submit

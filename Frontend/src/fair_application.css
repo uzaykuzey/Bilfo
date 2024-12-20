@@ -92,6 +92,7 @@ box-sizing: border-box;
 background: #fff; /* Add white background */
 border-radius: 1rem; /* Rounded corners */
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+text-align: center; /* Center text */
 }
 
 .form-container label {
@@ -127,27 +128,25 @@ gap: 0.5rem; /* Spacing between rows */
   padding: 1em;
   margin: 1em;
   max-width: 800px;
+  text-align: center;
 }
 
 .form-container .checkboxrow input {
   height: 1em;
   width: 1em;
   padding: 0%;
-  vertical-align: middle;
+  vertical-align: left;
   margin-bottom: 0%;
   margin-right: 1%;
 }
 
 .form-container .checkboxrow label {
-  flex: 1; /* Allow label to adjust naturally */
-  text-align: left; /* Align text to the left */
   margin: 0; /* Remove extra margins */
   color: #555; /* Optional: Set label text color */
   font-size: 0.9rem; /* Slightly smaller font size */
 }
 
 .form-container .checkboxrow a {
-  color: #1e5aa8; /* Make the link blue for visibility */
   text-decoration: underline; /* Optional: Underline link */
   cursor: pointer; /* Pointer cursor for links */
 }

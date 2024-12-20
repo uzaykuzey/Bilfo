@@ -22,7 +22,7 @@ export default function HomeLayout() {
         <div className="nav-links">
           <a href="/" className="nav-link">Campus Tours</a>
           <a href="/fair_application" className="nav-link">Fair Application</a>
-          <a href="/feedback" className="nav-link">FeedBack</a>
+          <a href="/feedback" className="nav-link">Feedback</a>
           <a href="/login" className="nav-link">Log In</a>
         </div>
 

@@ -66,7 +66,7 @@ export default function AdvisorListLayout() {
   const handleDemoteAdvisor = async () => {
     if (demoteAdvisor) {
       try {
-        const response = await api.post(`/demoteAdvisor`, { id: demoteAdvisor.id });
+        const response = await api.post(`/demoteUser`, { bilkentId: demoteAdvisor.bilkentId });
         if (response.status === 200) {
           setAdvisors(
             advisors.map((advisor) =>

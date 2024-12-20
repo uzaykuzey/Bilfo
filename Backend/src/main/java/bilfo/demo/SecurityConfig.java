@@ -29,7 +29,7 @@ public class SecurityConfig{
                                                                     ,"/form/hsform", "/form/indform", "/form/fairform", "/promoteUser", "/form/evaluate",
                                                                 "/addGuide","/removeUser", "/addAdvisor", "/addCoordinator", "/addActingDirector",
                                                                 "/changeAvailability", "/event/feedback", "/event/claimEvent", "/forgotPasswordMail",
-                                                                "/forgotPasswordChangeRequest").permitAll()
+                                                                "/forgotPasswordChangeRequest", "/demoteUser").permitAll()
                         .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/event", "/form", "/getAvailability", "/getFeedback", "/getAdvisorsOfTheDay","/getUserInfo"
                                                                 , "/event/getScheduleOfWeek","/form/getForms", "/event/getEvents", "/school/cityNames", "/school/districtNames", "school/schoolNames","/event/getStartOfWeek").permitAll()
                         .anyRequest().authenticated()

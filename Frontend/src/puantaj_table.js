@@ -1,24 +1,32 @@
 import NavbarLayout from "./navbar";
 import "./puantaj_table.css";
 import React, { useState, useEffect } from "react";
-import api from "./api/axios_config"; 
+import api from "./api/axios_config";
 import { useParams, useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";// Make sure you have a proper axios instance set up
+import { useLocation } from "react-router-dom"; // Make sure you have a proper axios instance set up
+import dayjs from "dayjs";
 
 export default function PuantajLayout() {
   const [logs, setLogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // For handling loading state
-  const [error, setError] = useState(""); 
+  const [error, setError] = useState("");
+  const [currentMonth, setCurrentMonth] = useState(dayjs()); // Initialize with current date
   const { bilkentId } = useParams();
   const { state } = useLocation();
   const { statusUser } = state;
   const navigate = useNavigate();
 
-  // Fetch logs on page load
+  // Fetch logs for the selected month
   useEffect(() => {
     const fetchLogs = async () => {
+      setIsLoading(true);
       try {
-        const response = await api.get("/getLogs"); // Replace with your actual API endpoint
+        const response = await api.get("/log/getLogs", {
+          params: {
+            bilkentId: bilkentId,
+            monthDate: currentMonth.format("YYYY-MM") + "-01", // Send the selected month to the API
+          },
+        });
         if (response.status === 200) {
           setLogs(response.data);
         } else {
@@ -32,7 +40,7 @@ export default function PuantajLayout() {
       }
     };
     fetchLogs();
-  }, []);
+  }, [currentMonth]); // Re-fetch logs whenever currentMonth changes
 
   const handleDelete = async (index) => {
     try {
@@ -52,11 +60,24 @@ export default function PuantajLayout() {
     console.log("Add log clicked!");
   };
 
+  const handlePreviousMonth = () => {
+    setCurrentMonth((prev) => prev.subtract(1, "month"));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth((prev) => prev.add(1, "month"));
+  };
+
   return (
     <div className="home-layout">
       <NavbarLayout />
       <div className="content">
         <h1>My Logs</h1>
+        <div className="month-navigation">
+          <button onClick={handlePreviousMonth} className="month-btn">◀ Previous</button>
+          <span className="current-month">{currentMonth.format("MMMM YYYY")}</span>
+          <button onClick={handleNextMonth} className="month-btn">Next ▶</button>
+        </div>
         {error && <p className="error-message">{error}</p>}
         <div className="log-table-container">
           {isLoading ? (

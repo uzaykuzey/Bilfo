@@ -23,9 +23,12 @@ export default function ScheduleLayout() {
   };
 
   function getWeekStartDate(date) {
-    const day = date.getDay();
-    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-    return new Date(date.setDate(diff));
+    const day = date.getUTCDay(); // Use getUTCDay to avoid time zone issues
+    const diff = date.getUTCDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
+    const startOfWeek = new Date(date);
+    startOfWeek.setUTCDate(diff);
+    startOfWeek.setUTCHours(0, 0, 0, 0); // Set time to midnight UTC
+    return startOfWeek;
   }
 
   function formatWeekRange(startDate) {
@@ -49,7 +52,7 @@ export default function ScheduleLayout() {
   }
 
   function formatDateToYYYYMMDD(date) {
-    return date.toISOString().split("T")[0];
+    return date.toISOString().split("T")[0]; // Convert to ISO string and extract the date
   }
 
   useEffect(() => {
@@ -61,8 +64,9 @@ export default function ScheduleLayout() {
     try {
       const formattedDate = formatDateToYYYYMMDD(currentWeekStart);
       console.log(formattedDate);
-      const response = await api.get("/event/getScheduleOfWeek", { params: { weekStartDate: startOfTheWeek, bilkentId: bilkentId } });
+      const response = await api.get("/event/getScheduleOfWeek", { params: { weekStartDate: formattedDate, bilkentId: bilkentId } });
       setTourSchedule(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching tour schedule:", error);
     } finally {

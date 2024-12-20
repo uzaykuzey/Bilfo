@@ -31,7 +31,8 @@ public class SecurityConfig{
                                                                 "/changeAvailability", "/event/feedback", "/event/claimEvent", "/forgotPasswordMail",
                                                                 "/forgotPasswordChangeRequest", "/demoteUser").permitAll()
                         .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/event", "/form", "/getAvailability", "/getFeedback", "/getAdvisorsOfTheDay","/getUserInfo"
-                                                                , "/event/getScheduleOfWeek","/form/getForms", "/event/getEvents", "/school/cityNames", "/school/districtNames", "/school/schoolNames").permitAll()
+                                                                , "/event/getScheduleOfWeek","/form/getForms", "/event/getEvents", "/school/cityNames", "/school/districtNames", "/school/schoolNames",
+                                                                  "/log/getLogs").permitAll()
                         .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfigurationSource()))

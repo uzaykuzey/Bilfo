@@ -104,6 +104,24 @@ public class LogService {
         return addLog(bilkentId, hours, eventId, paid);
     }
 
+    public boolean deleteLog(int bilkentId,ObjectId logId)
+    {
+        Optional<Log> log = logRepository.findById(logId);
+        if(log.isEmpty())
+        {
+            return false;
+        }
+        Optional<User> user = userService.getUser(bilkentId);
+        if(user.isEmpty())
+        {
+            return false;
+        }
+        user.get().getLogs().remove(log.get().getId());
+        logRepository.delete(log.get());
+        userService.saveUser(user.get());
+        return true;
+    }
+
 
     public boolean markAsPaid(ObjectId logId) {
         Optional<Log> log = getLog(logId);
@@ -117,7 +135,7 @@ public class LogService {
         return true;
     }
 
-    public List<Pair<Log, Form>> getLogs(int bilkentId, Date startDate)
+    public List<Pair<Log, Pair<Form, Event>>> getLogs(int bilkentId, Date startDate, boolean requiresForms)
     {
         Optional<User> optionalUser = userService.getUser(bilkentId);
         if(optionalUser.isEmpty())
@@ -125,10 +143,10 @@ public class LogService {
             return new ArrayList<>();
         }
 
-        return getLogs(optionalUser.get(), startDate);
+        return getLogs(optionalUser.get(), startDate, requiresForms);
     }
 
-    public List<Pair<Log, Form>> getLogs(User user, Date startDate)
+    public List<Pair<Log, Pair<Form, Event>>> getLogs(User user, Date startDate, boolean requiresForms)
     {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
@@ -138,7 +156,7 @@ public class LogService {
 
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date endOfMonth = calendar.getTime();
-        List<Pair<Log, Form>> result=new ArrayList<>();
+        List<Pair<Log, Pair<Form, Event>>> result=new ArrayList<>();
 
         for(ObjectId id: user.getLogs())
         {
@@ -149,23 +167,28 @@ public class LogService {
             }
             Log log = optionalLog.get();
 
-            Optional<Event> optionalEvent=eventService.getEvent(log.getEventId());
-            if(optionalEvent.isEmpty())
+            Form form = null;
+            Event event=null;
+            if(requiresForms)
             {
-                continue;
-            }
-            Event event = optionalEvent.get();
+                Optional<Event> optionalEvent=eventService.getEvent(log.getEventId());
+                if(optionalEvent.isEmpty())
+                {
+                    continue;
+                }
+                event = optionalEvent.get();
 
-            Optional<Form> optionalForm = formService.getForm(event.getOriginalForm());
-            if(optionalForm.isEmpty())
-            {
-                continue;
+                Optional<Form> optionalForm = formService.getForm(event.getOriginalForm());
+                if(optionalForm.isEmpty())
+                {
+                    continue;
+                }
+                form=optionalForm.get();
             }
-            Form form=optionalForm.get();
 
             if(log.getDate().after(startOfMonth) && log.getDate().before(endOfMonth))
             {
-                result.add(Pair.of(log, form));
+                result.add(Pair.of(log, Pair.of(form, event)));
             }
         }
         return result;
@@ -182,7 +205,7 @@ public class LogService {
                 continue;
             }
             double hours=0;
-            for(Pair<Log, Form> logFormPair: getLogs(user, startDate))
+            for(Pair<Log, Pair<Form, Event>> logFormPair: getLogs(user, startDate, false))
             {
                 hours+=logFormPair.getFirst().getHours();
             }
@@ -196,7 +219,7 @@ public class LogService {
         List<User> allUsers = userService.allUsers();
         for(User user: allUsers)
         {
-            for(Pair<Log, Form> logFormPair: getLogs(user, monthDate))
+            for(Pair<Log, Pair<Form, Event>> logFormPair: getLogs(user, monthDate, false))
             {
                 Log log=logFormPair.getFirst();
                 log.setPaid(true);
@@ -207,7 +230,7 @@ public class LogService {
 
     public void markAllLogsAsPaid(int bilkentId, Date monthDate)
     {
-        for(Pair<Log, Form> logFormPair: getLogs(bilkentId, monthDate))
+        for(Pair<Log, Pair<Form, Event>> logFormPair: getLogs(bilkentId, monthDate, false))
         {
             Log log=logFormPair.getFirst();
             log.setPaid(true);

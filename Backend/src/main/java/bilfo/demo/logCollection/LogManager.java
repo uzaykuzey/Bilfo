@@ -1,5 +1,6 @@
 package bilfo.demo.logCollection;
 
+import bilfo.demo.EventCollection.Event;
 import bilfo.demo.formCollection.Form;
 import bilfo.demo.formCollection.FormManager;
 import bilfo.demo.userCollection.User;
@@ -49,6 +50,16 @@ public class LogManager {
         return new ResponseEntity<>("failed to add log", HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/deleteLog")
+    public ResponseEntity<String> deleteLog(@RequestBody Map<String, String> deleteLogRequest) {
+        int bilkentId = Integer.parseInt(deleteLogRequest.get("bilkentId"));
+        ObjectId logId = new ObjectId(deleteLogRequest.get("logId"));
+        if(logService.deleteLog(bilkentId, logId)) {
+            return new ResponseEntity<>("successfully deleted log", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("failed to delete log", HttpStatus.BAD_REQUEST);
+    }
+
     @PostMapping("/markLogAsPaid")
     public ResponseEntity<String> markLogAsPaid(@RequestBody Map<String, String> markLogRequest) {
         ObjectId eventId = new ObjectId(markLogRequest.get("eventId"));
@@ -72,10 +83,10 @@ public class LogManager {
     }
 
     @GetMapping("/getLogs")
-    public ResponseEntity<List<Pair<Log, Form>>> getLogs(@RequestParam Map<String, String> logRequest) {
+    public ResponseEntity<List<Pair<Log, Pair<Form, Event>>>> getLogs(@RequestParam Map<String, String> logRequest) {
         int bilkentId=Integer.parseInt(logRequest.get("bilkentId"));
         Date monthDate= FormManager.stringToDate(logRequest.get("monthDate"));
-        return new ResponseEntity<>(logService.getLogs(bilkentId, monthDate), HttpStatus.OK);
+        return new ResponseEntity<>(logService.getLogs(bilkentId, monthDate, true), HttpStatus.OK);
     }
 
     @GetMapping("/getAllGuidesLogTable")
@@ -83,5 +94,8 @@ public class LogManager {
         Date startDate= FormManager.stringToDate(date);
         return new ResponseEntity<>(logService.getAllGuidesLogTable(startDate), HttpStatus.OK);
     }
+
+    /*@GetMapping("/getEventsOfUserThatDontHaveLogsAndFinished")
+    public ResponseEntity<List<Pair<Event, Form>>>*/
 
 }

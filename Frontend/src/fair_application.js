@@ -221,7 +221,8 @@ export default function FairApplicationLayout() {
                         )}
                     </label>
 
-                    <label>
+                    <label class = "checkboxrow">
+                        
                         <input
                             type="checkbox"
                             name="termsAccepted"
@@ -229,10 +230,12 @@ export default function FairApplicationLayout() {
                             onChange={handleCheckboxChange}
                             required
                         />
+                        
                         I have read and accepted the <a href="/terms-conditions">Terms & Conditions</a>
                         {formData.formErrors.termsAccepted && (
                             <span className="error">{formData.formErrors.termsAccepted}</span>
                         )}
+                        
                     </label>
 
                     <button type="submit" className="submit-button">

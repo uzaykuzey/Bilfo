@@ -1,9 +1,11 @@
 package bilfo.demo.EventCollection;
 
 import bilfo.demo.EventCollection.feedbackCollection.Feedback;
+import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.EVENT_STATES;
 import bilfo.demo.enums.EVENT_TYPES;
 import bilfo.demo.formCollection.Form;
+import bilfo.demo.formCollection.FormManager;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -98,6 +100,12 @@ public class EventManager {
     @GetMapping("/hasSuggestedEvents")
     public ResponseEntity<Boolean> hasSuggestedEvents(@RequestParam int bilkentId) {
         return new ResponseEntity<>(eventService.hasSuggestedEvents(bilkentId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getStartOfWeek")
+    public ResponseEntity<Date> getStartOfWeek(@RequestParam Map<String, String> getStartOfWeekRequest) {
+        Date date = FormManager.stringToDate(getStartOfWeekRequest.get("date"));
+        return new ResponseEntity<>(DAY.getStartOfWeek(date), HttpStatus.OK);
     }
 }
 

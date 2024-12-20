@@ -36,13 +36,13 @@ public class SchoolManager {
     @GetMapping("/districtNames")
     public String[] getDistrictNames(@RequestParam String city)
     {
-        return schools.get(city).keySet().toArray(new String[0]);
+        return schools.containsKey(city) ? schools.get(city).keySet().toArray(new String[0]): new String[]{};
     }
 
     @GetMapping("/schoolNames")
     public String[] getSchoolNames(@RequestParam String city, @RequestParam String district)
     {
-        return schools.get(city).get(district).keySet().toArray(new String[0]);
+        return schools.containsKey(city) && schools.get(city).containsKey(district) ? schools.get(city).get(district).keySet().toArray(new String[0]): new String[]{};
     }
 
     public Pair<Integer, Integer> getAdmissionStatistics(String city, String district, String school)

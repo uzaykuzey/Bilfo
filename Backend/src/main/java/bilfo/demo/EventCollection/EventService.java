@@ -14,16 +14,11 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.util.Pair;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Indexed;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
@@ -342,7 +337,7 @@ public class EventService {
         String[] tourSchedule = getScheduleOfWeek(user, weekStart);
         for(int i: indexOfTourTimes)
         {
-            if(tourSchedule[dayIndex + i*7] != "")
+            if(!Objects.equals(tourSchedule[dayIndex + i * 7], ""))
             {
                 return false;
             }

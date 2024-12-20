@@ -81,7 +81,7 @@ public class FormService {
             mailSenderService.sendEmail(form.get().getContactMail(), "Your Form has been evaluated", "Your form has been rejected.\nReason:\n"+rejectionMessage);
             return Optional.empty();
         }
-        mailSenderService.sendEmail(form.get().getContactMail(), "Your Form has been evaluated", "Your form has been accepted. \nAccepted time: "+chosenDate.toString()+" at "+chosenTime.toString());
+        mailSenderService.sendEmail(form.get().getContactMail(), "Your Form has been evaluated", "Your form has been accepted. \nAccepted time: "+chosenDate.toString().replace("00:00:00 TRT ", "")+" at "+chosenTime.toString());
         return eventService.createEvent(formId, new ArrayList<>(), new ArrayList<>(), form.get().getType(), chosenDate, chosenTime);
     }
 

@@ -1,11 +1,15 @@
 package bilfo.demo.logCollection;
 
+import bilfo.demo.formCollection.FormManager;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,8 +29,18 @@ public class LogManager {
     public ResponseEntity<String> addLog(@RequestBody Map<String, String> addLogRequest) {
         int bilkentId = Integer.parseInt(addLogRequest.get("bilkentId"));
         ObjectId eventId = new ObjectId(addLogRequest.get("eventId"));
-        double hours = Double.parseDouble(addLogRequest.get("hours").replace(',', '.'));
-
+        double hours=0;
+        if(!addLogRequest.containsKey("hours")) {
+            hours = Double.parseDouble(addLogRequest.get("hours").replace(',', '.'));
+            if(hours<=0)
+            {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        else
+        {
+            hours = -1;
+        }
         Optional<Log> log = logService.addLog(bilkentId, hours, eventId, false);
         if(log.isPresent()) {
             return new ResponseEntity<>("successfully added log", HttpStatus.OK);
@@ -43,5 +57,13 @@ public class LogManager {
         }
         return new ResponseEntity<>("failed to mark log as paid", HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/getLogs")
+    public ResponseEntity<List<Log>> getLogs(@RequestParam Map<String, String> logRequest) {
+        int bilkentId;
+        Date startDate= FormManager.stringToDate(logRequest.get("startDate"));
+        return null;
+    }
+
 }
 

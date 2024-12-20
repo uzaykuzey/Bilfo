@@ -10,6 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -23,9 +25,6 @@ public class BilfoApplication {
 		long duration = endTime - startTime; // Calculate the elapsed time
 		System.out.println("Execution time: " + duration + " milliseconds");
 
-		System.out.println(Arrays.toString(SchoolManager.getInstance().getCityNames()));
-		System.out.println(Arrays.toString(SchoolManager.getInstance().getDistrictNames("İSTANBUL")));
-		System.out.println(Arrays.toString(SchoolManager.getInstance().getSchoolNames("İSTANBUL", "ÜMRANİYE")));
 		SpringApplication.run(BilfoApplication.class, args);
 	}
 }

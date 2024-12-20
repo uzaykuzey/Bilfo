@@ -1,5 +1,8 @@
 package bilfo.demo.logCollection;
 
+import bilfo.demo.EventCollection.Event;
+import bilfo.demo.EventCollection.EventService;
+import bilfo.demo.enums.TOUR_TIMES;
 import bilfo.demo.userCollection.User;
 import bilfo.demo.userCollection.UserService;
 import org.bson.types.ObjectId;
@@ -7,6 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +26,8 @@ public class LogService {
     private static final Logger logger = LoggerFactory.getLogger(LogService.class);
     @Autowired
     private UserService userService;
+    @Autowired
+    private EventService eventService;
 
     public List<Log> allLogs(){
         return logRepository.findAll();
@@ -54,6 +64,19 @@ public class LogService {
         if(user.isEmpty())
         {
             return Optional.empty();
+        }
+
+        Optional<Event> event = eventService.getEvent(eventId);
+        if(event.isEmpty())
+        {
+            return Optional.empty();
+        }
+
+        if(hours == -1)
+        {
+            LocalTime localTime = LocalTime.parse(event.get().getTime().toString(), DateTimeFormatter.ofPattern("HH.mm"));
+
+            hours = ((int)Math.abs(ChronoUnit.MINUTES.between(localTime, LocalTime.now())))/60.0;
         }
 
         Optional<Log> log = createLog(hours, eventId, paid);

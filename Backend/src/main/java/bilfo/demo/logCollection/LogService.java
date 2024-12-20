@@ -2,6 +2,7 @@ package bilfo.demo.logCollection;
 
 import bilfo.demo.EventCollection.Event;
 import bilfo.demo.EventCollection.EventService;
+import bilfo.demo.Triple;
 import bilfo.demo.enums.TOUR_TIMES;
 import bilfo.demo.enums.USER_STATUS;
 import bilfo.demo.formCollection.Form;
@@ -135,7 +136,7 @@ public class LogService {
         return true;
     }
 
-    public List<Pair<Log, Pair<Form, Event>>> getLogs(int bilkentId, Date startDate, boolean requiresForms)
+    public List<Triple<Log, Form, Event>> getLogs(int bilkentId, Date startDate, boolean requiresForms)
     {
         Optional<User> optionalUser = userService.getUser(bilkentId);
         if(optionalUser.isEmpty())
@@ -146,7 +147,7 @@ public class LogService {
         return getLogs(optionalUser.get(), startDate, requiresForms);
     }
 
-    public List<Pair<Log, Pair<Form, Event>>> getLogs(User user, Date startDate, boolean requiresForms)
+    public List<Triple<Log, Form, Event>> getLogs(User user, Date startDate, boolean requiresForms)
     {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
@@ -156,7 +157,7 @@ public class LogService {
 
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date endOfMonth = calendar.getTime();
-        List<Pair<Log, Pair<Form, Event>>> result=new ArrayList<>();
+        List<Triple<Log, Form, Event>> result=new ArrayList<>();
 
         for(ObjectId id: user.getLogs())
         {
@@ -188,7 +189,7 @@ public class LogService {
 
             if(log.getDate().after(startOfMonth) && log.getDate().before(endOfMonth))
             {
-                result.add(Pair.of(log, Pair.of(form, event)));
+                result.add(Triple.of(log, form, event));
             }
         }
         return result;
@@ -205,7 +206,7 @@ public class LogService {
                 continue;
             }
             double hours=0;
-            for(Pair<Log, Pair<Form, Event>> logFormPair: getLogs(user, startDate, false))
+            for(var logFormPair: getLogs(user, startDate, false))
             {
                 hours+=logFormPair.getFirst().getHours();
             }
@@ -219,7 +220,7 @@ public class LogService {
         List<User> allUsers = userService.allUsers();
         for(User user: allUsers)
         {
-            for(Pair<Log, Pair<Form, Event>> logFormPair: getLogs(user, monthDate, false))
+            for(var logFormPair: getLogs(user, monthDate, false))
             {
                 Log log=logFormPair.getFirst();
                 log.setPaid(true);
@@ -230,7 +231,7 @@ public class LogService {
 
     public void markAllLogsAsPaid(int bilkentId, Date monthDate)
     {
-        for(Pair<Log, Pair<Form, Event>> logFormPair: getLogs(bilkentId, monthDate, false))
+        for(var logFormPair: getLogs(bilkentId, monthDate, false))
         {
             Log log=logFormPair.getFirst();
             log.setPaid(true);

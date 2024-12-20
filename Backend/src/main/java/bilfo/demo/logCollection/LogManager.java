@@ -1,6 +1,7 @@
 package bilfo.demo.logCollection;
 
 import bilfo.demo.EventCollection.Event;
+import bilfo.demo.Triple;
 import bilfo.demo.formCollection.Form;
 import bilfo.demo.formCollection.FormManager;
 import bilfo.demo.userCollection.User;
@@ -83,7 +84,7 @@ public class LogManager {
     }
 
     @GetMapping("/getLogs")
-    public ResponseEntity<List<Pair<Log, Pair<Form, Event>>>> getLogs(@RequestParam Map<String, String> logRequest) {
+    public ResponseEntity<List<Triple<Log, Form, Event>>> getLogs(@RequestParam Map<String, String> logRequest) {
         int bilkentId=Integer.parseInt(logRequest.get("bilkentId"));
         Date monthDate= FormManager.stringToDate(logRequest.get("monthDate"));
         return new ResponseEntity<>(logService.getLogs(bilkentId, monthDate, true), HttpStatus.OK);
@@ -96,6 +97,8 @@ public class LogManager {
     }
 
     /*@GetMapping("/getEventsOfUserThatDontHaveLogsAndFinished")
-    public ResponseEntity<List<Pair<Event, Form>>>*/
+    public ResponseEntity<List<Pair<Form, Event>>> getEventsOfUserThatDontHaveLogsAndFinished(@RequestParam int bilkentId) {
+        return new
+    }*/
 
 }

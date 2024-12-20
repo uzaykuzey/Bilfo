@@ -15,10 +15,6 @@ public class MailSenderService {
     @Value("${spring.mail.username}")
     private String mailUsername;
 
-    /*public MailSenderService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }*/
-
     public void sendEmail(String address, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(mailUsername);

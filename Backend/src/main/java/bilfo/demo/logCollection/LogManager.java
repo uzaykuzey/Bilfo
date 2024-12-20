@@ -29,20 +29,20 @@ public class LogManager {
     public ResponseEntity<String> addLog(@RequestBody Map<String, String> addLogRequest) {
         int bilkentId = Integer.parseInt(addLogRequest.get("bilkentId"));
         ObjectId eventId = new ObjectId(addLogRequest.get("eventId"));
-        double hours = 0;
-        if(!addLogRequest.containsKey("hours")) {
-            hours = Double.parseDouble(addLogRequest.get("hours").replace(',', '.'));
+        Optional<Log> log;
+        if(addLogRequest.containsKey("hours")) {
+            double hours = Double.parseDouble(addLogRequest.get("hours").replace(',', '.'));
             if(hours<=0)
             {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+            log = logService.addLog(bilkentId, hours, eventId, false);
         }
         else
         {
-            hours = -1;
+            log = logService.addLog(bilkentId, eventId, false);
         }
 
-        Optional<Log> log = logService.addLog(bilkentId, hours, eventId, false);
         if(log.isPresent()) {
             return new ResponseEntity<>("successfully added log", HttpStatus.OK);
         }

@@ -77,19 +77,6 @@ public class LogService {
             return Optional.empty();
         }
 
-        Optional<Event> event = eventService.getEvent(eventId);
-        if(event.isEmpty())
-        {
-            return Optional.empty();
-        }
-
-        if(hours == -1)
-        {
-            LocalTime localTime = LocalTime.parse(event.get().getTime().toString(), DateTimeFormatter.ofPattern("HH.mm"));
-
-            hours = ((int)Math.abs(ChronoUnit.MINUTES.between(localTime, LocalTime.now())))/60.0;
-        }
-
         Optional<Log> log = createLog(hours, eventId, paid);
         if(log.isEmpty())
         {
@@ -101,6 +88,22 @@ public class LogService {
         logRepository.save(log.get());
         return log;
     }
+
+    public Optional<Log> addLog(int bilkentId, ObjectId eventId, boolean paid)
+    {
+        Optional<Event> event = eventService.getEvent(eventId);
+        if(event.isEmpty())
+        {
+            return Optional.empty();
+        }
+
+        LocalTime localTime = LocalTime.parse(event.get().getTime().toString(), DateTimeFormatter.ofPattern("HH.mm"));
+
+        double hours = ((int)Math.abs(ChronoUnit.MINUTES.between(localTime, LocalTime.now())))/60.0;
+
+        return addLog(bilkentId, hours, eventId, paid);
+    }
+
 
     public boolean markAsPaid(ObjectId logId) {
         Optional<Log> log = getLog(logId);

@@ -5,6 +5,7 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import "./tour_fair_list.css";
 import NavbarLayout from "./navbar";
+import { FaTimes } from "react-icons/fa"; // Ensure you have `react-icons` installed for the cross icon.
 
 export default function TourListLayout() {
   const { bilkentId } = useParams();
@@ -141,7 +142,11 @@ export default function TourListLayout() {
     }
   };
 
+  
   const renderPopupContent = () => {
+    const [showConfirmModal, setShowConfirmModal] = useState(false); // State for showing confirmation modal
+    const [rejectionReason, setRejectionReason] = useState(""); // State for rejection reason
+  
     if (!selectedTour) return null;
   
     // Format the tour date
@@ -160,9 +165,39 @@ export default function TourListLayout() {
         return;
       }
   
-      // Send the evaluation data (update with real API call)
       acceptHighSchoolTour(selectedTour, selectedDate); // Pass the selected index
       closePopup();
+    };
+  
+    // Open confirmation modal
+    const openConfirmModal = () => {
+      if (!rejectionReason.trim()) {
+        alert("Please provide a reason for rejection.");
+        return;
+      }
+      setShowConfirmModal(true);
+    };
+  
+    // Close confirmation modal
+    const closeConfirmModal = () => {
+      setShowConfirmModal(false);
+    };
+  
+    // Handle reject
+    const handleReject = async () => {
+      try {
+        await api.post("/form/eva", {
+          formId: selectedTour.id,
+          state: "REJECTED",
+          index: 0,
+          rejectionMessage: rejectionReason.trim(),
+        });
+        alert("Tour rejected successfully.");
+        closePopup();
+      } catch (error) {
+        console.error("Error rejecting the tour:", error);
+        alert("Failed to reject the tour. Please try again.");
+      }
     };
   
     // Handle canceling the popup
@@ -172,6 +207,11 @@ export default function TourListLayout() {
   
     return (
       <div className="popup-content">
+        {/* Cross icon for closing */}
+        <div className="popup-close-icon" onClick={handleCancel}>
+          <FaTimes />
+        </div>
+  
         <h3>Evaluate Tour</h3>
         <p><strong>Tour Name:</strong> {selectedTour.name}</p>
         <p><strong>Location:</strong> {selectedTour.location}</p>
@@ -179,29 +219,65 @@ export default function TourListLayout() {
   
         <div className="possible-times">
           <h4>Select Time:</h4>
-          {selectedTour.possibleTimes && selectedTour.possibleTimes.map((time, index) => (
-            <div key={index} className="time-radio">
-              <input
-                type="radio"
-                id={`time-${index}`}
-                name="time-selection" // Ensures only one can be selected
-                checked={selectedDate === index}
-                onChange={() => handleTimeChange(index)}
-              />
-              <label htmlFor={`time-${index}`}>
-                {mapTime(time.second)} - {formatDate(new Date(time.first))}
-              </label>
-            </div>
-          ))}
+          {selectedTour.possibleTimes &&
+            selectedTour.possibleTimes.map((time, index) => (
+              <div key={index} className="time-radio">
+                <input
+                  type="radio"
+                  id={`time-${index}`}
+                  name="time-selection"
+                  checked={selectedDate === index}
+                  onChange={() => handleTimeChange(index)}
+                />
+                <label htmlFor={`time-${index}`}>
+                  {mapTime(time.second)} - {formatDate(new Date(time.first))}
+                </label>
+              </div>
+            ))}
+        </div>
+  
+        {/* Rejection text area */}
+        <div className="rejection-area">
+          <h4>Rejection Reason:</h4>
+          <textarea
+            id="rejection-reason"
+            placeholder="Enter the reason for rejection..."
+            rows="4"
+            value={rejectionReason}
+            onChange={(e) => setRejectionReason(e.target.value)}
+          />
         </div>
   
         <div className="popup-actions">
-          <button onClick={handleEvaluateAccept} className="accept-button">Accept</button>
-          <button onClick={handleCancel} className="cancel-button">Cancel</button>
+          <button onClick={handleEvaluateAccept} className="accept-button">
+            Accept
+          </button>
+          <button onClick={openConfirmModal} className="reject-button">
+            Reject
+          </button>
         </div>
+  
+        {/* Confirmation Modal */}
+        {showConfirmModal && (
+          <div className="confirmation-modal">
+            <div className="modal-content">
+              <p>Are you sure you want to reject this tour?</p>
+              <div className="modal-actions">
+                <button onClick={handleReject} className="confirm-button">
+                  Yes
+                </button>
+                <button onClick={closeConfirmModal} className="cancel-button">
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
+  
+
   
   
 
@@ -261,10 +337,14 @@ export default function TourListLayout() {
             <button className="details-button" onClick={() => openPopup(tour)}>Details</button>
           </>
         );
-      } else {
+      } else if (selectedStatus === "Pending"){
         return (
           <button className="evaluate-button" onClick={() => openPopup(tour)}>Evaluate</button>
         );
+      } else {
+        return(
+          <button className="details-button" onClick={() => openPopup(tour)}>Details</button>
+        );  
       }
     };
   

@@ -90,7 +90,7 @@ public class UserManager {
     public ResponseEntity<String> changeOwnUsername( @RequestBody Map<String,Object> changeUserRequest) {
         String username = (String) changeUserRequest.get("username");
         String password = (String) changeUserRequest.get("password");
-        int id = Integer.parseInt(changeUserRequest.get("id").toString());
+        int id = Integer.parseInt(changeUserRequest.get("bilkentId").toString());
         Optional<User> user = userService.authenticate(id,password);
         if (user.isPresent()) {
             userService.changeUsername(id,username);
@@ -104,7 +104,7 @@ public class UserManager {
     public ResponseEntity<String> changeOwnEmail( @RequestBody Map<String,Object> changeUserRequest) {
         String email = (String) changeUserRequest.get("email");
         String password = (String) changeUserRequest.get("password");
-        int id = Integer.parseInt(changeUserRequest.get("id").toString());
+        int id = Integer.parseInt(changeUserRequest.get("bilkentId").toString());
         Optional<User> user = userService.authenticate(id,password);
         if (user.isPresent()) {
             userService.changeEmail(id,email);
@@ -118,7 +118,7 @@ public class UserManager {
     public ResponseEntity<String> changeOwnPassword( @RequestBody Map<String,Object> changeUserRequest) {
         String newPassword = (String) changeUserRequest.get("newPassword");
         String oldPassword = (String) changeUserRequest.get("password");
-        int id = Integer.parseInt(changeUserRequest.get("id").toString());
+        int id = Integer.parseInt(changeUserRequest.get("bilkentId").toString());
         Optional<User> user = userService.authenticate(id,oldPassword);
         if (user.isPresent()) {
             String hashedPassword = passwordEncoder.encode(newPassword);

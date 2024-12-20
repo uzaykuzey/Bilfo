@@ -17,7 +17,8 @@ export default function ScheduleLayout() {
   const { bilkentId } = useParams();
 
   const handleDateChange = (date) => {
-    setCurrentWeekStart(date);
+    const mondayOfSelectedWeek = getWeekStartDate(date);
+    setCurrentWeekStart(mondayOfSelectedWeek);
     setShowCalendar(false); // Close calendar after date selection
   };
 
@@ -59,7 +60,8 @@ export default function ScheduleLayout() {
     setLoading(true); // Start loading
     try {
       const formattedDate = formatDateToYYYYMMDD(currentWeekStart);
-      const response = await api.get("/event/getScheduleOfWeek", { params: { weekStartDate: formattedDate, bilkentId: bilkentId } });
+      console.log(formattedDate);
+      const response = await api.get("/event/getScheduleOfWeek", { params: { weekStartDate: startOfTheWeek, bilkentId: bilkentId } });
       setTourSchedule(response.data);
     } catch (error) {
       console.error("Error fetching tour schedule:", error);
@@ -80,10 +82,6 @@ export default function ScheduleLayout() {
     setCurrentWeekStart(nextWeek);
   };
 
-  const handleDateSelection = (event) => {
-    const selectedDate = new Date(event.target.value);
-    setCurrentWeekStart(getWeekStartDate(selectedDate));
-  };
 
   return (
     <div className="home-layout">

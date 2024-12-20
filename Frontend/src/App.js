@@ -15,6 +15,7 @@ import ScheduleLayout from './tour_schedule';
 import FeedbackLayout from './feedback';
 import PuantajLayout from './puantaj_table';
 import ForgotPasswordLayout from './forgot_password';
+import PuantajTableGuideLayout from './puantaj_table_guide';
 
 function  App() {
   return (
@@ -35,6 +36,7 @@ function  App() {
         <Route path="/userHome/:bilkentId/availability" element={<AvailabilityLayout/>} />
         <Route path="/userHome/:bilkentId/schedule" element={<ScheduleLayout/>} />
         <Route path="/userHome/:bilkentId/puantaj" element={<PuantajLayout/>} />
+        <Route path="/userHome/:bilkentId/puantaj_guide" element={<PuantajTableGuideLayout/>} />
         {/* Redirect unknown routes */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

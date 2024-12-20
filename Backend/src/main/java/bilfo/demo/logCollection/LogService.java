@@ -15,8 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -48,8 +47,14 @@ public class LogService {
             return Optional.empty();
         }*/
 
+        Optional<Event> event = eventService.getEvent(eventId);
+        if(event.isEmpty())
+        {
+            return Optional.empty();
+        }
+
         // Create the new Log object
-        Log log = new Log(new ObjectId(), hours, eventId, paid);
+        Log log = new Log(new ObjectId(), hours, event.get().getDate(),eventId, paid);
 
         // Save the Log in the database
         Log savedLog = logRepository.save(log);
@@ -101,5 +106,39 @@ public class LogService {
         log.get().setPaid(true);
         logRepository.save(log.get());
         return true;
+    }
+
+    public List<Log> getLogs(int bilkentId, Date startDate)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date startOfMonth = calendar.getTime();
+
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        Date endOfMonth = calendar.getTime();
+        List<Log> result=new ArrayList<>();
+        Optional<User> optionalUser = userService.getUser(bilkentId);
+        if(optionalUser.isEmpty())
+        {
+            return new ArrayList<>();
+        }
+        User user = optionalUser.get();
+
+        for(ObjectId id: user.getLogs())
+        {
+            Optional<Log> optionalLog=logRepository.findById(id);
+            if(optionalLog.isEmpty())
+            {
+                continue;
+            }
+            Log log = optionalLog.get();
+            if(log.getDate().after(startOfMonth) && log.getDate().before(endOfMonth))
+            {
+                result.add(log);
+            }
+        }
+        return result;
     }
 }

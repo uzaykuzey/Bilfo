@@ -60,9 +60,9 @@ public class LogManager {
 
     @GetMapping("/getLogs")
     public ResponseEntity<List<Log>> getLogs(@RequestParam Map<String, String> logRequest) {
-        int bilkentId;
+        int bilkentId=Integer.parseInt(logRequest.get("bilkentId"));
         Date startDate= FormManager.stringToDate(logRequest.get("startDate"));
-        return null;
+        return new ResponseEntity<>(logService.getLogs(bilkentId, startDate), HttpStatus.OK);
     }
 
 }

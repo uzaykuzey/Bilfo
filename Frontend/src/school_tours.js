@@ -341,7 +341,7 @@ export default function SchoolToursForm() {
                         />
                     </label>
 
-                    <label>
+                    <div class = "checkbox-container">
                         <input
                             type="checkbox"
                             name="termsAccepted"
@@ -353,7 +353,7 @@ export default function SchoolToursForm() {
                         {formData.formErrors.termsAccepted && (
                             <span className="error">{formData.formErrors.termsAccepted}</span>
                         )}
-                    </label>
+                    </div>
 
                     <button type="submit" className="submit-button">
                         Submit

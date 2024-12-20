@@ -5,9 +5,6 @@ import bilfo.demo.counselorCollection.Counselor;
 import bilfo.demo.counselorCollection.CounselorRepository;
 import bilfo.demo.counselorCollection.CounselorService;
 import bilfo.demo.enums.*;
-import bilfo.demo.schoolCollection.School;
-import bilfo.demo.schoolCollection.SchoolRepository;
-import bilfo.demo.schoolCollection.SchoolService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -25,10 +22,6 @@ public class FormManager {
     @Autowired
     private FormService formService;
     @Autowired
-    private SchoolRepository schoolRepository;
-    @Autowired
-    private SchoolService schoolService;
-    @Autowired
     private CounselorRepository counselorRepository;
     @Autowired
     private CounselorService counselorService;
@@ -41,18 +34,9 @@ public class FormManager {
 
     @PostMapping("/hsform")
     public ResponseEntity<String> applyForHighschoolTour(@RequestBody Map<String, String> formApplication) {
-        Optional<School> schoolOptional=schoolRepository.findSchoolByName(formApplication.get("schoolName"));
-        String schoolName;
-        CITIES city = CITIES.valueOf(formApplication.get("city").toUpperCase());
-        if(schoolOptional.isPresent())
-        {
-            schoolName=schoolOptional.get().getName();
-        }
-        else
-        {
-            School s=schoolService.createSchool(formApplication.get("schoolName"), city, 0).get();
-            schoolName = s.getName();
-        }
+        String schoolName=formApplication.get("schoolName");
+        String city=formApplication.get("city");
+        String district=formApplication.get("district");
 
         Optional<Counselor> counselorOptional=counselorRepository.findCounselorByEmail(formApplication.get("email"));
         String counselorEmail;
@@ -71,7 +55,7 @@ public class FormManager {
         int visitorCount=Integer.parseInt(formApplication.get("visitorCount"));
         String visitorNotes=formApplication.get("visitorNotes");
 
-        Optional<Form> newForm = formService.createForm(EVENT_TYPES.HIGHSCHOOL_TOUR, FORM_STATES.NOT_REVIEWED, dates, counselorEmail, city, schoolName, visitorCount, visitorNotes, counselorEmail, null, DEPARTMENT.NOT_APPLICABLE);
+        Optional<Form> newForm = formService.createForm(EVENT_TYPES.HIGHSCHOOL_TOUR, FORM_STATES.NOT_REVIEWED, dates, counselorEmail, city, district, schoolName, visitorCount, visitorNotes, counselorEmail, null, DEPARTMENT.NOT_APPLICABLE);
         if(newForm.isPresent())
         {
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
@@ -94,7 +78,7 @@ public class FormManager {
         List<Pair<Date, TOUR_TIMES>> dates=createPossibleTimes(formApplication);
 
         String contactMail = formApplication.get("contactMail");
-        Optional<Form> newForm = formService.createForm(EVENT_TYPES.INDIVIDUAL_TOUR, FORM_STATES.NOT_REVIEWED, dates, contactMail, CITIES.ANKARA, null, visitorCount, visitorNotes, null, names, department);
+        Optional<Form> newForm = formService.createForm(EVENT_TYPES.INDIVIDUAL_TOUR, FORM_STATES.NOT_REVIEWED, dates, contactMail, "", "", null, visitorCount, visitorNotes, null, names, department);
         if(newForm.isPresent())
         {
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);
@@ -105,26 +89,15 @@ public class FormManager {
     @PostMapping("/fairform")
     public ResponseEntity<String> applyForFair(@RequestBody Map<String, String> formApplication)
     {
-        Optional<School> schoolOptional=schoolRepository.findSchoolByName(formApplication.get("schoolName"));
-        String schoolName;
-        CITIES city = CITIES.valueOf(formApplication.get("city").toUpperCase());
-        if(schoolOptional.isPresent())
-        {
-            schoolName=schoolOptional.get().getName();
-        }
-        else
-        {
-            School s=schoolService.createSchool(formApplication.get("schoolName"), city, 0).get();
-            schoolName = s.getName();
-        }
-
+        String schoolName = formApplication.get("schoolName");
+        String city=formApplication.get("city");
+        String district=formApplication.get("district");
         Date date = stringToDate(formApplication.get("date"));
-
         String contactMail = formApplication.get("contactMail");
         List<Pair<Date, TOUR_TIMES>> dates=new ArrayList<>();
         dates.add(Pair.of(date, TOUR_TIMES.WHOLE_DAY));
 
-        Optional<Form> newForm=formService.createForm(EVENT_TYPES.FAIR, FORM_STATES.NOT_REVIEWED, dates, contactMail, city, schoolName, 0, "", null, null, DEPARTMENT.NOT_APPLICABLE);
+        Optional<Form> newForm=formService.createForm(EVENT_TYPES.FAIR, FORM_STATES.NOT_REVIEWED, dates, contactMail, city, district, schoolName, 0, "", null, null, DEPARTMENT.NOT_APPLICABLE);
         if(newForm.isPresent())
         {
             return new ResponseEntity<String>("Form created", HttpStatus.CREATED);

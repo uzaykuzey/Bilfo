@@ -3,6 +3,7 @@ package bilfo.demo.logCollection;
 import bilfo.demo.EventCollection.Event;
 import bilfo.demo.EventCollection.EventService;
 import bilfo.demo.Triple;
+import bilfo.demo.enums.EVENT_STATES;
 import bilfo.demo.enums.TOUR_TIMES;
 import bilfo.demo.enums.USER_STATUS;
 import bilfo.demo.formCollection.Form;
@@ -136,7 +137,7 @@ public class LogService {
         return true;
     }
 
-    public List<Triple<Log, Form, Event>> getLogs(int bilkentId, Date startDate, boolean requiresForms)
+    public List<Triple<Log, Event, Form>> getLogs(int bilkentId, Date startDate, boolean requiresForms)
     {
         Optional<User> optionalUser = userService.getUser(bilkentId);
         if(optionalUser.isEmpty())
@@ -147,7 +148,7 @@ public class LogService {
         return getLogs(optionalUser.get(), startDate, requiresForms);
     }
 
-    public List<Triple<Log, Form, Event>> getLogs(User user, Date startDate, boolean requiresForms)
+    public List<Triple<Log, Event, Form>> getLogs(User user, Date startDate, boolean requiresForms)
     {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
@@ -157,7 +158,7 @@ public class LogService {
 
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date endOfMonth = calendar.getTime();
-        List<Triple<Log, Form, Event>> result=new ArrayList<>();
+        List<Triple<Log, Event, Form>> result=new ArrayList<>();
 
         for(ObjectId id: user.getLogs())
         {
@@ -189,7 +190,7 @@ public class LogService {
 
             if(log.getDate().after(startOfMonth) && log.getDate().before(endOfMonth))
             {
-                result.add(Triple.of(log, form, event));
+                result.add(Triple.of(log, event, form));
             }
         }
         return result;
@@ -237,5 +238,25 @@ public class LogService {
             log.setPaid(true);
             logRepository.save(log);
         }
+    }
+
+    public List<Pair<Event, Form>> getEventsOfUserThatDontHaveLogsAndFinished(int bilkentId)
+    {
+        Optional<User> optionalUser = userService.getUser(bilkentId);
+        List<Pair<Event, Form>> result=new ArrayList<>();
+        if(optionalUser.isEmpty())
+        {
+            return result;
+        }
+
+        for(var pair: eventService.getEvents(EVENT_STATES.COMPLETED))
+        {
+            Event event = pair.getFirst();
+            if(event.getGuides().contains(bilkentId) || event.getTrainees().contains(bilkentId))
+            {
+                result.add(pair);
+            }
+        }
+        return result;
     }
 }

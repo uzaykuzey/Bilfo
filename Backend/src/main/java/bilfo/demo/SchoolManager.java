@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
-@RequestMapping("/form")
+@RequestMapping("/school")
 public class SchoolManager {
     private static Map<String, Map<String, Map<String, Pair<Integer, Integer>>>> schools;
 

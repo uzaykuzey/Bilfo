@@ -19,10 +19,10 @@ import java.util.Arrays;
 @RestController
 public class BilfoApplication {
 	public static void main(String[] args) {
-		long startTime = System.currentTimeMillis(); // Record the start time
+		long startTime = System.currentTimeMillis();
 		SchoolManager.getInstance().readSchoolFile("/highschools.txt");
-		long endTime = System.currentTimeMillis(); // Record the end time
-		long duration = endTime - startTime; // Calculate the elapsed time
+		long endTime = System.currentTimeMillis();
+		long duration = endTime - startTime;
 		System.out.println("Execution time: " + duration + " milliseconds");
 
 		SpringApplication.run(BilfoApplication.class, args);

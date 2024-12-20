@@ -3,19 +3,19 @@
     min-height: 100vh;
   }
   
-
+  .content {
+    margin-top: 20px; /* Adjust spacing as needed */
+    padding: 20px; /* Optional: for inner spacing */
+    margin-left:10%;
+  }
+  
   
   h2 {
     font-size: 2rem;
     margin-bottom: 20px;
   }
   
-  .advisor-list {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+  
   
   .search-bar {
     display: flex;
@@ -79,45 +79,131 @@
   }
   /* Center the popup on the screen */
 
-.popup-container {
-  position: relative;
-  margin: auto;
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.popup-overlay {
-  background: rgba(0, 0, 0, 0.5); /* Dark overlay for the background */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.popup-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.popup-actions button {
-  padding: 10px 20px;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.popup-actions button:first-child {
-  background-color: #007bff;
-  color: white;
-}
-
-.popup-actions button:last-child {
-  background-color: #dc3545;
-  color: white;
-}
+  .advisor-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .advisor-table th,
+  .advisor-table td {
+    text-align: left;
+    padding: 12px;
+    font-size: 14px;
+    font-family: "Arial", sans-serif;
+  }
+  
+  .advisor-table th {
+    background-color: #f2f2f2;
+    color: #333;
+  }
+  
+  .advisor-table tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+  
+  .advisor-table tr:nth-child(odd) {
+    background-color: #fff;
+  }
+  
+  .advisor-table td {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .actions button {
+    margin: 0 4px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .actions button:nth-child(1) {
+    background-color: #007bff;
+  }
+  
+  .actions button:nth-child(2) {
+    background-color: #28a745;
+  }
+  
+  .actions button:nth-child(3) {
+    background-color: #dc3545;
+  }
+  
+  .actions button:hover {
+    opacity: 0.9;
+  }
+  
+  .add-advisor-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-advisor-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .popup-container {
+    padding: 20px;
+    font-family: "Arial", sans-serif;
+  }
+  
+  .popup-container h2 {
+    font-size: 18px;
+  }
+  
+  .popup-container .input-group {
+    margin-bottom: 15px;
+  }
+  
+  .popup-container .input-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .popup-container .input-group input,
+  .popup-container .input-group select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .popup-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .popup-actions button {
+    margin: 0 5px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .popup-actions button:nth-child(1) {
+    background-color: #28a745;
+  }
+  
+  .popup-actions button:nth-child(2) {
+    background-color: #dc3545;
+  }
+  
 
 /* Style for input fields */
 .input-group {

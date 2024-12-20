@@ -2,7 +2,7 @@ import "./guide_list.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import Popup from 'reactjs-popup';
+import Popup from "reactjs-popup";
 import api from "./api/axios_config";
 import NavbarLayout from "./navbar";
 
@@ -14,10 +14,14 @@ export default function GuideListLayout() {
 
   const [guides, setGuides] = useState([]);
   const [error, setError] = useState("");
-  const [showAddPopup, setShowAddPopup] = useState(false); // Add Guide Popup visibility
+  const [showAddPopup, setShowAddPopup] = useState(false);
   const [formError, setFormError] = useState("");
+  const [showRemovePopup, setShowRemovePopup] = useState(false);
+  const [showPromotePopup, setShowPromotePopup] = useState(false);
+  const [showDemotePopup, setShowDemotePopup] = useState(false);
+  const [selectedGuide, setSelectedGuide] = useState(null);
+  const [selectedDay, setSelectedDay] = useState("");
 
-  // Fields for Add Guide Form
   const [newGuide, setNewGuide] = useState({
     username: "",
     bilkentId: "",
@@ -27,14 +31,14 @@ export default function GuideListLayout() {
     trainee: false,
   });
 
-  // Departments dropdown
   const departments = [
     "AMER", "ARCH", "CHEM", "COMD", "CS", "CTIS", "ECON", "EDU", "EEE", "ELIT", "FA",
     "GRA", "HART", "IAED", "IE", "IR", "LAUD", "LAW", "MAN", "MATH", "MBG", "ME",
     "MSC", "PHIL", "PHYS", "POLS", "PSYC", "THEA", "THM", "THR", "TRIN",
   ];
 
-  // Fetch guides when the component loads
+  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
   useEffect(() => {
     const fetchGuides = async () => {
       try {
@@ -42,7 +46,7 @@ export default function GuideListLayout() {
         if (response.status === 200) {
           setGuides(response.data);
         } else if (response.status === 204) {
-          setGuides([]); // No guides available
+          setGuides([]);
         }
       } catch (err) {
         console.error("Error fetching guides:", err);
@@ -52,60 +56,57 @@ export default function GuideListLayout() {
     fetchGuides();
   }, []);
 
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setNewGuide({
-      ...newGuide,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
-
-  // Validation
-  const validateForm = () => {
-    const { username, bilkentId, email, phoneNo, department } = newGuide;
-
-    if (!username || !bilkentId || !email || !phoneNo || !department) {
-      return "All fields are required.";
-    }
-    if (!/^\d{8}$/.test(bilkentId)) {
-      return "ID must be exactly 8 digits.";
-    }
-    if (!/^\d{10}$/.test(phoneNo)) {
-      return "Phone number must be exactly 10 digits.";
-    }
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      return "Invalid email format.";
-    }
-    return null;
-  };
-
-  // Handle Add Guide Submission
-  const handleAddGuide = async () => {
-    const validationError = validateForm();
-    if (validationError) {
-      setFormError(validationError);
-      return;
-    }
-
+  const handlePromoteGuide = async () => {
     try {
-      const response = await api.post("/addGuide", newGuide);
-      if (response.status === 201) {
-        setGuides((prev) => [...prev, response.data]);
-        setShowAddPopup(false); // Close popup
-        setNewGuide({
-          username: "",
-          bilkentId: "",
-          email: "",
-          phoneNo: "",
-          department: "",
-          trainee: false,
+      setError("");
+      setFormError("");
+      let response
+      if(!selectedGuide.trainee){
+        response = await api.post("/promoteUser", { 
+          bilkentId: selectedGuide.bilkentId, 
+          day: selectedDay 
         });
-        setFormError(""); // Clear any errors
+      }else{
+        response = await api.post("/promoteUser", { 
+          bilkentId: selectedGuide.bilkentId, 
+        });
+      }
+      if (response.status === 200) {
+        setShowPromotePopup(false);
+        setSelectedGuide(null);
+        setSelectedDay("");
       }
     } catch (error) {
-      console.error("Error adding guide:", error);
-      setFormError("Failed to add guide. Please try again.");
+      console.error("Error promoting guide:", error);
+      setError("Failed to promote guide. Please try again.");
+    }
+  };
+
+  const handleDemoteGuide = async () => {
+    try {
+      console.log(selectedGuide.bilkentId);
+      const response = await api.post("/demoteUser", { bilkentId: selectedGuide.bilkentId });
+      if (response.status === 200) {
+        setShowDemotePopup(false);
+        setSelectedGuide(null);
+      }
+    } catch (error) {
+      console.error("Error demoting guide:", error);
+      setError("Failed to demote guide. Please try again.");
+    }
+  };
+
+  const handleRemoveGuide = async () => {
+    try {
+      const response = await api.post("/removeGuide", { bilkentId: selectedGuide.bilkentId });
+      if (response.status === 200) {
+        setGuides((prev) => prev.filter((guide) => guide.bilkentId !== selectedGuide.bilkentId));
+        setShowRemovePopup(false);
+        setSelectedGuide(null);
+      }
+    } catch (error) {
+      console.error("Error removing guide:", error);
+      setError("Failed to remove guide. Please try again.");
     }
   };
 
@@ -113,40 +114,67 @@ export default function GuideListLayout() {
     <div className="home-layout">
       <NavbarLayout />
 
-      {/* Main Content Area */}
       <div className="content">
         <h1>Guide List</h1>
         {error && <p style={{ color: "red" }}>{error}</p>}
         <div className="guide-table-container">
-          <table className="guide-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>E-mail</th>
-                <th>ID</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {guides.length > 0 ? (
-                guides.map((guide, index) => (
-                  <tr key={index}>
-                    <td>{guide.username}</td>
-                    <td>{guide.email}</td>
-                    <td>{guide.bilkentId}</td>
-                    <td>
-                      {/* Actions */}
-                      <button className="action-btn remove-btn">Remove</button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4">No guides available.</td>
+        <table className="guide-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>E-mail</th>
+              <th>ID</th>
+              <th>Trainee</th> {/* New column header */}
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {guides.length > 0 ? (
+              guides.map((guide, index) => (
+                <tr key={index}>
+                  <td>{guide.username}</td>
+                  <td>{guide.email}</td>
+                  <td>{guide.bilkentId}</td>
+                  <td>{guide.trainee ? "Yes" : "No"}</td> {/* New column data */}
+                  <td>
+                    <button
+                      className="action-btn promote-btn"
+                      onClick={() => {
+                        setSelectedGuide(guide);
+                        setShowPromotePopup(true);
+                      }}
+                    >
+                      Promote
+                    </button>
+                    <button
+                      className="action-btn demote-btn"
+                      onClick={() => {
+                        setSelectedGuide(guide);
+                        setShowDemotePopup(true);
+                      }}
+                    >
+                      Demote
+                    </button>
+                    <button
+                      className="action-btn remove-btn"
+                      onClick={() => {
+                        setSelectedGuide(guide);
+                        setShowRemovePopup(true);
+                      }}
+                    >
+                      Remove
+                    </button>
+                  </td>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5">No guides available.</td> {/* Adjusted colspan */}
+              </tr>
+            )}
+          </tbody>
+        </table>
+
           <button
             className="add-guide-btn"
             onClick={() => setShowAddPopup(true)}
@@ -161,83 +189,222 @@ export default function GuideListLayout() {
           onClose={() => setShowAddPopup(false)}
           modal
           closeOnDocumentClick
-          contentStyle={{
-            width: "400px",
-            padding: "20px",
-            borderRadius: "8px",
-            backgroundColor: "#fff",
-          }}
+        >
+          <div className="add-guide-popup">
+            <h2>Add Guide</h2>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                try {
+                  const data = {
+                    username: newGuide.username,
+                    bilkentId: newGuide.bilkentId,
+                    email: newGuide.email,
+                    phoneNo: newGuide.phoneNo,
+                    department: newGuide.department,
+                    trainee: newGuide.trainee,
+                  };
+                  const response = await api.post("/addGuide", data);
+                  if (response.status === 200) {
+                    setGuides([...guides, response.data]);
+                    setShowAddPopup(false);
+                    setNewGuide({
+                      username: "",
+                      bilkentId: "",
+                      email: "",
+                      phoneNo: "",
+                      department: "",
+                      trainee: false,
+                    });
+                  }
+                } catch (err) {
+                  console.error("Error adding guide:", err);
+                  setFormError("Failed to add guide. Please try again.");
+                }
+              }}
+            >
+              <div className="form-group">
+                <label>Name:</label>
+                <input
+                  type="text"
+                  value={newGuide.username}
+                  onChange={(e) =>
+                    setNewGuide({ ...newGuide, username: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>ID:</label>
+                <input
+                  type="text"
+                  value={newGuide.bilkentId}
+                  onChange={(e) =>
+                    setNewGuide({ ...newGuide, bilkentId: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>E-mail:</label>
+                <input
+                  type="email"
+                  value={newGuide.email}
+                  onChange={(e) =>
+                    setNewGuide({ ...newGuide, email: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Phone:</label>
+                <input
+                  type="text"
+                  value={newGuide.phoneNo}
+                  onChange={(e) =>
+                    setNewGuide({ ...newGuide, phoneNo: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Department:</label>
+                <select
+                  value={newGuide.department}
+                  onChange={(e) =>
+                    setNewGuide({ ...newGuide, department: e.target.value })
+                  }
+                  required
+                >
+                  <option value="">Select Department</option>
+                  {departments.map((dept, index) => (
+                    <option key={index} value={dept}>
+                      {dept}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={newGuide.trainee}
+                    onChange={(e) =>
+                      setNewGuide({ ...newGuide, trainee: e.target.checked })
+                    }
+                  />
+                  Trainee
+                </label>
+              </div>
+              {formError && <p style={{ color: "red" }}>{formError}</p>}
+              <div className="popup-buttons">
+                <button type="submit" className="save-btn">
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => setShowAddPopup(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </Popup>
+
+        {/* Remove Confirmation Popup */}
+        <Popup
+          open={showRemovePopup}
+          onClose={() => setShowRemovePopup(false)}
+          modal
+          closeOnDocumentClick
         >
           <div>
-            <h2>Add Guide</h2>
-            <div>
-              <label>Name:</label>
-              <input
-                type="text"
-                name="username"
-                value={newGuide.username}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <label>ID:</label>
-              <input
-                type="text"
-                name="bilkentId"
-                value={newGuide.bilkentId}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <label>Email:</label>
-              <input
-                type="email"
-                name="email"
-                value={newGuide.email}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <label>Phone Number:</label>
-              <input
-                type="text"
-                name="phoneNo"
-                value={newGuide.phoneNo}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div>
-              <label>Department:</label>
-              <select
-                name="department"
-                value={newGuide.department}
-                onChange={handleInputChange}
-              >
-                <option value="">--Select Department--</option>
-                {departments.map((dept, idx) => (
-                  <option key={idx} value={dept}>
-                    {dept}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label>
-                Trainee:
-                <input
-                  type="checkbox"
-                  name="trainee"
-                  checked={newGuide.trainee}
-                  onChange={handleInputChange}
-                />
-              </label>
-            </div>
-            {formError && <p style={{ color: "red" }}>{formError}</p>}
+            <h2>Confirm Removal</h2>
+            <p>
+              Are you sure you want to remove{" "}
+              <strong>{selectedGuide?.username}</strong>?
+            </p>
             <div className="modal-buttons">
-              <button className="confirm-btn" onClick={handleAddGuide}>
-                Add
+              <button className="confirm-btn" onClick={handleRemoveGuide}>
+                Remove
               </button>
-              <button className="cancel-btn" onClick={() => setShowAddPopup(false)}>
+              <button
+                className="cancel-btn"
+                onClick={() => setShowRemovePopup(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </Popup>
+
+        {/* Promote Confirmation Popup */}
+        <Popup
+          open={showPromotePopup}
+          onClose={() => setShowPromotePopup(false)}
+          modal
+          closeOnDocumentClick
+        >
+          <div>
+            <h2>Confirm Promotion</h2>
+            <p>
+              Are you sure you want to promote{" "}
+              <strong>{selectedGuide?.username}</strong>?
+            </p>
+            {!selectedGuide?.trainee && ( // Conditional check for trainee
+              <div className="form-group">
+                <label>Day of Promotion:</label>
+                <select
+                  value={selectedDay}
+                  onChange={(e) => setSelectedDay(e.target.value)}
+                  required
+                >
+                  <option value="">Select Day</option>
+                  {daysOfWeek.map((day, index) => (
+                    <option key={index} value={day}>
+                      {day}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+            <div className="modal-buttons">
+              <button className="confirm-btn" onClick={handlePromoteGuide}>
+                Promote
+              </button>
+              <button
+                className="cancel-btn"
+                onClick={() => setShowPromotePopup(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </Popup>
+
+        {/* Demote Confirmation Popup */}
+        <Popup
+          open={showDemotePopup}
+          onClose={() => setShowDemotePopup(false)}
+          modal
+          closeOnDocumentClick
+        >
+          <div>
+            <h2>Confirm Demotion</h2>
+            <p>
+              Are you sure you want to demote{" "}
+              <strong>{selectedGuide?.username}</strong>?
+            </p>
+            <div className="modal-buttons">
+              <button className="confirm-btn" onClick={handleDemoteGuide}>
+                Demote
+              </button>
+              <button
+                className="cancel-btn"
+                onClick={() => setShowDemotePopup(false)}
+              >
                 Cancel
               </button>
             </div>

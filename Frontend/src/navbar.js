@@ -28,6 +28,10 @@ export default function NavbarLayout(){
     e.preventDefault();
     navigate(`/userHome/${bilkentId}/puantaj`, { state: { statusUser } })
   }
+  const goToPuantajTableGuide = (e) => {
+    e.preventDefault();
+    navigate(`/userHome/${bilkentId}/puantaj_guide`, { state: { statusUser } });
+  } 
 return(
 <nav className="sidebar" >
         <div className="logo-container">
@@ -55,8 +59,12 @@ return(
           {statusUser === "ADVISOR" && (
             <a className="nav-link" onClick={goToGuideList}>Guide List</a>
           )}
-
-          <a href="/puantaj" className="nav-link" onClick={goToPuantajTable}>Puantaj Table</a>
+          {statusUser === "GUIDE" &&(
+            <a href="/puantaj" className="nav-link" onClick={goToPuantajTable}>Puantaj Table</a>
+          )}
+          {statusUser === "ADVISOR" &&(
+            <a href="/puantaj" className="nav-link" onClick={goToPuantajTableGuide}>Puantaj Table</a>
+          )}
           <a href="/logout" className="nav-link">Log Out</a>
         </div>
 

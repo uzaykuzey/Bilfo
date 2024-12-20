@@ -20,7 +20,7 @@ export default function UserSettingsLayout() {
       alert("Please fill out all fields for username change.");
       return;
     }
-    const usernameData = {username: username, password: passwordForUsername, id: bilkentId};
+    const usernameData = {username: username, password: passwordForUsername, bilkentId: bilkentId};
     try {
       const response = await api.post("/changeOwnUsername", usernameData);
       if (response.status == 200) {
@@ -40,7 +40,7 @@ export default function UserSettingsLayout() {
       alert("Please fill out all fields for email change.");
       return;
     }
-    const emailData = {email: email, password: passwordForEmail, id: bilkentId};
+    const emailData = {email: email, password: passwordForEmail, bilkentId: bilkentId};
     try {
       const response = await api.post("/changeOwnEmail", emailData);
       if (response.status == 200) {
@@ -64,7 +64,7 @@ export default function UserSettingsLayout() {
       alert("New passwords do not match.");
       return;
     }
-    const passwordData = {newPassword: newPassword,password: oldPassword, id: bilkentId };
+    const passwordData = {newPassword: newPassword,password: oldPassword, bilkentId: bilkentId };
     try {
       const response = await api.post("/changeOwnPassword",passwordData);
       if (response.status == 200) {

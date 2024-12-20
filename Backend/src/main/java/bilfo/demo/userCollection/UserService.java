@@ -289,7 +289,7 @@ public class UserService {
 
     private boolean demoteGuide(User guide)
     {
-        if(guide.isTrainee())
+        if(!guide.isTrainee())
         {
             guide.setTrainee(true);
             userRepository.save(guide);

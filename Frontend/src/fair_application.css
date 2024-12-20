@@ -98,7 +98,8 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 display: block;
 width: auto; /* Remove fixed width */
 text-align: left;
-margin-left: 13rem; /* Reset left margin */
+margin-left: 2rem; /* Reset left margin */
+margin-right: 2rem;
 margin-bottom: 0.5rem; /* Add spacing below labels */
 }
 
@@ -112,12 +113,43 @@ gap: 0.5rem; /* Spacing between rows */
 
 .form-container input,
 .form-container select {
+  flex: 2; /* Inputs take up 2 parts */
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
-  flex: 1; /* Inputs take remaining space */
-  max-width: 600px; /* Center inputs without exceeding rectangle */
+  max-width: 100%; /* Keep inputs responsive */
   box-sizing: border-box;
+}
+
+.form-container .checkboxrow {
+  display:block;
+  gap: 0.5rem;
+  padding: 1em;
+  margin: 1em;
+  max-width: 800px;
+}
+
+.form-container .checkboxrow input {
+  height: 1em;
+  width: 1em;
+  padding: 0%;
+  vertical-align: middle;
+  margin-bottom: 0%;
+  margin-right: 1%;
+}
+
+.form-container .checkboxrow label {
+  flex: 1; /* Allow label to adjust naturally */
+  text-align: left; /* Align text to the left */
+  margin: 0; /* Remove extra margins */
+  color: #555; /* Optional: Set label text color */
+  font-size: 0.9rem; /* Slightly smaller font size */
+}
+
+.form-container .checkboxrow a {
+  color: #1e5aa8; /* Make the link blue for visibility */
+  text-decoration: underline; /* Optional: Underline link */
+  cursor: pointer; /* Pointer cursor for links */
 }
 
 /* Title and Form Wrapper */
@@ -141,13 +173,7 @@ gap: 0.5rem; /* Spacing between rows */
   width: 100%;
 }
 
-/* Terms and Conditions */
-.terms {
-text-align: center;
-margin-top: 2rem;
-font-size: 0.9rem;
-color: #555;
-}
+
 
 /* Submit Button Styling */
 .submit-button {

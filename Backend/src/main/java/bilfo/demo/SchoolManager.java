@@ -4,7 +4,6 @@ import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +43,11 @@ public class SchoolManager {
     public String[] getSchoolNames(@RequestParam String city, @RequestParam String district)
     {
         return schools.get(city).get(district).keySet().toArray(new String[0]);
+    }
+
+    public Pair<Integer, Integer> getAdmissionStatistics(String city, String district, String school)
+    {
+        return schools.get(city).get(district).get(school);
     }
 
     public void readSchoolFile(String filePath) {

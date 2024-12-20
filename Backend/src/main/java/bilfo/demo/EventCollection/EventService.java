@@ -280,6 +280,23 @@ public class EventService {
         return result;
     }
 
+    public List<Pair<Event, Form>> getEvents(EVENT_STATES state)
+    {
+        List<Event> events = eventRepository.findEventsByState(state);
+        events.sort(null);
+        List<Pair<Event, Form>> result = new ArrayList<>();
+        for(Event event: events)
+        {
+            Optional<Form> optionalForm = formService.getForm(event.getOriginalForm());
+            if(optionalForm.isEmpty())
+            {
+                continue;
+            }
+            result.add(Pair.of(event, optionalForm.get()));
+        }
+        return result;
+    }
+
     public List<Pair<Event, Form>> getSuggestedEvents(int bilkentId) {
         Optional<User> optionalUser = userService.getUser(bilkentId);
         if(optionalUser.isEmpty())

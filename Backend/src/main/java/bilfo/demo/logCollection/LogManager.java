@@ -84,7 +84,7 @@ public class LogManager {
     }
 
     @GetMapping("/getLogs")
-    public ResponseEntity<List<Triple<Log, Form, Event>>> getLogs(@RequestParam Map<String, String> logRequest) {
+    public ResponseEntity<List<Triple<Log, Event, Form>>> getLogs(@RequestParam Map<String, String> logRequest) {
         int bilkentId=Integer.parseInt(logRequest.get("bilkentId"));
         Date monthDate= FormManager.stringToDate(logRequest.get("monthDate"));
         return new ResponseEntity<>(logService.getLogs(bilkentId, monthDate, true), HttpStatus.OK);
@@ -96,9 +96,9 @@ public class LogManager {
         return new ResponseEntity<>(logService.getAllGuidesLogTable(startDate), HttpStatus.OK);
     }
 
-    /*@GetMapping("/getEventsOfUserThatDontHaveLogsAndFinished")
-    public ResponseEntity<List<Pair<Form, Event>>> getEventsOfUserThatDontHaveLogsAndFinished(@RequestParam int bilkentId) {
-        return new
-    }*/
+    @GetMapping("/getEventsOfUserThatDontHaveLogsAndFinished")
+    public ResponseEntity<List<Pair<Event, Form>>> getEventsOfUserThatDontHaveLogsAndFinished(@RequestParam int bilkentId) {
+        return new ResponseEntity<>(logService.getEventsOfUserThatDontHaveLogsAndFinished(bilkentId), HttpStatus.OK);
+    }
 
 }

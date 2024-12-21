@@ -2,12 +2,16 @@ import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./navbar.css"
+import { useAuth } from "./AuthContext";
 
 export default function NavbarLayout(){
   const { bilkentId } = useParams();
-  const { state } = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
-  const { statusUser } = state;
+  const { user, logout } = useAuth();
+  
+  const statusUser = location.state?.statusUser || user?.role || 'GUIDE';
+
   const goToGuideList = (e) => {
     e.preventDefault();
     navigate(`/userHome/${bilkentId}/guide_list`, { state: { statusUser } });
@@ -32,8 +36,15 @@ export default function NavbarLayout(){
     e.preventDefault();
     navigate(`/userHome/${bilkentId}/puantaj_guide`, { state: { statusUser } });
   } 
-return(
-<nav className="sidebar" >
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    logout();
+    navigate('/', { replace: true });
+  };
+
+  return(
+    <nav className="sidebar" >
         <div className="logo-container">
           <div className="logo">
             <img
@@ -52,20 +63,17 @@ return(
           <a className="nav-link" onClick={goToUserHome}>Profile</a>
           <a className="nav-link" onClick={goToTourFairList}>Tours and Fairs</a>
 
-          {statusUser === "COORDINATOR" || statusUser === "ADVISOR" && (
+          {(statusUser === "COORDINATOR" || statusUser === "ADVISOR") && (
             <a className="nav-link" onClick={goToAdvisorlist}>Advisor List</a>
           )}
 
           {statusUser === "ADVISOR" && (
             <a className="nav-link" onClick={goToGuideList}>Guide List</a>
           )}
-          {statusUser === "GUIDE" &&(
-            <a href="/puantaj" className="nav-link" onClick={goToPuantajTable}>Puantaj Table</a>
-          )}
-          {statusUser === "ADVISOR" &&(
-            <a href="/puantaj" className="nav-link" onClick={goToPuantajTableGuide}>Puantaj Table</a>
-          )}
-          <a href="/logout" className="nav-link">Log Out</a>
+
+          <a className="nav-link" onClick={goToPuantajTable}>Puantaj Table</a>
+          <a className="nav-link" onClick={goToPuantajTableGuide}>Puantaj Table: Guides</a>
+          <a className="nav-link" onClick={handleLogout}>Log Out</a>
         </div>
 
         <div className="language-switcher">
@@ -81,5 +89,5 @@ return(
           />
         </div>
       </nav>
-);
+  );
 }

@@ -9,9 +9,13 @@ import api from "./api/axios_config";
 
 export default function UserHomeLayout() {
   const { bilkentId } = useParams();
-  const { state } = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
-  const { statusUser } = state;
+  console.log("Location in UserHome:", location);
+  
+  // Safely access state and provide fallback
+  const statusUser = location.state?.statusUser || 'GUIDE';
+  console.log("StatusUser in UserHome:", statusUser);
 
   const [advisors, setAdvisors] = useState([]); // Stores multiple advisors
   const [profile, setProfile] = useState({
@@ -48,14 +52,16 @@ export default function UserHomeLayout() {
           dayOfAdvisor: profileResponse.data.dayOfAdvisor,
         });
 
-        console.log(advisorsArray);
-        console.log(profileResponse.data);
+        console.log("Advisors:", advisorsArray);
+        console.log("Profile Response:", profileResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    fetchAdvisorAndProfile();
+    if (bilkentId) {
+      fetchAdvisorAndProfile();
+    }
   }, [bilkentId, statusUser]);
 
   const goToAvailability = (e) => {

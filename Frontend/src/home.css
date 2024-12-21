@@ -91,25 +91,49 @@
   flex: 1;
   font-size: 3rem;
   font-weight: bold;
-  margin-bottom: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   color: #1e5aa8;
-  text-align: left;
+  text-align: center;
+  align-items: center;
 }
 
 .tour-links {
   display: flex;
   flex: 2;
+  gap: 2rem;
+  align-items: center;
   justify-content: space-between; /* Space between the buttons */
   margin-bottom: 3rem;
 }
 
 .tour-link {
+  display: flex;
   padding: 1.5rem 2rem;
   background-color: #1e5aa8;
   color: white;
   text-decoration: none;
+  border-style: solid;
+  border-color: rgb(187, 187, 187);
   border-radius: 1.25rem;
   text-align: center;
+  align-items: center;
+  transition: background-color 0.3s;
+  width: 45%; /* Set width to 45% for each button to be more evenly spaced */
+}
+
+.tour-link-a {
+  display: flex;
+  padding: 2.2rem 2rem;
+  background-color: #1e5aa8;
+  color: white;
+  text-decoration: none;
+  border-style: solid;
+  border-color: rgb(187, 187, 187);
+  border-radius: 1.25rem;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
   transition: background-color 0.3s;
   width: 45%; /* Set width to 45% for each button to be more evenly spaced */
 }
@@ -119,11 +143,13 @@
 }
 
 .content-description {
-  flex: 3;
+  flex: 5;
   line-height: 1.75rem;
   font-size: 1.125rem;
   margin-bottom: 2rem;
-  text-align: left; /* Add spacing between content description and next section */
+  margin-left: 3%;
+  margin-right: 3%;
+  text-align: justify; /* Add spacing between content description and next section */
 }
 
 .visit-expectations h2 {
@@ -138,5 +164,4 @@
   flex: 5;
   font-size: 1.125rem;
   line-height: 1.75rem;
-  text-align: left;
 }

@@ -48,7 +48,6 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin-top: 2rem;
 }
 
 .nav-link {
@@ -93,6 +92,7 @@
   font-weight: bold;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  padding-top: 1rem;
   color: #1e5aa8;
   text-align: center;
   align-items: center;

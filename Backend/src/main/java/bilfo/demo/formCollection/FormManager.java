@@ -37,7 +37,7 @@ public class FormManager {
         String schoolName=formApplication.get("schoolName");
         String city=formApplication.get("city");
         String district=formApplication.get("district");
-
+        System.out.println(formApplication.get("counselorName"));
         Optional<Counselor> counselorOptional=counselorRepository.findCounselorByEmail(formApplication.get("email"));
         String counselorEmail;
         if(counselorOptional.isPresent())

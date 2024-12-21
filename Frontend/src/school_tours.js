@@ -17,9 +17,9 @@ export default function SchoolToursForm() {
         thirdTimeDate: '',
         thirdTimeHour: '',
         numberOfVisitors: '',
-        counsellorName: '',
-        counsellorPhone: '',
-        counsellorEmail: '',
+        counselorName: '',
+        counselorPhone: '',
+        counselorEmail: '',
         visitorNotes: '',
         termsAccepted: false,
         formErrors: {} // Store validation errors here
@@ -94,8 +94,8 @@ export default function SchoolToursForm() {
         const errors = {};
 
         // Email validation
-        if (!formData.counsellorEmail || !/\S+@\S+\.\S+/.test(formData.counsellorEmail)) {
-            errors.counsellorEmail = 'Please enter a valid email address.';
+        if (!formData.counselorEmail || !/\S+@\S+\.\S+/.test(formData.counselorEmail)) {
+            errors.counselorEmail = 'Please enter a valid email address.';
         }
 
         // Number of visitors validation
@@ -131,9 +131,9 @@ export default function SchoolToursForm() {
             date3: formData.thirdTimeDate,
             time3: formData.thirdTimeHour,
             visitorCount: formData.numberOfVisitors,
-            counselorName: formData.counsellorName,
-            phoneNo: formData.counsellorPhone,
-            email: formData.counsellorEmail,
+            counselorName: formData.counselorName,
+            phoneNo: formData.counselorPhone,
+            email: formData.counselorEmail,
             visitorNotes: formData.visitorNotes
         };
         try {
@@ -153,9 +153,9 @@ export default function SchoolToursForm() {
                     thirdTimeDate: '',
                     thirdTimeHour: '',
                     numberOfVisitors: '',
-                    counsellorName: '',
-                    counsellorPhone: '',
-                    counsellorEmail: '',
+                    counselorName: '',
+                    counselorPhone: '',
+                    counselorEmail: '',
                     visitorNotes: '',
                     termsAccepted: false,
                     formErrors: {}
@@ -368,8 +368,8 @@ export default function SchoolToursForm() {
                         Counsellor:
                         <input
                             type="text"
-                            name="counsellor"
-                            value={formData.counsellor}
+                            name="counselorName"
+                            value={formData.counselorName}
                             onChange={handleChange}
                             required
                         />
@@ -379,8 +379,8 @@ export default function SchoolToursForm() {
                         Counsellor's phone number:
                         <input
                             type="tel"
-                            name="counsellorPhone"
-                            value={formData.counsellorPhone}
+                            name="counselorPhone"
+                            value={formData.counselorPhone}
                             onChange={handleChange}
                             required
                         />
@@ -390,13 +390,13 @@ export default function SchoolToursForm() {
                         Counsellor's e-mail:
                         <input
                             type="email"
-                            name="counsellorEmail"
-                            value={formData.counsellorEmail}
+                            name="counselorEmail"
+                            value={formData.counselorEmail}
                             onChange={handleChange}
                             required
                         />
-                        {formData.formErrors.counsellorEmail && (
-                            <span className="error">{formData.formErrors.counsellorEmail}</span>
+                        {formData.formErrors.counselorEmail && (
+                            <span className="error">{formData.formErrors.counselorEmail}</span>
                         )}
                     </label>
 

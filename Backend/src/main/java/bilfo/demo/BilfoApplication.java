@@ -24,6 +24,7 @@ public class BilfoApplication {
 		long endTime = System.currentTimeMillis();
 		long duration = endTime - startTime;
 		System.out.println("Execution time: " + duration + " milliseconds");
+		System.out.println(Arrays.toString(SchoolManager.getInstance().getCityNames()));
 
 		SpringApplication.run(BilfoApplication.class, args);
 	}

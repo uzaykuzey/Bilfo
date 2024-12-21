@@ -55,9 +55,10 @@ public class SchoolManager {
         {
             return;
         }
+        Comparator<String> turkishComparator=new TurkishComparator();
         InputStream inputStream = getClass().getResourceAsStream(filePath);
         BufferedReader reader = null;
-        schools = new TreeMap<>();
+        schools = new TreeMap<>(turkishComparator);
         try
         {
             reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -73,11 +74,11 @@ public class SchoolManager {
 
                 if(!schools.containsKey(city))
                 {
-                    schools.put(city, new TreeMap<>());
+                    schools.put(city, new TreeMap<>(turkishComparator));
                 }
                 if(!schools.get(city).containsKey(district))
                 {
-                    schools.get(city).put(district, new TreeMap<>());
+                    schools.get(city).put(district, new TreeMap<>(turkishComparator));
                 }
                 schools.get(city).get(district).put(schoolName, Pair.of(admissionsToBilkent,admissionsTotal));
             }
@@ -102,4 +103,23 @@ public class SchoolManager {
         }
     }
 
+
+    /**
+     * A custom comparator class because java.text.Collator class was slow.
+     * Should only be used with capital turkish/english letters: ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ
+     */
+    private static class TurkishComparator implements Comparator<String> {
+
+        public static final String comprehensiveAlphabet = "ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ";
+        @Override
+        public int compare(String o1, String o2) {
+            int len = Math.min(o1.length(), o2.length());
+            for (int i = 0; i < len; i++) {
+                int index1 = comprehensiveAlphabet.indexOf(o1.charAt(i));
+                int index2 = comprehensiveAlphabet.indexOf(o2.charAt(i));
+                if (index1 != index2) return index1 - index2;
+            }
+            return o1.length() - o2.length();
+        }
+    }
 }

@@ -1,28 +1,70 @@
-import React, { useState } from 'react';
-import api from "./api/axios_config"
+import React, { useState, useEffect } from 'react';
+import api from "./api/axios_config.js";
 import './fair_application.css';
 
-export default function FairApplicationLayout() {
+export default function FairApplicationForm() {
+    const [cities, setCities] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [schoolsList, setSchoolsList] = useState([]);
     const [formData, setFormData] = useState({
-        organization: '',
+        schoolName: '',
+        city: '',
+        district: '',
         date: '',
         time: '',
-        city: '',
         contactInfo: '',
         termsAccepted: false,
         formErrors: {}
     });
 
     const timeOptions = ["9.00", "11.00", "13.00", "16.00"];
-    const cities = [
-        "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir",
-        "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır",
-        "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkâri", "Hatay",
-        "Isparta", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kilis", "Kocaeli", "Konya", "Kütahya", "Malatya",
-        "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya",
-        "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van",
-        "Yalova", "Yozgat", "Zonguldak", "Ardahan", "Bartın", "Bayburt"
-    ];
+
+    // Fetch cities on component mount
+    useEffect(() => {
+        const fetchCities = async () => {
+            try {
+                const response = await api.get("/school/cityNames");
+                setCities(response.data);
+            } catch (error) {
+                console.error("Failed to fetch cities:", error);
+            }
+        };
+        fetchCities();
+    }, []);
+
+    // Fetch districts when city changes
+    useEffect(() => {
+        const fetchDistricts = async () => {
+            if (formData.city) {
+                try {
+                    const response = await api.get(`/school/districtNames?city=${formData.city}`);
+                    setDistricts(response.data);
+                    // Reset district and school when city changes
+                    setFormData(prev => ({ ...prev, district: '', schoolName: '' }));
+                } catch (error) {
+                    console.error("Failed to fetch districts:", error);
+                }
+            }
+        };
+        fetchDistricts();
+    }, [formData.city]);
+
+    // Fetch schools when district changes
+    useEffect(() => {
+        const fetchSchools = async () => {
+            if (formData.city && formData.district) {
+                try {
+                    const response = await api.get(`/school/schoolNames?city=${formData.city}&district=${formData.district}`);
+                    setSchoolsList(response.data);
+                    // Reset school when district changes
+                    setFormData(prev => ({ ...prev, schoolName: '' }));
+                } catch (error) {
+                    console.error("Failed to fetch schools:", error);
+                }
+            }
+        };
+        fetchSchools();
+    }, [formData.district]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,10 +83,9 @@ export default function FairApplicationLayout() {
 
     const validateForm = () => {
         const errors = {};
-        if (!formData.organization) errors.organization = 'Please enter an organization.';
+        if (!formData.schoolName) errors.schoolName = 'Please select a school.';
         if (!formData.date) errors.date = 'Please select a date.';
         if (!formData.time) errors.time = 'Please select a time.';
-        if (!formData.city) errors.city = 'Please select a city.';
         if (!formData.contactInfo) errors.contactInfo = 'Please provide a contact email.';
         else if (!/\S+@\S+\.\S+/.test(formData.contactInfo)) errors.contactInfo = 'Please enter a valid email address.';
         if (!formData.termsAccepted) errors.termsAccepted = 'You must accept the terms and conditions.';
@@ -53,6 +94,7 @@ export default function FairApplicationLayout() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const errors = validateForm();
         if (Object.keys(errors).length > 0) {
             setFormData({
@@ -61,35 +103,38 @@ export default function FairApplicationLayout() {
             });
             return;
         }
+
         const fairFormData = {
-            schoolName: formData.organization,
+            schoolName: formData.schoolName,
+            city: formData.city,
+            district: formData.district,
             date: formData.date,
             time: formData.time,
-            city: formData.city,
-            contactMail: formData.contactInfo
+            contactInfo: formData.contactInfo
         };
-        try {
-            // Make the API call
-            const response = await api.post("/form/fairform", fairFormData);
 
-            // Handle the API response
+        try {
+            const response = await api.post("/form/fairform", fairFormData);
+            
             if (response.status === 200) {
+                // Reset form after successful submission
                 setFormData({
-                    organization: '',
+                    schoolName: '',
+                    city: '',
+                    district: '',
                     date: '',
                     time: '',
-                    city: '',
                     contactInfo: '',
                     termsAccepted: false,
                     formErrors: {}
                 });
-                alert("Form is sent!");
+                alert("Form submitted successfully!");
             } else {
-                alert("Failed to send!");
+                alert("Failed to submit form!");
             }
         } catch (error) {
-            console.log(error)
-            alert("Error occurred");
+            console.error("Error submitting form:", error);
+            alert("Error submitting form!");
         }
     };
 
@@ -139,16 +184,58 @@ export default function FairApplicationLayout() {
                 </div>
                 <form onSubmit={handleSubmit} className="fair-application-form">
                     <label>
-                        Organization:
-                        <input
-                            type="text"
-                            name="organization"
-                            value={formData.organization}
+                        City:
+                        <select
+                            name="city"
+                            value={formData.city}
                             onChange={handleChange}
                             required
-                        />
-                        {formData.formErrors.organization && (
-                            <span className="error">{formData.formErrors.organization}</span>
+                        >
+                            <option value="">Select City</option>
+                            {cities.map((city) => (
+                                <option key={city} value={city}>
+                                    {city}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <label>
+                        District:
+                        <select
+                            name="district"
+                            value={formData.district}
+                            onChange={handleChange}
+                            required
+                            disabled={!formData.city}
+                        >
+                            <option value="">Select District</option>
+                            {districts.map((district) => (
+                                <option key={district} value={district}>
+                                    {district}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <label>
+                        School Name:
+                        <select
+                            name="schoolName"
+                            value={formData.schoolName}
+                            onChange={handleChange}
+                            required
+                            disabled={!formData.district}
+                        >
+                            <option value="">Select School</option>
+                            {schoolsList.map((school) => (
+                                <option key={school} value={school}>
+                                    {school}
+                                </option>
+                            ))}
+                        </select>
+                        {formData.formErrors.schoolName && (
+                            <span className="error">{formData.formErrors.schoolName}</span>
                         )}
                     </label>
 
@@ -183,26 +270,6 @@ export default function FairApplicationLayout() {
                         </select>
                         {formData.formErrors.time && (
                             <span className="error">{formData.formErrors.time}</span>
-                        )}
-                    </label>
-
-                    <label>
-                        City:
-                        <select
-                            name="city"
-                            value={formData.city}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select City</option>
-                            {cities.map((city, index) => (
-                                <option key={index} value={city}>
-                                    {city}
-                                </option>
-                            ))}
-                        </select>
-                        {formData.formErrors.city && (
-                            <span className="error">{formData.formErrors.city}</span>
                         )}
                     </label>
 

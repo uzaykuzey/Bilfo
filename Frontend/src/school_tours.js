@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from "./api/axios_config.js"
 import './school_tours.css';
 
 export default function SchoolToursForm() {
+    const [cities, setCities] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [schoolsList, setSchoolsList] = useState([]);
     const [formData, setFormData] = useState({
         schoolName: '',
         city: '',
+        district: '',
         firstTimeDate: '',
         firstTimeHour: '',
         secondTimeDate: '',
@@ -22,16 +26,54 @@ export default function SchoolToursForm() {
     });
 
     const timeOptions = ["9.00", "11.00", "13.30", "16.00"];
-    const cities = [
-        "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir",
-        "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır",
-        "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkâri", "Hatay",
-        "Isparta", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kilis", "Kocaeli", "Konya", "Kütahya", "Malatya",
-        "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya",
-        "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van",
-        "Yalova", "Yozgat", "Zonguldak", "Ardahan", "Bartın", "Bayburt"
-    ];
     
+
+    // Fetch cities on component mount
+    useEffect(() => {
+        const fetchCities = async () => {
+            try {
+                const response = await api.get("/school/cityNames");
+                setCities(response.data);
+            } catch (error) {
+                console.error("Failed to fetch cities:", error);
+            }
+        };
+        fetchCities();
+    }, []);
+
+    // Fetch districts when city changes
+    useEffect(() => {
+        const fetchDistricts = async () => {
+            if (formData.city) {
+                try {
+                    const response = await api.get(`/school/districtNames?city=${formData.city}`);
+                    setDistricts(response.data);
+                    // Reset district and school when city changes
+                    setFormData(prev => ({ ...prev, district: '', schoolName: '' }));
+                } catch (error) {
+                    console.error("Failed to fetch districts:", error);
+                }
+            }
+        };
+        fetchDistricts();
+    }, [formData.city]);
+
+    // Fetch schools when district changes
+    useEffect(() => {
+        const fetchSchools = async () => {
+            if (formData.city && formData.district) {
+                try {
+                    const response = await api.get(`/school/schoolNames?city=${formData.city}&district=${formData.district}`);
+                    setSchoolsList(response.data);
+                    // Reset school when district changes
+                    setFormData(prev => ({ ...prev, schoolName: '' }));
+                } catch (error) {
+                    console.error("Failed to fetch schools:", error);
+                }
+            }
+        };
+        fetchSchools();
+    }, [formData.district]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -103,6 +145,7 @@ export default function SchoolToursForm() {
                 setFormData({
                     schoolName: '',
                     city: '',
+                    district: '',
                     firstTimeDate: '',
                     firstTimeHour: '',
                     secondTimeDate: '',
@@ -173,17 +216,6 @@ export default function SchoolToursForm() {
                 </div>
                 <form onSubmit={handleSubmit} className="tour-form">
                     <label>
-                        Name of the school:
-                        <input
-                            type="text"
-                            name="schoolName"
-                            value={formData.schoolName}
-                            onChange={handleChange}
-                            required
-                        />
-                    </label>
-
-                    <label>
                         City:
                         <select
                             name="city"
@@ -195,6 +227,42 @@ export default function SchoolToursForm() {
                             {cities.map((city) => (
                                 <option key={city} value={city}>
                                     {city}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <label>
+                        District:
+                        <select
+                            name="district"
+                            value={formData.district}
+                            onChange={handleChange}
+                            required
+                            disabled={!formData.city}
+                        >
+                            <option value="">Select District</option>
+                            {districts.map((district) => (
+                                <option key={district} value={district}>
+                                    {district}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <label>
+                        School Name:
+                        <select
+                            name="schoolName"
+                            value={formData.schoolName}
+                            onChange={handleChange}
+                            required
+                            disabled={!formData.district}
+                        >
+                            <option value="">Select School</option>
+                            {schoolsList.map((school) => (
+                                <option key={school} value={school}>
+                                    {school}
                                 </option>
                             ))}
                         </select>
@@ -341,7 +409,7 @@ export default function SchoolToursForm() {
                         />
                     </label>
 
-                    <div class = "checkbox-container">
+                    <div className="checkbox-container">
                         <input
                             type="checkbox"
                             name="termsAccepted"

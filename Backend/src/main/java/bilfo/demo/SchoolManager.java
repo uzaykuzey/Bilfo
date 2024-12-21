@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,10 +15,18 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/school")
+@CrossOrigin(origins = "*")
+
 public class SchoolManager {
     private static Map<String, Map<String, Map<String, Pair<Integer, Integer>>>> schools;
 
     private static SchoolManager instance;
+
+    private SchoolManager() {
+        if (schools == null) {
+            readSchoolFile("/highschools.txt");
+        }
+    }
 
     public static SchoolManager getInstance() {
         if (instance == null) {
@@ -33,7 +42,12 @@ public class SchoolManager {
     @GetMapping("/cityNames")
     public String[] getCityNames()
     {
-        return schools.keySet().toArray(new String[0]);
+        if (schools == null) {
+            readSchoolFile("/highschools.txt");
+        }
+        return schools.keySet().stream()
+            .filter(city -> city != null && !city.trim().isEmpty())
+            .toArray(String[]::new);
     }
 
     @GetMapping("/districtNames")
@@ -76,6 +90,10 @@ public class SchoolManager {
             String line;
             while ((line = reader.readLine()) != null)
             {
+                if (line.contains("UNKNOWN")) {
+                    continue;
+                }
+                
                 String[] tokens = line.split(";");
                 String schoolName = tokens[0].trim();
                 String city = tokens[1].trim();

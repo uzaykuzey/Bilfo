@@ -13,13 +13,10 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-}
+  }
 
-  
-  /* Advisor Section */
-  /* Advisor Section */
 .advisor-section {
-  background-color: #1e5aa8;
+  background-color: black;
   color: white;
   padding: 1rem;
   border-radius: 0.5rem;

@@ -84,7 +84,11 @@ export default function UserSettingsLayout() {
       <NavbarLayout/>
       {/* Main Content */}
       <div className="main-content">
-        <div className="profile-section">
+        <div className="editing-header">
+          <h2>Editing</h2>
+          <span className="edit-icon">✏️</span>
+        </div>
+        <div className="profile-section-s">
           <div className="profile-pic">
             <img src="/path/to/profile-picture.png" alt="User Profile" />
           </div>
@@ -92,12 +96,9 @@ export default function UserSettingsLayout() {
         </div>
 
         <div className="editing-section">
-          <div className="editing-header">
-            <h2>Editing</h2>
-            <span className="edit-icon">✏️</span>
-          </div>
+          
 
-          <div className="form-container">
+          <div className="form-container-settings">
             {/* Username */}
             <div className="form-group">
               <h3>Username</h3>

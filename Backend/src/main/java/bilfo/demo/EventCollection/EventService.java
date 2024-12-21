@@ -362,5 +362,9 @@ public class EventService {
 
         return true;
     }
+
+    public EventRepository getEventRepository() {
+        return eventRepository;
+    }
 }
 

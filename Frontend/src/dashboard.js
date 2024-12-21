@@ -6,7 +6,7 @@ import api from "./api/axios_config";
 import NavbarLayout from "./navbar";
 import { Bar, Pie } from 'react-chartjs-2';
 import {
-  Chart as ChartJS,
+  Chart,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -16,7 +16,8 @@ import {
   Legend
 } from 'chart.js';
 
-ChartJS.register(
+// Register Chart.js components
+Chart.register(
   CategoryScale,
   LinearScale,
   BarElement,
@@ -50,17 +51,34 @@ export default function DashboardLayout() {
     const fetchDashboardData = async () => {
       try {
         setIsLoading(true);
-        const response = await api.get("/getDashboardData");
+        console.log('Making request to:', '/dashboard/createDashboard');
+        
+        const response = await api.post('/dashboard/createDashboard', {});
+        console.log('Response:', response);
+        
         if (response.status === 200) {
-          setDashboardData(response.data);
+          // Transform the data to match the expected format
+          const transformedData = {
+            cityDistribution: Object.values(response.data.cityDistribution || {}),
+            weekDistribution: Object.values(response.data.weeklySchedule || {}),
+            categoryDistribution: Object.values(response.data.formDistribution || {}),
+            tourCounts: {
+              individual: response.data.tourStats?.completed || 0,
+              school: response.data.tourStats?.ongoing || 0,
+              cancelled: response.data.tourStats?.cancelled || 0,
+              total: response.data.tourStats?.total || 0
+            }
+          };
+          setDashboardData(transformedData);
         }
-      } catch (err) {
-        console.error("Error fetching dashboard data:", err);
-        setError("An error occurred while fetching dashboard data.");
+      } catch (error) {
+        console.error("Full error object:", error);
+        setError("Failed to load dashboard data");
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchDashboardData();
   }, []);
 
@@ -123,7 +141,6 @@ export default function DashboardLayout() {
                 <div className="no-data">No category data available</div>
               )}
             </div>
-
             <div className="chart-box">
               <h2>City Distribution</h2>
               {dashboardData.cityDistribution.some(val => val > 0) ? (
@@ -144,7 +161,6 @@ export default function DashboardLayout() {
                 <div className="no-data">No city data available</div>
               )}
             </div>
-
             <div className="chart-box">
               <h2>Week of the Day Distribution</h2>
               {dashboardData.weekDistribution.some(val => val > 0) ? (
@@ -153,7 +169,6 @@ export default function DashboardLayout() {
                 <div className="no-data">No weekly distribution data available</div>
               )}
             </div>
-
             <div className="stats-box">
               <div className="stat-item">
                 <h3>Individual Tours</h3>

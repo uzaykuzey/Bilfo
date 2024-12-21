@@ -16,5 +16,6 @@ public interface FormRepository extends MongoRepository<Form, ObjectId> {
     public Optional<Form> findFormById(ObjectId id);
     public List<Form> findAll();
 
-    List<Form> findAllByTypeAndApproved(EVENT_TYPES type, FORM_STATES approved);
+    List<Form> findAllByTypeAndApproved(EVENT_TYPES type, FORM_STATES approved);    
+    List<Form> findAllByType(FORM_STATES state);
 }

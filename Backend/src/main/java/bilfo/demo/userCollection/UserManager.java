@@ -6,6 +6,8 @@ import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import bilfo.demo.formCollection.Form;
 import bilfo.demo.mailSender.MailSenderManager;
+import bilfo.demo.security.jwt.JwtUtil;
+import bilfo.demo.security.dto.LoginResponse;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -29,6 +31,8 @@ public class UserManager {
     @Autowired
     @Lazy
     private MailSenderManager mailSenderManager;
+    @Autowired
+    private JwtUtil jwtUtil;
     @GetMapping
     public ResponseEntity<List<User>> allUsers(){
         return new ResponseEntity<List<User>>(userService.allUsers(),HttpStatus.OK);
@@ -72,17 +76,27 @@ public class UserManager {
 
 
     @PostMapping("/user/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> loginRequest) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
         int userId = Integer.parseInt(loginRequest.get("userId"));
         String password = loginRequest.get("password");
-        // Authenticate the user
-        Optional<User> user = userService.authenticate(userId, password);
-
-        if (user.isPresent()) {
-            // You can return a JWT token or any other response after successful login
-            return new ResponseEntity<String>(user.get().getStatus().toString(), HttpStatus.OK);
+        
+        Optional<User> userOpt = userService.authenticate(userId, password);
+        
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            String token = jwtUtil.generateToken(user);
+            
+            LoginResponse response = new LoginResponse(
+                token,
+                user.getBilkentId(),
+                user.getStatus(),
+                user.getUsername()
+            );
+            
+            return ResponseEntity.ok(response);
         } else {
-            return new ResponseEntity<String>("Invalid credentials", HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Invalid credentials");
         }
     }
 

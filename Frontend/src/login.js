@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import "./login.css";
 import { useNavigate } from "react-router-dom";
 import api from "./api/axios_config";
+import { useAuth } from './AuthContext';
 
 export default function LoginForm() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -20,16 +22,34 @@ export default function LoginForm() {
 
     try {
       const response = await api.post("/user/login", loginData);
-      console.log("Response received:", response);
-
+      console.log("Full Response:", response);
+      console.log("Response data:", response.data);
+      console.log("BilkentId:", response.data.bilkentId);
+      console.log("Status:", response.data.status);
+      
       if (response.status === 200) {
-        navigate(`/userHome/${userId}`, { state: { statusUser: response.data, zort: "zort" } });
+        await login(response.data.token);
+        
+        const bilkentId = response.data.bilkentId;
+        const status = response.data.status;
+        console.log("About to navigate with:", {
+          bilkentId,
+          status,
+          path: `/userHome/${bilkentId}`,
+          state: { statusUser: status }
+        });
+        
+        navigate(`/userHome/${bilkentId}`, { 
+          state: { statusUser: status },
+          replace: true
+        });
       } else {
-        alert(response.data.message || "Invalid credentials. Please try again.");
+        alert("Invalid credentials. Please try again.");
       }
     } catch (error) {
+      console.error("Login error:", error);
       if (error.response) {
-        alert(`Error: ${error.response.data.message || "An error occurred. Please try again later."}`);
+        alert(error.response.data || "An error occurred. Please try again later.");
       } else if (error.request) {
         alert("No response received from the server. Please check your network connection.");
       } else {

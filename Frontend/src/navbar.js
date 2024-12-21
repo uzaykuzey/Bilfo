@@ -71,10 +71,8 @@ export default function NavbarLayout(){
             <a className="nav-link" onClick={goToGuideList}>Guide List</a>
           )}
 
-          <a href="/logout" className="nav-link">Log Out</a>
-
           <a className="nav-link" onClick={goToPuantajTable}>Puantaj Table</a>
-          <a className="nav-link" onClick={goToPuantajTableGuide}>Puantaj Table</a>
+          <a className="nav-link" onClick={goToPuantajTableGuide}>Puantaj Table: Guides</a>
           <a className="nav-link" onClick={handleLogout}>Log Out</a>
         </div>
 

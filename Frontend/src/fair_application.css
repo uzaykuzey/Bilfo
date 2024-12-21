@@ -17,33 +17,42 @@
 
 .logo {
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
+  margin-top: 1rem;
   gap: 1rem;
-  padding-left: 1rem;
+  
 }
 
 .logo-image {
-  width: 180px;
-  height: 180px;
+  width: 95px;
+  height: 95px;
   border-radius: 50%;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .logo-text h1 {
   font-size: 1.5rem;
   font-weight: bold;
   text-align: left;
+  margin-bottom: 0;
+  margin-top: 0.9rem;
 }
 
 .logo-text p {
-  font-size: 1rem;
+  text-align: left;
+  font-size: 0.9rem;
 }
 
 .nav-links {
   display: flex;
   flex-direction: column;
+  margin-top: 2rem;
   gap: 1rem;
 }
 
@@ -71,16 +80,6 @@
 .language-icon {
   width: 40px;
   height: 32px;
-}
-
-/* Main Content Adjustments */
-.main-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Center vertically */
-  align-items: center; /* Center horizontally */
-  padding: 2rem;
-  width: 100%;
 }
 
 /* Form Container Styling */

@@ -117,7 +117,7 @@ export default function FeedbackLayout() {
         </div>
 
         {/* Textarea for Experiences */}
-        <div className="form-group">
+        <div className="form-group1">
           <label>Please tell us about your experiences:</label>
           <textarea
             rows="4"
@@ -128,7 +128,7 @@ export default function FeedbackLayout() {
         </div>
 
         {/* Textarea for Recommendations */}
-        <div className="form-group">
+        <div className="form-group1">
           <label>Any Recommendations?</label>
           <textarea
             rows="4"
@@ -139,7 +139,7 @@ export default function FeedbackLayout() {
         </div>
 
         {/* Input for Contact Email */}
-        <div className="form-group">
+        <div className="form-group2">
           <label>Enter Your Email:</label>
           <input
             type="email"
@@ -151,7 +151,7 @@ export default function FeedbackLayout() {
         </div>
 
         {/* Input for Email Code */}
-        <div className="form-group">
+        <div className="form-group2">
           <label>Enter the Code From Your Email:</label>
           <input
             type="text"

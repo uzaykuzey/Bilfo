@@ -1,23 +1,26 @@
-.home-layout {
+  .home-layout {
     display: flex;
     min-height: 100vh;
   }
   /* Overall Layout */
-.feedback-page {
+  .feedback-page {
     display: flex;
     height: 100vh;
     font-family: Arial, sans-serif;
     color: #333;
   }
- 
   
   /* Feedback Form */
   .feedback-form {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    max-width: 800px;
+    width: 100%;
     padding: 40px;
+    margin: 0 auto;
     background-color: #fafafa;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin: 40px;
     border-radius: 8px;
   }
   
@@ -30,7 +33,7 @@
   .rating-container {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 0.5rem;
   }
   
   .rating-container .label {
@@ -52,14 +55,31 @@
     color: gold;
   }
   
-  .form-group {
-    margin-bottom: 20px;
+  .form-group1 {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    gap: 0;
+  }
+
+  .form-group2 {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
   
-  .form-group label {
+  .form-group1 label {
     display: block;
-    margin-bottom: 10px;
     font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-group2 label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
   }
   
   textarea {
@@ -71,10 +91,10 @@
   }
   
   .input-code {
-    width: 200px;
+    max-width: none;
     padding: 8px;
     font-size: 14px;
-    text-align: center;
+    text-align: left;
     border: 1px solid #ddd;
     border-radius: 5px;
   }

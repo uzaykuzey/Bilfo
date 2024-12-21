@@ -248,15 +248,34 @@ public class LogService {
         {
             return result;
         }
+        User user = optionalUser.get();
 
         for(var pair: eventService.getEvents(EVENT_STATES.COMPLETED))
         {
             Event event = pair.getFirst();
-            if(event.getGuides().contains(bilkentId) || event.getTrainees().contains(bilkentId))
+            if(!userHasLogForThisEvent(user, event) && (event.getGuides().contains(bilkentId) || event.getTrainees().contains(bilkentId)))
             {
                 result.add(pair);
             }
         }
         return result;
+    }
+
+    private boolean userHasLogForThisEvent(User user, Event event)
+    {
+        for(ObjectId logId: user.getLogs())
+        {
+            Optional<Log> optionalLog=logRepository.findById(logId);
+            if(optionalLog.isEmpty())
+            {
+                continue;
+            }
+            Log log = optionalLog.get();
+            if(log.getEventId().equals(event.getId()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

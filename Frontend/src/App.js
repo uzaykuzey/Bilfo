@@ -111,7 +111,7 @@ function App() {
         <Route
          path="/userHome/:bilkentId/puantaj_guide"
          element={
-           <ProtectedRoute allowedRoles={['ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+           <ProtectedRoute allowedRoles={['GUIDE','ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
              <PuantajTableGuideLayout />
            </ProtectedRoute>
          }

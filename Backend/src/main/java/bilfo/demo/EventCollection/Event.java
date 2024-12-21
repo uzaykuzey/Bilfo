@@ -1,8 +1,10 @@
 package bilfo.demo.EventCollection;
 
+import bilfo.demo.ObjectIdSerializer;
 import bilfo.demo.enums.EVENT_STATES;
 import bilfo.demo.enums.EVENT_TYPES;
 import bilfo.demo.enums.TOUR_TIMES;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Event implements Comparable<Event> {
     @Id
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
     private ObjectId originalForm;
     private List<Integer> guides; //store bilkent ids

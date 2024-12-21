@@ -168,38 +168,33 @@ public class LogService {
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date endOfMonth = calendar.getTime();
         List<Triple<Log, Event, Form>> result=new ArrayList<>();
-
-        for(ObjectId id: user.getLogs())
-        {
-            Optional<Log> optionalLog=logRepository.findById(id);
-            if(optionalLog.isEmpty())
-            {
-                continue;
-            }
-            Log log = optionalLog.get();
-
-            Form form = null;
-            Event event=null;
-            if(requiresForms)
-            {
-                Optional<Event> optionalEvent=eventService.getEvent(log.getEventId());
-                if(optionalEvent.isEmpty())
-                {
+        if(user.getLogs() != null) {
+            for (ObjectId id : user.getLogs()) {
+                Optional<Log> optionalLog = logRepository.findById(id);
+                if (optionalLog.isEmpty()) {
                     continue;
                 }
-                event = optionalEvent.get();
+                Log log = optionalLog.get();
 
-                Optional<Form> optionalForm = formService.getForm(event.getOriginalForm());
-                if(optionalForm.isEmpty())
-                {
-                    continue;
+                Form form = null;
+                Event event = null;
+                if (requiresForms) {
+                    Optional<Event> optionalEvent = eventService.getEvent(log.getEventId());
+                    if (optionalEvent.isEmpty()) {
+                        continue;
+                    }
+                    event = optionalEvent.get();
+
+                    Optional<Form> optionalForm = formService.getForm(event.getOriginalForm());
+                    if (optionalForm.isEmpty()) {
+                        continue;
+                    }
+                    form = optionalForm.get();
                 }
-                form=optionalForm.get();
-            }
 
-            if(log.getDate().after(startOfMonth) && log.getDate().before(endOfMonth))
-            {
-                result.add(Triple.of(log, event, form));
+                if (log.getDate().after(startOfMonth) && log.getDate().before(endOfMonth)) {
+                    result.add(Triple.of(log, event, form));
+                }
             }
         }
         return result;

@@ -71,3 +71,100 @@
 .delete-btn:hover {
   background-color: #c82333;
 }
+.add-log-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.add-log-table th,
+.add-log-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.add-log-table th {
+  background-color: #f4f4f4;
+  color: #333;
+  font-weight: bold;
+}
+
+.add-log-table tr:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.add-log-table td {
+  color: #555;
+}
+
+.add-log-table tr.selected {
+  background-color: #cce5ff; /* Highlight selected row */
+}
+
+.add-log-table input[type="number"] {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.add-log-table button {
+  background-color: #4CAF50; /* Green */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.add-log-table button:hover {
+  background-color: #45a049;
+}
+
+.add-log-table .no-event-message {
+  color: #999;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.add-log-table td input {
+  margin-top: 10px;
+  width: 60px;
+  font-size: 14px;
+  padding: 5px;
+}
+
+.add-log-modal {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.add-log-modal h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.add-log-modal button {
+  background-color: #f44336; /* Red */
+  color: white;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.add-log-modal button:hover {
+  background-color: #e53935;
+}

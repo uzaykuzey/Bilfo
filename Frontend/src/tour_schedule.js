@@ -93,13 +93,13 @@
       
         
         const handleWorkHoursSubmit = async () => {
-          if (workHours.trim() && !isNaN(workHours)) {
+          if (!isNaN(workHours)) {
       
             const eventId = selectedEvent.split(".")[1]; 
             const requestData = {
               eventId: eventId,
               bilkentId: bilkentId,
-              hoursWorked: workHours, 
+              hours: workHours, 
             };
             
             console.log(requestData);

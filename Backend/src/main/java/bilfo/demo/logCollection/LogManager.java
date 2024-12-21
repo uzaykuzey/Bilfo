@@ -90,9 +90,12 @@ public class LogManager {
         return new ResponseEntity<>(logService.getLogs(bilkentId, monthDate, true), HttpStatus.OK);
     }
 
+
     @GetMapping("/getAllGuidesLogTable")
     public ResponseEntity<List<Pair<User, Double>>> getAllGuidesLogTable(@RequestParam String date) {
+        System.out.println(date);
         Date startDate= FormManager.stringToDate(date);
+        
         return new ResponseEntity<>(logService.getAllGuidesLogTable(startDate), HttpStatus.OK);
     }
 

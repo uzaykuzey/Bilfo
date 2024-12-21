@@ -4,12 +4,15 @@ import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
+@RestController
 @RequestMapping("/school")
 public class SchoolManager {
     private static Map<String, Map<String, Map<String, Pair<Integer, Integer>>>> schools;
@@ -47,7 +50,15 @@ public class SchoolManager {
 
     public Pair<Integer, Integer> getAdmissionStatistics(String city, String district, String school)
     {
-        return schools.get(city).get(district).get(school);
+        try
+        {
+            return schools.get(city).get(district).get(school);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return Pair.of(0, 0);
+        }
     }
 
     public void readSchoolFile(String filePath) {

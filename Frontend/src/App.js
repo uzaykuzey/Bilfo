@@ -1,5 +1,8 @@
 import './App.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { ProtectedRoute } from './ProtectedRoute';
+import { useAuth } from './AuthContext';
+
 import HomeLayout from './home';
 import LoginForm from './login';
 import UserHomeLayout from './userHome';
@@ -17,28 +20,111 @@ import PuantajLayout from './puantaj_table';
 import ForgotPasswordLayout from './forgot_password';
 import PuantajTableGuideLayout from './puantaj_table_guide';
 
-function  App() {
+function App() {
+  const { user } = useAuth();
+
   return (
     <div className="App">
       <Routes>
+        {/*Public Routes*/}
         <Route path="/" element={<HomeLayout />} />
-        <Route path="/school_tours" element={<SchoolToursLayout/>} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/school_tours" element={<SchoolToursLayout />} />
         <Route path="/individual_tours" element={<IndividualToursLayout/>} />
         <Route path="/fair_application" element={<FairApplicationLayout/>} />
         <Route path="/feedback" element={<FeedbackLayout/>} />
-        <Route path="/login" element={<LoginForm />} />
         <Route path="/forgot_password" element={<ForgotPasswordLayout/>} />
-        <Route path="/userHome/:bilkentId" element={<UserHomeLayout/>} />
-        <Route path="/userHome/:bilkentId/settings" element={<UserSettingsLayout/>} />
-        <Route path="/userHome/:bilkentId/guide_list" element={<GuideListLayout/>} />
-        <Route path="/userHome/:bilkentId/advisor_list" element={<AdvisorListLayout/>} />
-        <Route path="/userHome/:bilkentId/tour_fair_list" element={<TourListLayout/>} />
-        <Route path="/userHome/:bilkentId/availability" element={<AvailabilityLayout/>} />
-        <Route path="/userHome/:bilkentId/schedule" element={<ScheduleLayout/>} />
-        <Route path="/userHome/:bilkentId/puantaj" element={<PuantajLayout/>} />
-        <Route path="/userHome/:bilkentId/puantaj_guide" element={<PuantajTableGuideLayout/>} />
-        {/* Redirect unknown routes */}
-        <Route path="*" element={<Navigate to="/" />} />
+
+        {/* Protected routes */}
+       <Route
+         path="/userHome/:bilkentId"
+         element={
+           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+             <UserHomeLayout />
+           </ProtectedRoute>
+         }
+       />
+
+        <Route
+         path="/userHome/:bilkentId/settings"
+         element={
+           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+             <UserSettingsLayout />
+           </ProtectedRoute>
+         }
+       />
+
+        <Route
+         path="/userHome/:bilkentId/guide_list"
+         element={
+           <ProtectedRoute allowedRoles={['ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+             <GuideListLayout/>
+           </ProtectedRoute>
+         }
+       />
+
+        <Route
+         path="/userHome/:bilkentId/advisor_list"
+         element={
+           <ProtectedRoute allowedRoles={['COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+             <AdvisorListLayout />
+           </ProtectedRoute>
+         }
+       />
+
+        <Route
+         path="/userHome/:bilkentId/tour_fair_list"
+         element={
+           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+             <TourListLayout />
+           </ProtectedRoute>
+         }
+       />
+
+        <Route
+         path="/userHome/:bilkentId/availability"
+         element={
+           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+             <AvailabilityLayout />
+           </ProtectedRoute>
+         }
+       />
+
+        <Route
+         path="/userHome/:bilkentId/schedule"
+         element={
+           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+             <ScheduleLayout />
+           </ProtectedRoute>
+         }
+       />
+
+        <Route
+         path="/userHome/:bilkentId/puantaj"
+         element={
+           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+             <PuantajLayout />
+           </ProtectedRoute>
+         }
+       />
+
+        <Route
+         path="/userHome/:bilkentId/puantaj_guide"
+         element={
+           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+             <PuantajTableGuideLayout />
+           </ProtectedRoute>
+         }
+       />
+
+        {/* Catch-all route */}
+        <Route path="*" element={
+          user ? (
+            <Navigate to={`/userHome/${user.sub}`} replace state={{ statusUser: user.role }} />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        } />
       </Routes>
     </div>
   );

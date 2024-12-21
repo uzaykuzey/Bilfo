@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./navbar.css"
 import { useAuth } from "./AuthContext";
 
@@ -43,6 +43,11 @@ export default function NavbarLayout(){
     navigate('/', { replace: true });
   };
 
+  const handleDashboardClick = (e) => {
+    e.preventDefault();
+    navigate(`/userHome/${bilkentId}/dashboard`, { state: { statusUser}});
+  };
+
   return(
     <nav className="sidebar" >
         <div className="logo-container">
@@ -74,6 +79,8 @@ export default function NavbarLayout(){
           <a className="nav-link" onClick={goToPuantajTable}>Puantaj Table</a>
           <a className="nav-link" onClick={goToPuantajTableGuide}>Puantaj Table: Guides</a>
           <a className="nav-link" onClick={handleLogout}>Log Out</a>
+          <a className="nav-link" onClick={handleDashboardClick}>Dashboard</a>
+
         </div>
 
         <div className="language-switcher">

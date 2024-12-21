@@ -19,6 +19,7 @@ import FeedbackLayout from './feedback';
 import PuantajLayout from './puantaj_table';
 import ForgotPasswordLayout from './forgot_password';
 import PuantajTableGuideLayout from './puantaj_table_guide';
+import DashboardLayout from './dashboard';
 
 function App() {
   const { user } = useAuth();
@@ -34,6 +35,7 @@ function App() {
         <Route path="/fair_application" element={<FairApplicationLayout/>} />
         <Route path="/feedback" element={<FeedbackLayout/>} />
         <Route path="/forgot_password" element={<ForgotPasswordLayout/>} />
+        <Route path="/dashboard" element={<DashboardLayout />} />
 
         {/* Protected routes */}
        <Route
@@ -116,6 +118,16 @@ function App() {
            </ProtectedRoute>
          }
        />
+
+        <Route
+         path="/userHome/:bilkentId/dashboard"
+         element={
+           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+             <DashboardLayout />
+           </ProtectedRoute>
+         }
+       />
+
 
         {/* Catch-all route */}
         <Route path="*" element={

@@ -117,24 +117,6 @@ function App() {
          }
        />
 
-        <Route
-        path="/userHome/:bilkentId/dashboard"
-        element={
-         <ProtectedRoute allowedRoles={['ACTING_DIRECTOR', 'ADMIN']}>
-           <DashboardLayout />
-         </ProtectedRoute>
-        }
-        />
-
-     <Route
-      path="/userHome/:bilkentId/user_list"
-      element={
-        <ProtectedRoute allowedRoles={['ADMIN']}>
-          <UserListLayout />
-        </ProtectedRoute>
-      }
-    />
-
         {/* Catch-all route */}
         <Route path="*" element={
           user ? (

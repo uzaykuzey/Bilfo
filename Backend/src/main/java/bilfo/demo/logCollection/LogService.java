@@ -206,7 +206,7 @@ public class LogService {
         List<Pair<User, Double>> result=new ArrayList<>();
         for(User user: userService.allUsers())
         {
-            if(user.getStatus()== USER_STATUS.ACTING_DIRECTOR)
+            if(user.getStatus()== USER_STATUS.ACTING_DIRECTOR || user.getStatus() == USER_STATUS.COORDINATOR)
             {
                 continue;
             }

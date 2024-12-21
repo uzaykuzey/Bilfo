@@ -63,9 +63,9 @@ public class LogManager {
 
     @PostMapping("/markLogAsPaid")
     public ResponseEntity<String> markLogAsPaid(@RequestBody Map<String, String> markLogRequest) {
-        ObjectId eventId = new ObjectId(markLogRequest.get("eventId"));
+        ObjectId logId = new ObjectId(markLogRequest.get("logId"));
 
-        if(logService.markAsPaid(eventId)) {
+        if(logService.markAsPaid(logId)) {
             return new ResponseEntity<>("successfully marked log as paid", HttpStatus.OK);
         }
         return new ResponseEntity<>("failed to mark log as paid", HttpStatus.BAD_REQUEST);
@@ -95,7 +95,7 @@ public class LogManager {
     public ResponseEntity<List<Pair<User, Double>>> getAllGuidesLogTable(@RequestParam String date) {
         System.out.println(date);
         Date startDate= FormManager.stringToDate(date);
-        
+
         return new ResponseEntity<>(logService.getAllGuidesLogTable(startDate), HttpStatus.OK);
     }
 

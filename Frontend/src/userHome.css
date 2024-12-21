@@ -69,7 +69,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 2rem;
-  }
+}
   
   /* Enlarged Profile Card */
   .profile-card {
@@ -80,14 +80,14 @@
     width: 100%;
     text-align: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    margin-top: 6rem; /* Adjust space from the top */
+
 }
 
   
   /* Profile Header */
   .profile-header {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
     gap: 2rem;
     margin-bottom: 2rem;
     justify-content: center; /* Center the content */
@@ -103,19 +103,46 @@
   }
   
   .profile-header-details {
+    display: flex;
+    flex-direction: column;
     text-align: left;
   }
   
   .profile-header-details h2 {
+    flex: 2;
     font-size: 2rem; /* Larger name text */
     font-weight: bold;
     margin: 0;
   }
   
   .profile-header-details h3 {
+    flex: 2;
     font-size: 1.25rem;
     color: gray;
     margin: 0;
+    margin-bottom: 1rem;
+  }
+
+  .profile-header-details .action-button{
+    background-color: black;
+    height: 100%;
+    font-size: 1rem;
+  }
+
+  .profile-header-details .action-button:hover {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+
+  .profile-details {
+    border: 3px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+  }
+
+  .profile-details p{
+    text-align: left;
+    text-indent: 1rem;
   }
   
   /* Profile Actions */

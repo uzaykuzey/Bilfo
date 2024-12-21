@@ -74,6 +74,11 @@ export default function UserHomeLayout() {
     navigate(`/userHome/${bilkentId}/schedule`, { state: { statusUser } });
   };
 
+  const goToSettings = (e) => {
+    e.preventDefault();
+    navigate(`/userHome/${bilkentId}/settings`, { state: { statusUser } });
+  }
+
   return (
     <div className="home-layout">
       {<NavbarLayout />}
@@ -106,15 +111,13 @@ export default function UserHomeLayout() {
               <div className="profile-header-details">
                 <h2>
                   {profile.username}
-                  <Link
-                    to={`/userHome/${bilkentId}/settings`}
-                    state={statusUser}
-                    className="nav-link"
-                  >
-                    <i className="fas fa-user-circle"></i>
-                  </Link>
                 </h2>
                 <h3>{profile.role === "ADVISOR" ? "Advisor" : "Guide"}</h3>
+                <h4>
+                  <button className="action-button" onClick={goToSettings}>
+                    Edit Profile
+                  </button>
+                </h4>
               </div>
             </div>
 

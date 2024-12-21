@@ -111,11 +111,29 @@ function App() {
         <Route
          path="/userHome/:bilkentId/puantaj_guide"
          element={
-           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+           <ProtectedRoute allowedRoles={['ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
              <PuantajTableGuideLayout />
            </ProtectedRoute>
          }
        />
+
+        <Route
+        path="/userHome/:bilkentId/dashboard"
+        element={
+         <ProtectedRoute allowedRoles={['ACTING_DIRECTOR', 'ADMIN']}>
+           <DashboardLayout />
+         </ProtectedRoute>
+        }
+        />
+
+     <Route
+      path="/userHome/:bilkentId/user_list"
+      element={
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <UserListLayout />
+        </ProtectedRoute>
+      }
+    />
 
         {/* Catch-all route */}
         <Route path="*" element={

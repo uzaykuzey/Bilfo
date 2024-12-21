@@ -4,5 +4,6 @@ public enum USER_STATUS {
     GUIDE,
     ADVISOR,
     COORDINATOR,
-    ACTING_DIRECTOR
+    ACTING_DIRECTOR,
+    ADMIN
 }

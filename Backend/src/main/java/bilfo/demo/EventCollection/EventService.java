@@ -257,9 +257,9 @@ public class EventService {
 
         return switch (form.getType())
         {
-            case FAIR -> ((FairForm) form).getSchoolName() + " (Fair)";
-            case HIGHSCHOOL_TOUR -> ((HighSchoolTourForm) form).getSchoolName() + " (Tour)";
-            case INDIVIDUAL_TOUR -> "Individual Tour";
+            case FAIR -> ((FairForm) form).getSchoolName() + " (Fair)." + event.getId();
+            case HIGHSCHOOL_TOUR -> ((HighSchoolTourForm) form).getSchoolName() + " (Tour)." + event.getId();
+            case INDIVIDUAL_TOUR -> "Individual Tour." + event.getId();
         };
     }
 

@@ -74,6 +74,15 @@ public class LogService {
     public Optional<Log> addLog(int bilkentId, double hours, ObjectId eventId, boolean paid)
     {
         Optional<User> user = userService.getUser(bilkentId);
+        List<ObjectId> userLogs = user.get().getLogs();
+        for(int i = 0;i<userLogs.size();i++){
+            Optional<Log> log = logRepository.findLogById(userLogs.get(i));
+            if(log.isPresent()) {
+                if (log.get().getEventId().toString().equals(eventId.toString())) {
+                    return Optional.empty();
+                }
+            }
+        }
         if(user.isEmpty())
         {
             return Optional.empty();

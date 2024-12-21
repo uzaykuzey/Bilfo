@@ -3,14 +3,16 @@ import "./puantaj_table.css";
 import React, { useState, useEffect } from "react";
 import api from "./api/axios_config";
 import { useParams, useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom"; // Make sure you have a proper axios instance set up
+import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
+import Popup from "reactjs-popup"; // Import reactjs-popup
 
 export default function PuantajLayout() {
   const [logs, setLogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // For handling loading state
   const [error, setError] = useState("");
   const [currentMonth, setCurrentMonth] = useState(dayjs()); // Initialize with current date
+  const [logToDelete, setLogToDelete] = useState(null); // To store the log that will be deleted
   const { bilkentId } = useParams();
   const { state } = useLocation();
   const { statusUser } = state;
@@ -27,6 +29,7 @@ export default function PuantajLayout() {
             monthDate: currentMonth.format("YYYY-MM") + "-01", // Send the selected month to the API
           },
         });
+        console.log(response.data);
         if (response.status === 200) {
           setLogs(response.data);
         } else {
@@ -42,12 +45,20 @@ export default function PuantajLayout() {
     fetchLogs();
   }, [currentMonth]); // Re-fetch logs whenever currentMonth changes
 
-  const handleDelete = async (index) => {
+  const handleDelete = async () => {
     try {
-      const logToDelete = logs[index];
-      const response = await api.post("/deleteLog", { id: logToDelete.id }); // Replace with your delete API
+      const requestData = {
+        logId: logToDelete.first?.id,         // The ID of the log you want to delete
+        bilkentId: bilkentId,       // The Bilkent ID of the user
+      };
+
+      // Make the API call to delete the log
+      const response = await api.post("/log/deleteLog", requestData); // Replace with your delete API endpoint
       if (response.status === 200) {
-        setLogs((prevLogs) => prevLogs.filter((_, i) => i !== index));
+        // Remove the deleted log from the local state
+        setLogs((prevLogs) => prevLogs.filter((log) => log.first?.id !== logToDelete.first?.id));
+      } else {
+        setError("Failed to delete log. Please try again later.");
       }
     } catch (err) {
       console.error("Error deleting log:", err);
@@ -66,6 +77,10 @@ export default function PuantajLayout() {
 
   const handleNextMonth = () => {
     setCurrentMonth((prev) => prev.add(1, "month"));
+  };
+
+  const confirmDelete = (log) => {
+    setLogToDelete(log);  // Set the log to be deleted
   };
 
   return (
@@ -96,14 +111,20 @@ export default function PuantajLayout() {
               <tbody>
                 {logs.map((log, index) => (
                   <tr key={index}>
-                    <td>{log.name}</td>
-                    <td>{log.type}</td>
-                    <td>{log.date}</td>
-                    <td>{log.hour}</td>
+                    <td>{log.third?.schoolName}</td>
+                    <td>{log.third?.type}</td>
+                    <td>{log.second?.date 
+                      ? new Date(log.second.date).toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "2-digit",
+                        })
+                      : ""}</td>
+                    <td>{log.first?.hours}</td>
                     <td>
                       <button
                         className="delete-btn"
-                        onClick={() => handleDelete(index)}
+                        onClick={() => confirmDelete(log)} // Show confirmation modal
                       >
                         Delete
                       </button>
@@ -120,6 +141,22 @@ export default function PuantajLayout() {
           </button>
         </div>
       </div>
+
+      {/* Confirmation Modal using react-popup */}
+      <Popup
+        open={logToDelete !== null} // Check if a log is selected for deletion
+        onClose={() => setLogToDelete(null)} // Close modal when canceled
+        modal
+        nested
+      >
+        <div className="delete-modal">
+          <h2>Are you sure you want to delete this log?</h2>
+          <div className="delete-modal-actions">
+            <button onClick={handleDelete}>Confirm</button>
+            <button onClick={() => setLogToDelete(null)}>Cancel</button>
+          </div>
+        </div>
+      </Popup>
     </div>
   );
 }

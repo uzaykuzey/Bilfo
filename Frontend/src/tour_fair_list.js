@@ -19,7 +19,7 @@ export default function TourListLayout() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [claimPopupOpen, setClaimPopupOpen] = useState(false);
   const [selectedClaimTour, setSelectedClaimTour] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true); // Loading state
   const [selectedStatus, setSelectedStatus] = useState("Pending");
   const [selectedType, setSelectedType] = useState("HIGHSCHOOL_TOUR");
 
@@ -343,7 +343,7 @@ export default function TourListLayout() {
         );
       } else {
         return(
-          <button className="details-button" onClick={() => openPopup(tour)}>Details</button>
+          <button className="details-button">Details</button>
         );  
       }
     };

@@ -20,7 +20,7 @@ export default function TourListLayout() {
   const [claimPopupOpen, setClaimPopupOpen] = useState(false);
   const [selectedClaimTour, setSelectedClaimTour] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // Loading state
-  const [selectedStatus, setSelectedStatus] = useState("Pending");
+  const [selectedStatus, setSelectedStatus] = useState();
   const [selectedType, setSelectedType] = useState("HIGHSCHOOL_TOUR");
 
   // Set initial state based on the user role
@@ -31,6 +31,7 @@ export default function TourListLayout() {
       setSelectedStatus("Pending");
     }
   }, [statusUser]);
+
 
   const handleDateChange = (e, index) => {
     setSelectedDate(index);
@@ -296,33 +297,40 @@ export default function TourListLayout() {
     const fetchTours = async () => {
       try {
         let tours;
-        if(selectedStatus == "Pending"){
-          const response = await api.get("/form/getForms", { params: { type: selectedType, state: "NOT_REVIEWED" } });
+        if (statusUser === "GUIDE" && selectedStatus === "Accepted") {
+          // Fetch only "Accepted" tours for guides on initial load
+          const response = await api.get("/event/getEvents", {
+            params: { type: selectedType, state: "ONGOING" },
+          });
           tours = response.data;
           setFilteredTours(tours);
-        }else if(selectedStatus == "Accepted"){
-          const response = await api.get("/event/getEvents", { params: { type: selectedType, state: "ONGOING" } });
-          console.log(response.data);
+        } else if (selectedStatus === "Pending") {
+          const response = await api.get("/form/getForms", {
+            params: { type: selectedType, state: "NOT_REVIEWED" },
+          });
           tours = response.data;
           setFilteredTours(tours);
-        }else{
-          const response = await api.get("/form/getForms", { params: { type: selectedType, state: "REJECTED" } });
+        } else if (selectedStatus === "Rejected") {
+          const response = await api.get("/form/getForms", {
+            params: { type: selectedType, state: "REJECTED" },
+          });
           tours = response.data;
           setFilteredTours(tours);
         }
         console.log(selectedStatus);
         console.log(selectedType);
         console.log(tours);
-        setFilteredTours(tours);
       } catch (error) {
         console.error("Error fetching filtered tours:", error);
       }
     };
-
+  
     fetchTours();
   }, [selectedStatus, selectedType, statusUser]);
+  
 
   const renderTable = () => {
+    
     if (!filteredTours || filteredTours.length === 0) {
       return <p>No data available for the selected type.</p>;
     }
@@ -363,6 +371,7 @@ export default function TourListLayout() {
     };
   
     const renderRowData = (tour) => {
+
       switch (selectedType) {
         case "HIGHSCHOOL_TOUR":
           if(selectedStatus != "Accepted"){

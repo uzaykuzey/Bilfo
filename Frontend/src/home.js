@@ -48,7 +48,6 @@ export default function HomeLayout() {
         <div className="tour-links">
           <a href="/school_tours" className="tour-link">School Tour Application</a>
           <a href="/individual_tours" className="tour-link">Individual Tour Application</a>
-          <a href="/fair_application" className="tour-link-a">Fair Application</a>
         </div>
 
         {/* Content Description */}

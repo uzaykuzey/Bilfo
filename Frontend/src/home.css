@@ -57,7 +57,7 @@
   color: white;
   text-decoration: none;
   border-radius: 2rem;
-  text-align: center;
+  text-align: left;
   transition: background-color 0.3s;
   border: 1px solid white;
 }
@@ -101,7 +101,7 @@
 .tour-links {
   display: flex;
   flex: 2;
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
   justify-content: space-between; /* Space between the buttons */
   margin-bottom: 3rem;
@@ -117,22 +117,6 @@
   border-color: rgb(187, 187, 187);
   border-radius: 1.25rem;
   text-align: center;
-  align-items: center;
-  transition: background-color 0.3s;
-  width: 45%; /* Set width to 45% for each button to be more evenly spaced */
-}
-
-.tour-link-a {
-  display: flex;
-  padding: 2.2rem 2rem;
-  background-color: #1e5aa8;
-  color: white;
-  text-decoration: none;
-  border-style: solid;
-  border-color: rgb(187, 187, 187);
-  border-radius: 1.25rem;
-  text-align: center;
-  justify-content: center;
   align-items: center;
   transition: background-color 0.3s;
   width: 45%; /* Set width to 45% for each button to be more evenly spaced */

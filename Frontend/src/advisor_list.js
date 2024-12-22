@@ -146,12 +146,12 @@ export default function AdvisorListLayout() {
   return (
     <div className="home-layout">
       <NavbarLayout />
-      <div className="content">
-        <h2>Advisor List</h2>
-        <div className="advisor-list">
-          <button className="add-advisor-btn" onClick={() => setIsAddPopupOpen(true)}>
+      <div className="content-alist">
+        <h2 id = "advisor-list-header">Advisor List</h2>
+        <button className="add-advisor-btn" onClick={() => setIsAddPopupOpen(true)}>
             Add Advisor
           </button>
+        <div className="advisor-list">
 
           <table className="advisor-table">
             <thead>

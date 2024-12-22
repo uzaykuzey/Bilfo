@@ -34,7 +34,7 @@
 .nav-links {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .nav-link {
@@ -44,6 +44,7 @@
   border-radius: 1rem;
   text-align: left;
   transition: background-color 0.3s;
+  cursor: pointer;
 }
 
 .nav-link-logout {
@@ -54,9 +55,8 @@
   text-align: left;
   transition: background-color 0.3s;
   margin-top: 2rem;
+  cursor: pointer;
 }
-
-
 
 .language-switcher {
   margin-top: auto;

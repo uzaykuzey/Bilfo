@@ -123,7 +123,7 @@ export default function PuantajLayout() {
   return (
     <div className="home-layout">
       <NavbarLayout />
-      <div className="content">
+      <div className="main-content-puantaj">
         <h1>My Logs</h1>
         <div className="month-navigation">
           <button onClick={handlePreviousMonth} className="month-btn">◀ Previous</button>
@@ -131,7 +131,7 @@ export default function PuantajLayout() {
           <button onClick={handleNextMonth} className="month-btn">Next ▶</button>
         </div>
         {error && <p className="error-message">{error}</p>}
-        <div className="log-table-container">
+        <div className="log-table-container-normal">
           {isLoading ? (
             <p>Loading logs...</p>
           ) : logs.length > 0 ? (

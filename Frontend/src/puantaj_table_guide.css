@@ -60,7 +60,6 @@ h1 {
   width: 100%;
   max-width: 800px;
   border-collapse: collapse;
-  margin-top: 20px;
   border-radius: 8px; /* Rounded corners for a softer look */
   overflow: hidden; /* Clip overflow content for rounded corners */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow for depth */

@@ -5,6 +5,9 @@ import bilfo.demo.EventCollection.Event;
 import bilfo.demo.EventCollection.EventService;
 import bilfo.demo.enums.*;
 import bilfo.demo.mailSender.MailSenderService;
+import bilfo.demo.passwordCollection.eventPasswordCollection.FormPassword;
+import bilfo.demo.passwordCollection.eventPasswordCollection.FormPasswordService;
+import bilfo.demo.userCollection.UserManager;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +28,12 @@ public class FormService {
     @Autowired
     private FormRepository formRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    @Lazy
+    FormPasswordService formPasswordService;
     @Autowired
     @Lazy
     private EventService eventService;
@@ -58,11 +68,13 @@ public class FormService {
             case HIGHSCHOOL_TOUR -> form = new HighSchoolTourForm(new ObjectId(), approved, possibleDates, contactMail, visitorCount, visitorNotes, schoolName, counselorEmail, city, district);
             default -> throw new IllegalArgumentException("Unknown EVENT_TYPE: " + type);
         }
-
+        String password = UserManager.generatePassword(16);
+        FormPassword formPassword = new FormPassword(new ObjectId(), form.getId(), form.getContactMail(), passwordEncoder.encode(password));
+        mailSenderService.sendEmail(form.getContactMail(), "Bilkent Form Application", "Your event has been completed, you can give your feedback by using code:\n"+password);
         // Save the Form in the database
         Form savedForm = formRepository.save(form);
         logger.info("Form created successfully.");
-
+        formPasswordService.saveFormPassword(formPassword);
         return Optional.of(savedForm);
     }
 

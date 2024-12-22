@@ -6,8 +6,8 @@ import bilfo.demo.Triple;
 import bilfo.demo.enums.*;
 import bilfo.demo.formCollection.*;
 import bilfo.demo.mailSender.MailSenderService;
-import bilfo.demo.passwordCollection.eventPasswordCollection.EventPassword;
-import bilfo.demo.passwordCollection.eventPasswordCollection.EventPasswordService;
+import bilfo.demo.passwordCollection.eventPasswordCollection.FormPassword;
+import bilfo.demo.passwordCollection.eventPasswordCollection.FormPasswordService;
 import bilfo.demo.userCollection.User;
 import bilfo.demo.userCollection.UserManager;
 import bilfo.demo.userCollection.UserRepository;
@@ -20,6 +20,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -39,8 +41,12 @@ public class EventService {
 
     @Autowired
     private EventRepository eventRepository;
+
     @Autowired
-    private EventPasswordService eventPasswordService;
+    @Lazy
+    private FormRepository formRepository;
+    @Autowired
+    private FormPasswordService formPasswordService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -156,13 +162,22 @@ public class EventService {
 
     public boolean sendFeedback(String email, String password, int rating, String experience, String recommendations)
     {
-        List<EventPassword> eventPasswords = eventPasswordService.getEventPasswordsByContactMail(email);
+        List<FormPassword> formPasswords = formPasswordService.getFormPasswordsByContactMail(email);
 
-        for(EventPassword eventPassword:eventPasswords)
+        for(FormPassword formPassword:formPasswords)
         {
-            if(passwordEncoder.matches(password, eventPassword.getHashedPassword()))
+            if(passwordEncoder.matches(password, formPassword.getHashedPassword()))
             {
-                Optional<Event> event = eventRepository.findById(eventPassword.getEventId());
+                Optional<Form> form = formRepository.findById(formPassword.getFormId());
+                List<Event> events = eventRepository.findAll();
+                Optional<Event> event = Optional.empty();
+                for(Event eventCurr : events){
+                 if(eventCurr.getOriginalForm().equals(form.get().getId())){
+                     event = Optional.of(eventCurr);
+                     break;
+                 }
+                }
+
                 if(event.isEmpty())
                 {
                     continue;
@@ -174,13 +189,60 @@ public class EventService {
                 }
                 event.get().setFeedback(feedback.get().getId());
                 eventRepository.save(event.get());
-                eventPasswordService.deleteEventPassword(eventPassword);
+                formPasswordService.deleteFormPassword(formPassword);
                 return true;
             }
         }
         return false;
     }
 
+    public boolean eventDateIsOkay(String email ,String password){
+        List<FormPassword> formPasswords = formPasswordService.getFormPasswordsByContactMail(email);
+        for(FormPassword formPassword:formPasswords){
+            if(passwordEncoder.matches(password, formPassword.getHashedPassword())){
+                Optional<Form> form = formRepository.findById(formPassword.getFormId());
+                List<Event> events = eventRepository.findAll();
+                Optional<Event> event = Optional.empty();
+                for(Event eventCurr : events){
+                    if(eventCurr.getOriginalForm().equals(form.get().getId())){
+                        event = Optional.of(eventCurr);
+                        break;
+                    }
+                }
+
+                if(event.isEmpty())
+                {
+                    continue;
+                }
+                Date legacyDate = event.get().getDate();
+                LocalDate date = legacyDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                TOUR_TIMES times = event.get().getTime();
+                LocalTime time = LocalTime.of(1,0);
+                switch (times) {
+                    case NINE_AM:
+                        time = LocalTime.of(9, 0);
+                        break;
+                    case ELEVEN_AM:
+                        time = LocalTime.of(11, 0);
+                        break;
+                    case ONE_THIRTY_PM:
+                        time = LocalTime.of(13, 30);
+                        break;
+                    case FOUR_PM:
+                        time = LocalTime.of(16, 0);
+                        break;
+                }
+                LocalDateTime eventDateTime = LocalDateTime.of(date, time);
+
+                // Get the current date and time
+                LocalDateTime now = LocalDateTime.now();
+
+                return eventDateTime.isBefore(now);
+            }
+
+        }
+        return true;
+    }
     public Optional<Feedback> getFeedback(ObjectId eventId) {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
         if(optionalEvent.isEmpty())
@@ -203,12 +265,7 @@ public class EventService {
                 if(optionalForm.isEmpty()) {
                     continue;
                 }
-                Form form = optionalForm.get();
-                String password = UserManager.generatePassword(16);
-                EventPassword eventPassword = new EventPassword(new ObjectId(), event.getId(), form.getContactMail(), passwordEncoder.encode(password));
-                mailSenderService.sendEmail(form.getContactMail(), "Bilkent Event Feedback", "Your event has been completed, you can give your feedback by using code:\n"+password);
                 eventRepository.save(event);
-                eventPasswordService.saveEventPassword(eventPassword);
             }
         }
     }

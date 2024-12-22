@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @RestController
 @Repository
-public interface EventPasswordRepository extends MongoRepository<EventPassword, ObjectId> {
-    public Optional<EventPassword> findByEventId(ObjectId eventId);
-    public void removeById(ObjectId eventId);
-    public List<EventPassword> findByContactMail(String contactMail);
+public interface FormPasswordRepository extends MongoRepository<FormPassword, ObjectId> {
+    public Optional<FormPassword> findByFormId(ObjectId formId);
+    public void removeById(ObjectId formId);
+    public List<FormPassword> findByContactMail(String contactMail);
 }

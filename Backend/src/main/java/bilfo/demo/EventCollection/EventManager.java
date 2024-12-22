@@ -63,6 +63,9 @@ public class EventManager {
         int rating = Integer.parseInt(eventFeedbackRequest.get("rating"));
         String experience = eventFeedbackRequest.get("experience");
         String recommendation = eventFeedbackRequest.get("recommendation");
+        if(!eventService.eventDateIsOkay(contactMail,password)){
+            return new ResponseEntity<>("The event has not been completed!!!",HttpStatus.BAD_REQUEST);
+        }
         if(eventService.sendFeedback(contactMail, password, rating, experience, recommendation))
         {
             return new ResponseEntity<>("Feedback sent", HttpStatus.OK);

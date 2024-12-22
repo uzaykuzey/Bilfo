@@ -9,14 +9,14 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document(collection = "event_passwords")
+@Document(collection = "form_passwords")
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventPassword {
+public class FormPassword {
     @Id
     ObjectId id;
     @Indexed(unique = true)
-    private ObjectId eventId;
+    private ObjectId formId;
     private String contactMail;
     private String hashedPassword;
 }

@@ -215,7 +215,7 @@ export default function TourListLayout() {
   
         <h3>Evaluate Tour</h3>
         <p><strong>Tour Name:</strong> {selectedTour.name}</p>
-        <p><strong>Location:</strong> {selectedTour.location}</p>
+        <p><strong>City:</strong> {selectedTour.city}</p>
         <p><strong>Date:</strong> {formattedDate}</p>
   
         <div className="possible-times">
@@ -364,7 +364,7 @@ export default function TourListLayout() {
         case "INDIVIDUAL_TOUR":
           return ["Names", "Department", "Date", "Day", "Time", "Visitor Count", "Actions"];
         case "FAIR":
-          return ["School Name", "Location", "Date", "Day", "Time", "Actions"];
+          return ["School Name", "City", "Date", "Day", "Time", "Actions"];
         default:
           return [];
       }
@@ -384,7 +384,7 @@ export default function TourListLayout() {
             return (
               <>
                 <td>{tour.schoolName}</td>
-                <td>{tour.location}</td>
+                <td>{tour.city}</td>
                 <td>{formattedDate}</td>
                 <td>{day}</td>
                 <td>{formattedTime}</td>
@@ -402,7 +402,7 @@ export default function TourListLayout() {
             return (
               <>
                 <td>{tour.second?.schoolName}</td>
-                <td>{tour.second?.location}</td>
+                <td>{tour.second?.city}</td>
                 <td>{formattedDate}</td>
                 <td>{day}</td>
                 <td>{formattedTime}</td>
@@ -460,7 +460,7 @@ export default function TourListLayout() {
             return (
               <>
                 <td>{tour.schoolName}</td>
-                <td>{tour.location}</td>
+                <td>{tour.city}</td>
                 <td>{formattedDate}</td>
                 <td>{day}</td>
                 <td>{formattedTime}</td>
@@ -477,7 +477,7 @@ export default function TourListLayout() {
             return (
               <>
                 <td>{tour.second?.schoolName}</td>
-                <td>{tour.second?.location}</td>
+                <td>{tour.second?.city}</td>
                 <td>{formattedDate}</td>
                 <td>{day}</td>
                 <td>{formattedTime}</td>

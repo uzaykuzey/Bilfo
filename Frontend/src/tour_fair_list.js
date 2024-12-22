@@ -23,9 +23,15 @@ export default function TourListLayout() {
   const [selectedStatus, setSelectedStatus] = useState();
   const [selectedType, setSelectedType] = useState("HIGHSCHOOL_TOUR");
   const [assignPopupOpen, setAssignPopupOpen] = useState(false);
+  const [detailsPopupOpen, setDetailsPopupOpen] = useState(false);
   const [selectedAssignTour, setSelectedAssignTour] = useState(null);
+  const [selectedDetailsTour, setSelectedDetailsTour] = useState(null);
   const [availableGuides, setAvailableGuides] = useState([]);
-  const [isLoadingGuides, setIsLoadingGuides] = useState(false); 
+  const [detailsGuides, setDetailsGuides] = useState([]);
+  const [detailsTrainee, setDetailsTrainee] = useState([]);
+  const [detailSuggested, setDetailsSuggested] = useState([]);
+  const [isLoadingGuides, setIsLoadingGuides] = useState(false);
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);  
   const [guideId,setGuideId] = useState(null);// For loading state
 
 
@@ -174,6 +180,7 @@ export default function TourListLayout() {
       setAssignPopupOpen(true); // Show the popup after fetching guides
     }
   };
+
   
   
   const closeAssignPopup = () => {
@@ -181,7 +188,31 @@ export default function TourListLayout() {
     setGuideId("");
     setAssignPopupOpen(false);
   };
-  
+
+  const openDetailsPopup = async (tour) => {
+    setSelectedDetailsTour(tour);
+    setIsLoadingDetails(true); // Show a loading state
+    try{
+        const response = await api.get("/event/getGuidesOfEvent", {params: {eventId: tour.first?.id}});
+
+        console.log(response.data);
+        setDetailsGuides(response.data.first);
+        setDetailsTrainee(response.data.second);
+        setDetailsSuggested(response.data.third);
+        
+    }catch (error){
+      console.error("Error fetching guides:", error);
+      alert("An error occurred while fetching guides.");
+    }finally{
+      setIsLoadingDetails(false);
+      setDetailsPopupOpen(true); // Show the popup after fetching guides
+    }
+  };  
+
+  const closeDetailsPopup = () => {
+    setSelectedDetailsTour(null);
+    setDetailsPopupOpen(false);
+  }
   const confirmAssignGuide = async (guideId) => {
     try {
       const response = await api.post("/event/offerEvent", {
@@ -255,8 +286,56 @@ export default function TourListLayout() {
     );
   };
   
+  const renderDetailsPopupContent = () => {
+    if (!selectedDetailsTour) return null; // Ensure a tour is selected
+    console.log(selectedDetailsTour);
+    // Format the tour date
+    const formattedDate = new Date(selectedDetailsTour.date).toLocaleDateString("en-US");
   
+    return (
+      <div className="popup-overlay">
+        <div className="popup-content">
+          {/* Close Icon */}
+          <div className="popup-close-icon" onClick={closeDetailsPopup}>
+            ×
+          </div>
+          <h3>Tour Details</h3>
+          {selectedDetailsTour.second.type === "HIGHSCHOOL_TOUR" && (
+           <p><strong>Counselor Mail: </strong>{selectedDetailsTour.second?.contactMail}</p>
+          )}
+          {selectedDetailsTour.second.type === "INDIVIDUAL_TOUR" && (
+           <p><strong>Contact Mail: </strong>{selectedDetailsTour.second?.contactMail}</p>
+          )}
+          <h4>Guides</h4>
+          <ul>
+            {detailsGuides.map((guide, index) => (
+              <li key={index}>ID: {guide.bilkentId} Name: {guide.username}</li>
+            ))}
+          </ul>
+          
+          {/* Details Trainee */}
+          <h4>Trainees</h4>
+          <ul>
+            {detailsTrainee.map((trainee, index) => (
+              <li key={index}>ID: {trainee.bilkentId} Name: {trainee.username}</li>
+            ))}
+          </ul>
+          
+          {/* Details Suggested */}
+          <h4>Suggested Guides</h4>
+          <ul>
+            {detailSuggested.map((suggestion, index) => (
+              <li key={index}>ID: {suggestion.bilkentId} Name: {suggestion.username}</li>
+            ))}
+          </ul>
+          
+          
   
+         
+        </div>
+      </div>
+    );
+  };
   
 
   const cancelTour = async (tour) => {
@@ -344,9 +423,28 @@ export default function TourListLayout() {
         </div>
   
         <h3>Evaluate Tour</h3>
-        <p><strong>Tour Name:</strong> {selectedTour.name}</p>
-        <p><strong>City:</strong> {selectedTour.city}</p>
-        <p><strong>Date:</strong> {formattedDate}</p>
+        {selectedTour.type === "HIGHSCHOOL_TOUR" && (
+          <div>
+            <p><strong>Tour Name:</strong> {selectedTour.name}</p>
+            <p><strong>City:</strong> {selectedTour.city}</p>
+            <p><strong>Date:</strong> {formattedDate}</p>
+          </div>
+        )}
+        {/* Additional details for INDIVIDUAL_TOUR */}
+        {selectedTour.type === "INDIVIDUAL_TOUR" && (
+          <div className="individual-tour-details">
+            <h4>Visitor Information</h4>
+            <p><strong>Number of Visitors:</strong> {selectedTour.visitorCount}</p>
+            <strong>Names:</strong>
+            <ul>
+              {selectedTour.names.map((visitor, index) => (
+                <li key={index}>{visitor}</li>
+              ))}
+            </ul>
+            <p><strong>Department</strong> {selectedTour.department}</p>
+            <p><strong>Contact Mail:</strong> {selectedTour.contactMail}</p>
+          </div>
+        )}
   
         <div className="possible-times">
           <h4>Select Time:</h4>
@@ -407,10 +505,6 @@ export default function TourListLayout() {
       </div>
     );
   };
-  
-
-  
-  
 
   const renderClaimPopupContent = () => {
     return (
@@ -472,7 +566,7 @@ export default function TourListLayout() {
             <button className="assign-button" onClick={() => openAssignPopup(tour)}>Assign Guide</button>
             <button className="claim-button" onClick={() => claimTour(tour)}>Claim</button>
             <button className="cancel-button" onClick={() => cancelTour(tour)}>Cancel</button>
-            <button className="details-button" onClick={() => openPopup(tour)}>Details</button>
+            <button className="details-button" onClick={() => openDetailsPopup(tour)}>Details</button>
           </>
         );
       } else if (selectedStatus === "Pending"){
@@ -683,6 +777,9 @@ export default function TourListLayout() {
       </Popup>
       <Popup open={assignPopupOpen} onClose={closeAssignPopup} modal>
         {renderAssignPopupContent()}
+      </Popup>
+      <Popup open={detailsPopupOpen} onClose={closeDetailsPopup} modal>
+        {renderDetailsPopupContent()}
       </Popup>
     </div>
   );

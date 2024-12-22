@@ -2,6 +2,7 @@ package bilfo.demo.EventCollection;
 
 import bilfo.demo.EventCollection.feedbackCollection.Feedback;
 import bilfo.demo.EventCollection.feedbackCollection.FeedbackService;
+import bilfo.demo.Triple;
 import bilfo.demo.enums.*;
 import bilfo.demo.formCollection.*;
 import bilfo.demo.mailSender.MailSenderService;
@@ -9,6 +10,7 @@ import bilfo.demo.passwordCollection.eventPasswordCollection.EventPassword;
 import bilfo.demo.passwordCollection.eventPasswordCollection.EventPasswordService;
 import bilfo.demo.userCollection.User;
 import bilfo.demo.userCollection.UserManager;
+import bilfo.demo.userCollection.UserRepository;
 import bilfo.demo.userCollection.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class EventService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    @Lazy
+    private UserRepository userRepository;
     @Autowired
     @Lazy
     private FormService formService;
@@ -126,6 +131,28 @@ public class EventService {
         return true;
     }
 
+
+    public Triple<List<Optional<User>>,List<Optional<User>>,List<Optional<User>>> getGuidesOfEvent(ObjectId eventId){
+        Optional<Event> selectedEvent = eventRepository.findEventById(eventId);
+        List<Integer> bilkentIds = selectedEvent.get().getGuides();
+        List<Optional<User>> guidesAssigned = new ArrayList<>();
+        for(Integer bilkentId : bilkentIds){
+            Optional<User> guide =userRepository.findByBilkentId(bilkentId);
+            if (guide.isPresent()){
+                guidesAssigned.add(guide);
+            }
+        }
+        bilkentIds = selectedEvent.get().getTrainees();
+        List<Optional<User>> traineesAssigned = new ArrayList<>();
+        for(Integer bilkentId : bilkentIds){
+            Optional<User> guide =userRepository.findByBilkentId(bilkentId);
+            if (guide.isPresent()){
+                guidesAssigned.add(guide);
+            }
+        }
+        List<Optional<User>> suggestedGuides = userService.getSuggestedForEvent(eventId);
+        return Triple.of(guidesAssigned,traineesAssigned,suggestedGuides);
+    }
 
     public boolean sendFeedback(String email, String password, int rating, String experience, String recommendations)
     {

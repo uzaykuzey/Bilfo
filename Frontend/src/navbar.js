@@ -81,7 +81,7 @@ export default function NavbarLayout(){
           )}
           
 
-          {(statusUser === "ADVISOR" || statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR" || statusUser === "ADMIN") && (
+          {(statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR" || statusUser === "ADMIN") && (
             <a className="nav-link" onClick={goToPuantajTableGuide}>Puantaj Table: Guides</a>
           )}
           

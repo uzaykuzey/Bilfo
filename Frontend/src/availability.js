@@ -90,7 +90,7 @@ export default function AvailabilityLayout() {
     <div className="home-layout">
       <NavbarLayout />
 
-      <div className="main-content">
+      <div className="main-content-availability">
         <h2>Availability Schedule</h2>
 
         <table className="availability-table">

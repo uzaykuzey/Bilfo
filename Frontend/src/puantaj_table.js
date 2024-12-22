@@ -142,7 +142,7 @@ export default function PuantajLayout() {
                   <th>Type</th>
                   <th>Date</th>
                   <th>Hour</th>
-                  <th></th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>

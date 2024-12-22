@@ -4,18 +4,18 @@
 }
   
 
-.content {
+.content-puantaj {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 900px;
 }
 
-h1 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
+.content-puantaj h1 {
+    padding-top: 4rem;
+    margin-bottom: 2rem;
+    font-size: 2rem;
     color: #333;
 }
 
@@ -51,6 +51,7 @@ h1 {
 .log-table-container {
   display: flex;
   justify-content: center;
+  gap: 20px;
   width: 100%;
   overflow-x: auto;
   padding: 10px; /* Add some padding for spacing around the table */
@@ -97,6 +98,30 @@ h1 {
 .log-table td {
   color: #333; /* Consistent text color */
   font-weight: 400; /* Standard font weight for regular cells */
+}
+
+.mark-all-paid-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  width: 100px;
+  height: 80px;
+  padding: 10px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.details-btn {
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 

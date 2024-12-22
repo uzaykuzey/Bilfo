@@ -152,7 +152,7 @@ export default function PuantajTableGuideLayout() {
     return (
         <div className="home-layout">
             <NavbarLayout />
-            <div className="content">
+            <div className="content-puantaj">
                 <h1>Guide Logs</h1>
 
                 {!isDetailsView ? (
@@ -163,12 +163,7 @@ export default function PuantajTableGuideLayout() {
                             <button onClick={handleNextMonth} className="month-btn">Next ▶</button>
                         </div>
 
-                        {/* Mark All as Paid Button */}
-                        <div className="mark-all-paid-btn-container">
-                            <button onClick={handleMarkAllAsPaid} className="mark-all-paid-btn">
-                                Mark All as Paid
-                            </button>
-                        </div>
+                        
 
                         {/* Render the confirmation popup if it's visible */}
                         {isPopupVisible && (
@@ -216,6 +211,12 @@ export default function PuantajTableGuideLayout() {
                             ) : (
                                 <p className="no-data-message">No logs found for this month.</p>
                             )}
+                                {/* Mark All as Paid Button */}
+                            <div className="mark-all-paid-btn-container">
+                                <button onClick={handleMarkAllAsPaid} className="mark-all-paid-btn">
+                                    Mark All as Paid
+                                </button>
+                            </div>
                         </div>
                     </>
                 ) : (

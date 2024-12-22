@@ -44,16 +44,38 @@
   .add-advisor-btn:hover {
     background-color: #0056b3;
   }
+
+  .advisor-list{
+    margin: 20px auto;
+  }
   
+  .advisor-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
   .advisor-table th,
   .advisor-table td {
     padding: 12px 15px;
+    font-size: 1rem;
     text-align: left;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    font-family: "Arial", sans-serif;
   }
   
+  .advisor-table tr {
+    background-color: white;
+  }
+
+  .advisor-table tr:hover {
+    background-color: #f5f5f5;
+  }
+
   .advisor-table th {
-    background-color: #f4f4f4;
+    background-color: #f1f1f1;
   }
   
   .actions {
@@ -68,49 +90,10 @@
     cursor: pointer;
   }
   
-  
-  
   .btn:hover {
     opacity: 0.9;
   }
   /* Center the popup on the screen */
-
-  .advisor-list{
-    margin: 20px auto;
-  }
-
-  .advisor-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .advisor-table th,
-  .advisor-table td {
-    text-align: left;
-    padding: 12px;
-    font-size: 1rem;
-    font-family: "Arial", sans-serif;
-  }
-  
-  .advisor-table th {
-    background-color: #f2f2f2;
-    color: #333;
-  }
-  
-  .advisor-table tr:nth-child(even) {
-    background-color: #fafafa;
-  }
-  
-  .advisor-table tr:nth-child(odd) {
-    background-color: #fff;
-  }
-  
-  .advisor-table td {
-    border-bottom: 1px solid #ddd;
-  }
   
   .actions button {
     margin: 0 4px;

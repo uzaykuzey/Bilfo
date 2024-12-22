@@ -60,10 +60,18 @@
     background-color: #28a745;
     color: #fff;
   }
+
+  .promote-btn:hover {
+    background-color: #218838;
+  }
   
   .remove-btn {
     background-color: #dc3545;
     color: #fff;
+  }
+
+  .remove-btn:hover {
+    background-color: #c82333;
   }
   
   .add-guide-btn {
@@ -75,6 +83,11 @@
     border-radius: 5px;
     cursor: pointer;
   }
+
+  .add-guide-btn:hover {
+    background-color: #0056b3;
+  }
+
   .modal-overlay {
     position: fixed;
     top: 0;

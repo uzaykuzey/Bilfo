@@ -45,12 +45,6 @@
     background-color: #0056b3;
   }
   
-  /* Table styles */
-  .advisor-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
   .advisor-table th,
   .advisor-table td {
     padding: 12px 15px;
@@ -97,7 +91,7 @@
   .advisor-table td {
     text-align: left;
     padding: 12px;
-    font-size: 14px;
+    font-size: 1rem;
     font-family: "Arial", sans-serif;
   }
   
@@ -121,7 +115,7 @@
   .actions button {
     margin: 0 4px;
     padding: 6px 12px;
-    font-size: 12px;
+    font-size: 14px;
     color: #fff;
     border: none;
     border-radius: 5px;

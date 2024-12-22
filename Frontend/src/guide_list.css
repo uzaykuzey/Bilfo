@@ -3,10 +3,19 @@
     min-height: 100vh;
   }
   
+  .content-glist {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+  }
+
+  #guide-list-header {
+    margin-top: 4rem;
+  }
   
   .guide-table-container {
     margin: 20px auto;
-    padding: 20px;
     border-radius: 10px;
     background-color: #f9f9f9;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -58,6 +67,7 @@
   }
   
   .add-guide-btn {
+    margin-top: 1rem;
     padding: 10px 20px;
     background-color: #007bff;
     color: #fff;

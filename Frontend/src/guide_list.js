@@ -114,75 +114,74 @@ export default function GuideListLayout() {
     <div className="home-layout">
       <NavbarLayout />
 
-      <div className="content">
-        <h1>Guide List</h1>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <div className="guide-table-container">
-        <table className="guide-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>E-mail</th>
-              <th>ID</th>
-              <th>Trainee</th> {/* New column header */}
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {guides.length > 0 ? (
-              guides.map((guide, index) => (
-                <tr key={index}>
-                  <td>{guide.username}</td>
-                  <td>{guide.email}</td>
-                  <td>{guide.bilkentId}</td>
-                  <td>{guide.trainee ? "Yes" : "No"}</td> {/* New column data */}
-                  <td>
-                    <button
-                      className="action-btn promote-btn"
-                      onClick={() => {
-                        setSelectedGuide(guide);
-                        setShowPromotePopup(true);
-                      }}
-                    >
-                      Promote
-                    </button>
-                    <button
-                      className="action-btn demote-btn"
-                      onClick={() => {
-                        setSelectedGuide(guide);
-                        setShowDemotePopup(true);
-                      }}
-                    >
-                      Demote
-                    </button>
-                    <button
-                      className="action-btn remove-btn"
-                      onClick={() => {
-                        setSelectedGuide(guide);
-                        setShowRemovePopup(true);
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5">No guides available.</td> {/* Adjusted colspan */}
-              </tr>
-            )}
-          </tbody>
-        </table>
+      <div className="content-glist">
+        <h1 id = "guide-list-header">Guide List</h1>
 
-          <button
+        <button
             className="add-guide-btn"
             onClick={() => setShowAddPopup(true)}
-          >
-            Add Guide
-          </button>
-        </div>
+          >Add Guide</button>
 
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <div className="guide-table-container">
+          <table className="guide-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>E-mail</th>
+                <th>ID</th>
+                <th>Trainee</th> {/* New column header */}
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {guides.length > 0 ? (
+                guides.map((guide, index) => (
+                  <tr key={index}>
+                    <td>{guide.username}</td>
+                    <td>{guide.email}</td>
+                    <td>{guide.bilkentId}</td>
+                    <td>{guide.trainee ? "Yes" : "No"}</td> {/* New column data */}
+                    <td>
+                      <button
+                        className="action-btn promote-btn"
+                        onClick={() => {
+                          setSelectedGuide(guide);
+                          setShowPromotePopup(true);
+                        }}
+                      >
+                        Promote
+                      </button>
+                      <button
+                        className="action-btn demote-btn"
+                        onClick={() => {
+                          setSelectedGuide(guide);
+                          setShowDemotePopup(true);
+                        }}
+                      >
+                        Demote
+                      </button>
+                      <button
+                        className="action-btn remove-btn"
+                        onClick={() => {
+                          setSelectedGuide(guide);
+                          setShowRemovePopup(true);
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">No guides available.</td> {/* Adjusted colspan */}
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        
         {/* Add Guide Popup */}
         <Popup
           open={showAddPopup}

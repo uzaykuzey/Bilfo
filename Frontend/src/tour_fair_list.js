@@ -514,7 +514,7 @@ export default function TourListLayout() {
   return (
     <div className="home-layout">
       <NavbarLayout />
-      <div className="main-content">
+      <div className="main-content-tour-fair-list">
         <h2>Tours and Fairs</h2>
         <div className="filters">
           <label htmlFor="status">Status: </label>

@@ -1,9 +1,16 @@
-.home-layout {
+  .home-layout {
     display: flex;
     min-height: 100vh;
   }
   
-  
+  .main-content-tour-fair-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 4rem;
+  }
+
   .tour-table {
     width: 100%;
     border-collapse: collapse;

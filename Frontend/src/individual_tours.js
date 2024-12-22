@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import api from "./api/axios_config.js";
 import './individual_tours.css';
+import './terms_conditions.css';
 
 export default function IndividualToursForm() {
+    const [isTermsPopupOpen, setIsTermsPopupOpen] = useState(false);
     const [formData, setFormData] = useState({
         applicantNames: '',
         firstTimeDate: '',
@@ -149,6 +151,15 @@ export default function IndividualToursForm() {
         } catch (error) {
             alert("An error occurred while submitting the form.");
         }
+    };
+
+    const openTermsPopup = (e) => {
+        e.preventDefault();
+        setIsTermsPopupOpen(true);
+    };
+
+    const closeTermsPopup = () => {
+        setIsTermsPopupOpen(false);
     };
 
     return (
@@ -346,7 +357,9 @@ export default function IndividualToursForm() {
                             onChange={handleCheckboxChange}
                             required
                         />
-                        <span>I have read and accepted the <a href="/terms-conditions">Terms & Conditions</a></span>
+                        <span>
+                            I have read and accepted the <a href="#" onClick={openTermsPopup} className="terms-link">Terms & Conditions</a>
+                        </span>
                         {formData.formErrors.termsAccepted && (
                             <span className="error">{formData.formErrors.termsAccepted}</span>
                         )}
@@ -357,6 +370,19 @@ export default function IndividualToursForm() {
                     </button>
                 </form>
             </div>
+            {isTermsPopupOpen && (
+                <div className="popup-overlay">
+                    <div className="popup-content">
+                        <h3 id = "terms-header">Terms and Conditions</h3>
+                        <p className= 'terms'>1- Here are the terms and conditions...</p>
+                        <p className= 'terms'>2- Here are the terms and conditions...</p>
+                        <p className= 'terms'>3- Here are the terms and conditions...</p>
+                        <p className= 'terms'>4- Here are the terms and conditions...</p>
+                        <p className= 'terms'>5- Here are the terms and conditions...</p>
+                        <button onClick={closeTermsPopup} className="close-terms">I Understand</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

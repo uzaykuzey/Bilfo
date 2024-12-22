@@ -95,7 +95,7 @@ function App() {
         <Route
          path="/userHome/:bilkentId/availability"
          element={
-           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR']}>
              <AvailabilityLayout />
            </ProtectedRoute>
          }
@@ -104,7 +104,7 @@ function App() {
         <Route
          path="/userHome/:bilkentId/schedule"
          element={
-           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR']}>
              <ScheduleLayout />
            </ProtectedRoute>
          }
@@ -113,7 +113,7 @@ function App() {
         <Route
          path="/userHome/:bilkentId/puantaj"
          element={
-           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR']}>
              <PuantajLayout />
            </ProtectedRoute>
          }
@@ -122,7 +122,7 @@ function App() {
         <Route
          path="/userHome/:bilkentId/puantaj_guide"
          element={
-           <ProtectedRoute allowedRoles={['GUIDE','ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+           <ProtectedRoute allowedRoles={['COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
              <PuantajTableGuideLayout />
            </ProtectedRoute>
          }
@@ -131,12 +131,20 @@ function App() {
         <Route
          path="/userHome/:bilkentId/dashboard"
          element={
-           <ProtectedRoute allowedRoles={['GUIDE', 'ADVISOR', 'COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+           <ProtectedRoute allowedRoles={['COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
              <DashboardLayout />
            </ProtectedRoute>
          }
        />
 
+        <Route
+         path="/userHome/:bilkentId/user_list"
+         element={
+           <ProtectedRoute allowedRoles={['ADMIN']}>
+             <DashboardLayout />
+           </ProtectedRoute>
+         }
+       />
 
         {/* Catch-all route */}
         <Route path="*" element={

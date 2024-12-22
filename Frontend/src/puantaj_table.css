@@ -5,18 +5,17 @@
 
 .main-content-puantaj {
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
+
 }
 
 .main-content-puantaj h1 {
     font-size: 1.8rem;
     color: #333;
     margin-bottom: 0.2rem;
-    padding-top: 2rem;
+    padding-top: 4rem;
 }
 
 .month-navigation {
@@ -78,9 +77,6 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    position: absolute;
-    right: calc((100% - 900px) / 2);
-    top: 70px;
     text-align: center;
     white-space: nowrap;
 }

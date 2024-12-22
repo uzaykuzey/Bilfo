@@ -24,18 +24,25 @@ import DashboardLayout from './dashboard';
 function App() {
   const { user } = useAuth();
 
+  const PublicOnlyRoute = ({ children }) => {
+    if (user) {
+      return <Navigate to={`/userHome/${user.sub}`} replace state={{ statusUser: user.role }} />;
+    }
+    return children;
+  };
+
   return (
     <div className="App">
       <Routes>
-        {/*Public Routes*/}
-        <Route path="/" element={<HomeLayout />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/school_tours" element={<SchoolToursLayout />} />
-        <Route path="/individual_tours" element={<IndividualToursLayout/>} />
-        <Route path="/fair_application" element={<FairApplicationLayout/>} />
-        <Route path="/feedback" element={<FeedbackLayout/>} />
-        <Route path="/forgot_password" element={<ForgotPasswordLayout/>} />
-        <Route path="/dashboard" element={<DashboardLayout />} />
+        {/*Public Routes - now wrapped with PublicOnlyRoute*/}
+        <Route path="/" element={<PublicOnlyRoute><HomeLayout /></PublicOnlyRoute>} />
+        <Route path="/login" element={<PublicOnlyRoute><LoginForm /></PublicOnlyRoute>} />
+        <Route path="/school_tours" element={<PublicOnlyRoute><SchoolToursLayout /></PublicOnlyRoute>} />
+        <Route path="/individual_tours" element={<PublicOnlyRoute><IndividualToursLayout/></PublicOnlyRoute>} />
+        <Route path="/fair_application" element={<PublicOnlyRoute><FairApplicationLayout/></PublicOnlyRoute>} />
+        <Route path="/feedback" element={<PublicOnlyRoute><FeedbackLayout/></PublicOnlyRoute>} />
+        <Route path="/forgot_password" element={<PublicOnlyRoute><ForgotPasswordLayout/></PublicOnlyRoute>} />
+        <Route path="/dashboard" element={<PublicOnlyRoute><DashboardLayout /></PublicOnlyRoute>} />
 
         {/* Protected routes */}
        <Route

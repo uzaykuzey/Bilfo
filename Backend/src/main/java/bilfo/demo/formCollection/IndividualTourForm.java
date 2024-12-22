@@ -18,8 +18,8 @@ public class IndividualTourForm extends TourForm {
     private String[] names;
     private DEPARTMENT department;
 
-    public IndividualTourForm(ObjectId id, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, String contactMail, int visitorCount, String visitorNotes, String[] names, DEPARTMENT department) {
-        super(id, approved, possibleTimes, contactMail, visitorCount, visitorNotes, EVENT_TYPES.INDIVIDUAL_TOUR);
+    public IndividualTourForm(ObjectId id, Date dateOfForm, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, String contactMail, int visitorCount, String visitorNotes, String[] names, DEPARTMENT department) {
+        super(id, dateOfForm, approved, possibleTimes, contactMail, visitorCount, visitorNotes, EVENT_TYPES.INDIVIDUAL_TOUR);
         this.names = names;
         this.department = department;
     }

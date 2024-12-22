@@ -112,7 +112,22 @@ export default function UserHomeLayout() {
                 <h2>
                   {profile.username}
                 </h2>
-                <h3>{profile.role === "ADVISOR" ? "Advisor" : "Guide"}</h3>
+                <h3>
+                  {(() => {
+                    switch (profile.role) {
+                      case "ADVISOR":
+                        return "Advisor";
+                      case "COORDINATOR":
+                        return "Coordinator";
+                      case "ACTING_DIRECTOR":
+                        return "Acting Director";
+                      case "ADMIN":
+                        return "Admin";
+                      default:
+                        return "Guide";
+                    }
+                  })()}
+                </h3>
                 <h4>
                   <button className="action-button" onClick={goToSettings}>
                     Edit Profile
@@ -133,7 +148,8 @@ export default function UserHomeLayout() {
                 <strong>Role:</strong> {profile.role}
               </p>
               <p>
-                <strong>Day of Advisor:</strong> {profile.dayOfAdvisor}
+                <strong>Day of Advisor:</strong>{" "}
+                {profile.dayOfAdvisor === "NOT_ASSIGNED" ? "Not Assigned" : profile.dayOfAdvisor}
               </p>
               <p>
                 <strong>Total Hours of Service:</strong> {profile.totalHours}

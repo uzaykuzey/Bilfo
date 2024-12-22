@@ -344,7 +344,7 @@ public class EventService {
             boolean[] availability = user.getAvailability();
             for(int i: indexOfTourTimes)
             {
-                if(!availability[dayIndex + i*7])
+                if(availability[dayIndex + i*7])
                 {
                     return false;
                 }

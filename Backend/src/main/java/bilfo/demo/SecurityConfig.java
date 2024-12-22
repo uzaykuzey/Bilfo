@@ -30,10 +30,10 @@ public class SecurityConfig{
                                                                 "/addGuide","/removeUser", "/addAdvisor", "/addCoordinator", "/addActingDirector",
                                                                 "/changeAvailability", "/event/feedback", "/event/claimEvent", "/forgotPasswordMail",
                                                                 "/forgotPasswordChangeRequest", "/demoteUser", "/log/addLog", "/log/deleteLog",
-                                                                "/log/markLogAsPaid", "/log/markAllLogsAsPaid", "/dashboard/createDashboard").permitAll()
+                                                                "/log/markLogAsPaid", "/log/markAllLogsAsPaid", "/dashboard/createDashboard", "/event/offerEvent").permitAll()
                         .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/event", "/form", "/getAvailability", "/getFeedback", "/getAdvisorsOfTheDay","/getUserInfo"
                                                                 , "/event/getScheduleOfWeek","/form/getForms", "/event/getEvents", "/school/cityNames", "/school/districtNames", "/school/schoolNames",
-                                                                  "/log/getLogs", "/log/getEventsOfUserThatDontHaveLogsAndFinished","/log/getAllGuidesLogTable").permitAll()
+                                                                  "/log/getLogs", "/log/getEventsOfUserThatDontHaveLogsAndFinished","/log/getAllGuidesLogTable", "/guidesAvailable").permitAll()
                         .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfigurationSource()))

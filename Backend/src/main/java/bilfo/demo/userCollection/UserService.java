@@ -1,5 +1,6 @@
 package bilfo.demo.userCollection;
 
+import bilfo.demo.EventCollection.EventService;
 import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
@@ -10,9 +11,11 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +32,10 @@ public class UserService {
     private MailSenderService mailSenderService;
     @Autowired
     private ForgotPasswordService forgotPasswordService;
+
+    @Autowired
+    @Lazy
+    private EventService eventService;
 
     public List<User> allUsers(){
         return userRepository.findAll();
@@ -171,6 +178,45 @@ public class UserService {
         }
     }
 
+    public List<User> getAvailableGuides(String date, int[] index,ObjectId eventId){
+        Optional<List<User>> guides = userRepository.findUsersByStatus(USER_STATUS.GUIDE);
+        List<User> availableGuides = new ArrayList<User>();
+        if (guides.isPresent()){
+            for(User guide : guides.get()){
+                boolean[] availability = guide.getAvailability();
+                boolean available = true;
+                for(int i : index){
+                    if(availability[i]){
+                        available = false;
+                        break;
+                    }
+                }
+                if (!available)
+                    continue;
+                int bilkentId = guide.getBilkentId();
+                String[] schedule = eventService.getScheduleOfWeek(bilkentId, date);
+                for (int i : index) {
+                    if(!schedule[i].equals("")){
+                        available = false;
+                        continue;
+                    }
+                }
+                if (!available)
+                    continue;
+                List<ObjectId> suggestedEvents = guide.getSuggestedEvents();
+                for (ObjectId id : suggestedEvents){
+                    if(id.equals(eventId)){
+                        available = false;
+                        continue;
+                    }
+                }
+                if (!available)
+                    continue;
+                availableGuides.add(guide);
+            }
+        }
+        return availableGuides;
+    }
     public void removeLog(ObjectId logId, int bilkentId)
     {
         Optional<User> user = userRepository.findByBilkentId(bilkentId);

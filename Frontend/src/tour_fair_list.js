@@ -22,6 +22,12 @@ export default function TourListLayout() {
   const [isLoading, setIsLoading] = useState(true); // Loading state
   const [selectedStatus, setSelectedStatus] = useState();
   const [selectedType, setSelectedType] = useState("HIGHSCHOOL_TOUR");
+  const [assignPopupOpen, setAssignPopupOpen] = useState(false);
+  const [selectedAssignTour, setSelectedAssignTour] = useState(null);
+  const [availableGuides, setAvailableGuides] = useState([]);
+  const [isLoadingGuides, setIsLoadingGuides] = useState(false); 
+  const [guideId,setGuideId] = useState(null);// For loading state
+
 
   // Set initial state based on the user role
   useEffect(() => {
@@ -114,20 +120,144 @@ export default function TourListLayout() {
       alert("An error occurred while accepting the tour.");
     }
   };
-
-  const assignGuide = async (tour) => {
-    // Assign a guide to the tour
+  const openAssignPopup = async (tour) => {
+    setSelectedAssignTour(tour);
+    setIsLoadingGuides(true); // Show a loading state
     try {
-      const response = await api.post("/form/assignGuide", { formId: tour.id, bilkentId });
-      if (response.status === 200) {
-        alert("Guide assigned successfully!");
+      const date = new Date(tour.first?.date);
+      let dayOfWeek = date.getDay();
+
+      // If it's Sunday, we want it to be 6
+      if (dayOfWeek === 0) {
+        dayOfWeek = 6;
       } else {
-        alert("Failed to assign guide.");
+        // Shift other days to make Monday = 0, Tuesday = 1, etc.
+        dayOfWeek -= 1;
+      }
+      console.log("Day of the week:", dayOfWeek);
+      // Set the date to the Sunday of the current week
+      date.setDate(date.getDate() - dayOfWeek + 1);
+
+      // Format the date as "yyyy-MM-dd"
+      const formattedDate = date.toISOString().split('T')[0];
+
+      console.log("Start of the week:", formattedDate);
+
+      const time = tour.first?.time;
+      let index;
+      if (time == "NINE_AM"){
+        index = [7*0+dayOfWeek, 7*1+dayOfWeek, 7*2+dayOfWeek];
+      }else if (time == "ELEVEN_AM"){
+        index = [7*2+dayOfWeek, 7*3+dayOfWeek, 7*4+dayOfWeek];
+      }else if (time == "ONE_THIRTY_PM"){
+        index = [7*5+dayOfWeek, 7*6+dayOfWeek, 7*7+dayOfWeek];
+      }else if (time == "FOUR_PM"){
+        index = [7*7+dayOfWeek, 7*8+dayOfWeek, 7*9+dayOfWeek];
+      }  
+      console.log(index);
+      const response = await api.get("/guidesAvailable",{params: {date: formattedDate,
+                                                                  eventId: tour.first?.id,
+                                                                  index1: index[0],
+                                                                  index2: index[1],
+                                                                  index3: index[2]}}); 
+      if (response.status === 200) {
+        console.log(response.data);
+        setAvailableGuides(response.data);
+      } else {
+        alert("Failed to fetch available guides.");
       }
     } catch (error) {
+      console.error("Error fetching guides:", error);
+      alert("An error occurred while fetching guides.");
+    } finally {
+      setIsLoadingGuides(false);
+      setAssignPopupOpen(true); // Show the popup after fetching guides
+    }
+  };
+  
+  
+  const closeAssignPopup = () => {
+    setSelectedAssignTour(null);
+    setGuideId("");
+    setAssignPopupOpen(false);
+  };
+  
+  const confirmAssignGuide = async (guideId) => {
+    try {
+      const response = await api.post("/event/offerEvent", {
+        formId: selectedAssignTour.second?.id,
+        bilkentId: guideId,
+      });
+      if (response.status === 200) {
+        alert("Guide assigned successfully!");
+        closeAssignPopup();
+      } else {
+        alert("Failed to assign the guide.");
+      }
+    } catch (error) {
+      console.error("Error assigning guide:", error);
       alert("An error occurred while assigning the guide.");
     }
   };
+  
+  const renderAssignPopupContent = () => {
+    if (isLoadingGuides) {
+      return <div>Loading available guides...</div>;
+    }
+  
+    if (availableGuides.length === 0) {
+      return (
+        <div>
+          <h3>No Guides Available</h3>
+          <p>There are currently no guides available for assignment.</p>
+          <button onClick={closeAssignPopup} className="cancel-button">
+            Close
+          </button>
+        </div>
+      );
+    }
+  
+    return (
+      <div className="assign-popup-content">
+        <h3>Assign Guide</h3>
+        <p>Select a guide to assign for the tour.</p>
+        <table className="guide-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>ID</th>
+              <th>Trainee</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {availableGuides.map((guide) => (
+              <tr key={guide.id}>
+                <td>{guide.username}</td>
+                <td>{guide.bilkentId}</td>
+                <td>{guide.trainee ? "Yes" : "No"}</td>
+                <td>
+                  <button
+                    onClick={() => confirmAssignGuide(guide.bilkentId)}
+                    className="assign-guide-button"
+                  >
+                    Assign
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button onClick={closeAssignPopup} className="cancel-button">
+          Cancel
+        </button>
+      </div>
+    );
+  };
+  
+  
+  
+  
 
   const cancelTour = async (tour) => {
     // Cancel the tour
@@ -339,7 +469,7 @@ export default function TourListLayout() {
       if (selectedStatus === "Accepted") {
         return (
           <>
-            <button className="assign-button" onClick={() => assignGuide(tour)}>Assign Guide</button>
+            <button className="assign-button" onClick={() => openAssignPopup(tour)}>Assign Guide</button>
             <button className="claim-button" onClick={() => claimTour(tour)}>Claim</button>
             <button className="cancel-button" onClick={() => cancelTour(tour)}>Cancel</button>
             <button className="details-button" onClick={() => openPopup(tour)}>Details</button>
@@ -550,6 +680,9 @@ export default function TourListLayout() {
 
       <Popup open={claimPopupOpen} onClose={() => setClaimPopupOpen(false)} modal>
         {renderClaimPopupContent()}
+      </Popup>
+      <Popup open={assignPopupOpen} onClose={closeAssignPopup} modal>
+        {renderAssignPopupContent()}
       </Popup>
     </div>
   );

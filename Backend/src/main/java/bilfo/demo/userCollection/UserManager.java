@@ -5,6 +5,7 @@ import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
 import bilfo.demo.enums.USER_STATUS;
 import bilfo.demo.formCollection.Form;
+import bilfo.demo.formCollection.FormManager;
 import bilfo.demo.mailSender.MailSenderManager;
 import bilfo.demo.security.jwt.JwtUtil;
 import bilfo.demo.security.dto.LoginResponse;
@@ -60,7 +61,7 @@ public class UserManager {
             trainee = Boolean.parseBoolean(userRequest.get("trainee"));
         }
         // Attempt to create the user
-        Optional<User> newUser = userService.createUser(bilkentId, username, email, phoneNo, password, status, department, new ArrayList<>(), new ArrayList<>(), trainee, getTrueArray(User.AVAILABILITY_LENGTH), day);
+        Optional<User> newUser = userService.createUser(bilkentId, username, email, phoneNo, password, status, department, new ArrayList<>(), new ArrayList<>(), trainee, getFalseArray(User.AVAILABILITY_LENGTH), day);
 
         if (newUser.isPresent()) {
             return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
@@ -263,7 +264,7 @@ public class UserManager {
         boolean trainee = Boolean.parseBoolean(addGuideRequest.get("trainee"));
         DEPARTMENT department = DEPARTMENT.valueOf(addGuideRequest.get("department").toUpperCase());
         String tempPassword = generatePassword(User.DEFAULT_GUIDE_PASSWORD_LENGTH);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.GUIDE, department, new ArrayList<>(), new ArrayList<>(), trainee, getTrueArray(User.AVAILABILITY_LENGTH), DAY.NOT_ASSIGNED);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.GUIDE, department, new ArrayList<>(), new ArrayList<>(), trainee, getFalseArray(User.AVAILABILITY_LENGTH), DAY.NOT_ASSIGNED);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new GUIDE!!!",
                     "Your password is " + tempPassword + ". Change it as soon as possible.");
@@ -282,7 +283,7 @@ public class UserManager {
         DEPARTMENT department = DEPARTMENT.valueOf(addAdvisorRequest.get("department").toUpperCase());
         DAY day = DAY.valueOf(addAdvisorRequest.get("day").toUpperCase());
         String tempPassword = generatePassword(User.DEFAULT_ADVISOR_PASSWORD_LENGTH);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ADVISOR, department, new ArrayList<>(), new ArrayList<>(), false, getTrueArray(User.AVAILABILITY_LENGTH), day);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ADVISOR, department, new ArrayList<>(), new ArrayList<>(), false, getFalseArray(User.AVAILABILITY_LENGTH), day);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new ADVISOR!!!",
                                         "Your password is " + tempPassword + ". Change it as soon as possible.");
@@ -300,7 +301,7 @@ public class UserManager {
         String phoneNo = addCoordinatorRequest.get("phoneNo");
         DEPARTMENT department = DEPARTMENT.valueOf(addCoordinatorRequest.get("department").toUpperCase());
         String tempPassword = generatePassword(User.DEFAULT_COORDINATOR_PASSWORD_LENGTH);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.COORDINATOR, department, new ArrayList<>(), new ArrayList<>(), false, getTrueArray(User.AVAILABILITY_LENGTH), DAY.NOT_ASSIGNED);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.COORDINATOR, department, new ArrayList<>(), new ArrayList<>(), false, getFalseArray(User.AVAILABILITY_LENGTH), DAY.NOT_ASSIGNED);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new COORDINATOR!!!",
                     "Your password is " + tempPassword + ". Change it as soon as possible.");
@@ -317,7 +318,7 @@ public class UserManager {
         String email = addActingDirectorRequest.get("email");
         String phoneNo = addActingDirectorRequest.get("phoneNo");
         String tempPassword = generatePassword(User.DEFAULT_ACTING_DIRECTOR_PASSWORD_LENGTH);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ACTING_DIRECTOR, DEPARTMENT.NOT_APPLICABLE, new ArrayList<>(), new ArrayList<>(), false, getTrueArray(User.AVAILABILITY_LENGTH), DAY.NOT_ASSIGNED);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ACTING_DIRECTOR, DEPARTMENT.NOT_APPLICABLE, new ArrayList<>(), new ArrayList<>(), false, getFalseArray(User.AVAILABILITY_LENGTH), DAY.NOT_ASSIGNED);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new COORDINATOR!!!",
                     "Your password is " + tempPassword + ". Change it as soon as possible.");
@@ -399,6 +400,19 @@ public class UserManager {
         return new ResponseEntity<>("Error Occurred", HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/guidesAvailable")
+    public ResponseEntity<List<User>> getAvailableGuides(@RequestParam Map<String,String> dateOfTour){
+        String date = dateOfTour.get("date");
+        int index1 = Integer.parseInt(dateOfTour.get("index1"));
+        int index2 = Integer.parseInt(dateOfTour.get("index2"));
+        int index3 = Integer.parseInt(dateOfTour.get("index3"));
+        int[] indexes = new int[]{index1, index2, index3};
+        ObjectId eventId = new ObjectId(dateOfTour.get("eventId"));
+        List<User> availableGuides = userService.getAvailableGuides(date, indexes,eventId);
+
+        return new ResponseEntity<List<User>>(availableGuides,HttpStatus.OK);
+    }
+
     public static String generatePassword(int length) {
         String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
@@ -435,6 +449,15 @@ public class UserManager {
         for(int i=0;i<length;i++)
         {
             array[i]=true;
+        }
+        return array;
+    }
+    private boolean[] getFalseArray(int length)
+    {
+        boolean[] array = new boolean[length];
+        for(int i=0;i<length;i++)
+        {
+            array[i]=false;
         }
         return array;
     }

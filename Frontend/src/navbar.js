@@ -68,18 +68,26 @@ export default function NavbarLayout(){
           <a className="nav-link" onClick={goToUserHome}>Profile</a>
           <a className="nav-link" onClick={goToTourFairList}>Tours and Fairs</a>
 
-          {(statusUser === "COORDINATOR" || statusUser === "ADVISOR") && (
+          {(statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR" || statusUser === "ADMIN") && (
             <a className="nav-link" onClick={goToAdvisorlist}>Advisor List</a>
           )}
 
-          {statusUser === "ADVISOR" && (
+          {(statusUser === "ADVISOR" || statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR" || statusUser === "ADMIN") && (
             <a className="nav-link" onClick={goToGuideList}>Guide List</a>
           )}
 
           <a className="nav-link" onClick={goToPuantajTable}>Puantaj Table</a>
-          <a className="nav-link" onClick={goToPuantajTableGuide}>Puantaj Table: Guides</a>
-          <a className="nav-link" onClick={handleDashboardClick}>Dashboard</a>
-          <a className="nav-link-logout" onClick={handleLogout}>Log Out</a>
+
+          {(statusUser === "ADVISOR" || statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR" || statusUser === "ADMIN") && (
+            <a className="nav-link" onClick={goToPuantajTableGuide}>Puantaj Table: Guides</a>
+          )}
+          
+          {(statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR" || statusUser === "ADMIN") && (
+            <a className="nav-link" onClick={handleDashboardClick}>Dashboard</a>
+          )}
+
+          
+          <a className="nav-link" id = "logout" onClick={handleLogout}>Log Out</a>
           
 
         </div>

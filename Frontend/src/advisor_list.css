@@ -3,16 +3,17 @@
     min-height: 100vh;
   }
   
-  .content {
-    margin-top: 20px; /* Adjust spacing as needed */
-    padding: 20px; /* Optional: for inner spacing */
-
+  .content-alist {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
   }
   
   
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
+  #advisor-list-header {
+    margin-top: 4rem;
+    font-size: 2.5rem
   }
   
   
@@ -33,31 +34,48 @@
   .add-advisor-btn {
     background-color: #007bff;
     color: #fff;
-    padding: 10px 15px;
+    padding: 10px 20px;
+    margin-top: 1rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
   }
   
   .add-advisor-btn:hover {
     background-color: #0056b3;
   }
+
+  .advisor-list{
+    margin: 20px auto;
+  }
   
-  /* Table styles */
   .advisor-table {
     width: 100%;
     border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
+
   .advisor-table th,
   .advisor-table td {
     padding: 12px 15px;
+    font-size: 1rem;
     text-align: left;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    font-family: "Arial", sans-serif;
   }
   
+  .advisor-table tr {
+    background-color: white;
+  }
+
+  .advisor-table tr:hover {
+    background-color: #f5f5f5;
+  }
+
   .advisor-table th {
-    background-color: #f4f4f4;
+    background-color: #f1f1f1;
   }
   
   .actions {
@@ -72,50 +90,15 @@
     cursor: pointer;
   }
   
-  
-  
   .btn:hover {
     opacity: 0.9;
   }
   /* Center the popup on the screen */
-
-  .advisor-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .advisor-table th,
-  .advisor-table td {
-    text-align: left;
-    padding: 12px;
-    font-size: 14px;
-    font-family: "Arial", sans-serif;
-  }
-  
-  .advisor-table th {
-    background-color: #f2f2f2;
-    color: #333;
-  }
-  
-  .advisor-table tr:nth-child(even) {
-    background-color: #fafafa;
-  }
-  
-  .advisor-table tr:nth-child(odd) {
-    background-color: #fff;
-  }
-  
-  .advisor-table td {
-    border-bottom: 1px solid #ddd;
-  }
   
   .actions button {
     margin: 0 4px;
     padding: 6px 12px;
-    font-size: 12px;
+    font-size: 14px;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -136,21 +119,6 @@
   
   .actions button:hover {
     opacity: 0.9;
-  }
-  
-  .add-advisor-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 8px 16px;
-    margin-bottom: 10px;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .add-advisor-btn:hover {
-    background-color: #0056b3;
   }
   
   .popup-container {

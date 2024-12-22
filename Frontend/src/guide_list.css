@@ -3,10 +3,19 @@
     min-height: 100vh;
   }
   
+  .content-glist {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+  }
+
+  #guide-list-header {
+    margin-top: 4rem;
+  }
   
   .guide-table-container {
     margin: 20px auto;
-    padding: 20px;
     border-radius: 10px;
     background-color: #f9f9f9;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -51,13 +60,22 @@
     background-color: #28a745;
     color: #fff;
   }
+
+  .promote-btn:hover {
+    background-color: #218838;
+  }
   
   .remove-btn {
     background-color: #dc3545;
     color: #fff;
   }
+
+  .remove-btn:hover {
+    background-color: #c82333;
+  }
   
   .add-guide-btn {
+    margin-top: 1rem;
     padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
@@ -65,6 +83,11 @@
     border-radius: 5px;
     cursor: pointer;
   }
+
+  .add-guide-btn:hover {
+    background-color: #0056b3;
+  }
+
   .modal-overlay {
     position: fixed;
     top: 0;

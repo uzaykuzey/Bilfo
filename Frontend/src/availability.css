@@ -5,10 +5,13 @@
   }
   
   /* Main Content */
-  .main-content {
-    flex: 1; /* Take up remaining horizontal space */
-    padding: 20px;
+  .main-content-availability {
+    flex: 1; 
+    padding: 5rem;
+    display: flex;
+    flex-direction: column;
     text-align: center;
+    align-items: center;
     overflow-x: auto;
     box-sizing: border-box;
   }
@@ -54,6 +57,7 @@
   .save-button {
     margin-top: 20px;
     padding: 10px 20px;
+    width: 100px;
     background-color: #4CAF50;
     color: white;
     border: none;

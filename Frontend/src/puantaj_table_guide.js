@@ -152,132 +152,140 @@ export default function PuantajTableGuideLayout() {
     return (
         <div className="home-layout">
             <NavbarLayout />
-            <div className="content-puantaj">
-                <h1>Guide Logs</h1>
+            {!isDetailsView ? (
+                <div className="content-puantaj">
+                    <h1>Guide Logs</h1>
 
-                {!isDetailsView ? (
-                    <>
-                        <div className="month-navigation">
-                            <button onClick={handlePreviousMonth} className="month-btn">◀ Previous</button>
-                            <span className="current-month">{currentMonth.format("MMMM YYYY")}</span>
-                            <button onClick={handleNextMonth} className="month-btn">Next ▶</button>
-                        </div>
+                    <div className="month-navigation">
+                        <button onClick={handlePreviousMonth} className="month-btn">◀</button>
+                        <span className="current-month">{currentMonth.format("MMMM YYYY")}</span>
+                        <button onClick={handleNextMonth} className="month-btn">▶</button>
+                    </div>
 
-                        
+                    <div className="mark-all-paid-container">
+                        <button onClick={handleMarkAllAsPaid} className="mark-all-paid-btn">
+                            Mark All as Paid
+                        </button>
+                    </div>
 
-                        {/* Render the confirmation popup if it's visible */}
-                        {isPopupVisible && (
-                            <ConfirmationPopup 
-                                onConfirm={handleConfirmMarkAllAsPaid} 
-                                onCancel={handleCancelMarkAllAsPaid} 
-                            />
-                        )}
-
-                        <div className="log-table-container">
-                            {guideList.length > 0 ? (
-                                <table className="log-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Bilkent ID</th>
-                                            <th>Trainee</th>
-                                            <th>Hours</th>
-                                            <th>Actions</th>
+                    <div className="log-table-container">
+                        {guideList.length > 0 ? (
+                            <table className="log-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Bilkent ID</th>
+                                        <th>Trainee</th>
+                                        <th>Hours</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {guideList.map((guide, index) => (
+                                        <tr
+                                            key={index}
+                                            className={selectedRowId === guide.first?.bilkentId ? "selected-row" : ""}
+                                            onClick={() => handleRowClick(guide.first?.bilkentId)}
+                                        >
+                                            <td>{guide.first?.username}</td>
+                                            <td>{guide.first?.bilkentId}</td>
+                                            <td>{guide.first?.trainee ? "Yes" : "No"}</td>
+                                            <td>{guide.second}</td>
+                                            <td>
+                                                <button
+                                                    className="details-btn"
+                                                    onClick={() => handleDetailsClick(guide)}
+                                                >
+                                                    Details
+                                                </button>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {guideList.map((guide, index) => (
-                                            <tr
-                                                key={index}
-                                                className={selectedRowId === guide.first?.bilkentId ? "selected-row" : ""}
-                                                onClick={() => handleRowClick(guide.first?.bilkentId)}
-                                            >
-                                                <td>{guide.first?.username}</td>
-                                                <td>{guide.first?.bilkentId}</td>
-                                                <td>{guide.first?.trainee ? "Yes" : "No"}</td>
-                                                <td>{guide.second}</td>
-                                                <td>
-                                                    <button
-                                                        className="details-btn"
-                                                        onClick={() => handleDetailsClick(guide)}
-                                                    >
-                                                        Details
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            ) : (
-                                <p className="no-data-message">No logs found for this month.</p>
-                            )}
-                                {/* Mark All as Paid Button */}
-                            <div className="mark-all-paid-btn-container">
-                                <button onClick={handleMarkAllAsPaid} className="mark-all-paid-btn">
-                                    Mark All as Paid
-                                </button>
-                            </div>
-                        </div>
-                    </>
-                ) : (
-                    <div className="log-details-container">
-                        <button onClick={handleBackClick} className="back-btn">◀ Back</button>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <p className="no-data-message">No logs found for this month.</p>
+                        )}
+                    </div>
+
+                    {/* Confirmation popup for Mark All as Paid */}
+                    {isPopupVisible && (
+                        <ConfirmationPopup
+                            onConfirm={handleConfirmMarkAllAsPaid}
+                            onCancel={handleCancelMarkAllAsPaid}
+                        />
+                    )}
+                </div>
+            ) : (
+                <div className="log-details-container">
+                    <div className="guide-logs-header">
+                        <h1>Guide Logs</h1>
                         <h2>Logs for {selectedGuideName}</h2>
-
-                        {/* Month Navigation in Details View */}
+                        
                         <div className="month-navigation">
-                            <button onClick={handleDetailsPreviousMonth} className="month-btn">◀ Previous</button>
+                            <button onClick={handleDetailsPreviousMonth} className="month-btn">◀</button>
                             <span className="current-month">{selectedDetailsMonth.format("MMMM YYYY")}</span>
-                            <button onClick={handleDetailsNextMonth} className="month-btn">Next ▶</button>
+                            <button onClick={handleDetailsNextMonth} className="month-btn">▶</button>
                         </div>
 
-                        <div className="mark-paid-btn-container">
+                        <div className="header-actions">
+                            <button onClick={handleBackClick} className="back-button">Back</button>
                             <button
                                 onClick={handleMarkAsPaid}
-                                className="mark-paid-btn"
+                                className="mark-as-paid-button"
                                 disabled={selectedLogId === null}
                             >
                                 Mark as Paid
                             </button>
                         </div>
-
-                        <table className="log-table">
-                            <thead>
-                                <tr>
-                                    <th>Activity Name</th>
-                                    <th>Type</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Hours</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {selectedGuideLogs.map((log, index) => (
-                                    <tr
-                                        key={index}
-                                        className={selectedLogId === log.id ? "selected-row" : ""}
-                                        onClick={() => handleLogRowClick(log.id)}
-                                    >
-                                        <td>
-                                            {log.third?.type === "HIGHSCHOOL_TOUR" && log.third?.schoolName}
-                                            {log.third?.type === "INDIVIDUAL_TOUR" && "Individual Tour"}
-                                            {log.third?.type === "FAIR" && log.third?.schoolName}
-                                        </td>
-                                        <td>
-                                            {log.third?.type === "HIGHSCHOOL_TOUR" && "High School Tour"}
-                                            {log.third?.type === "INDIVIDUAL_TOUR" && "Individual Tour"}
-                                            {log.third?.type === "FAIR" && "Fair"}
-                                        </td>
-                                        <td>{log.first?.date ? dayjs(log.first?.date).format("DD.MM.YY") : ""}</td>
-                                        <td>{log.first?.paid ? "Paid" : "Unpaid"}</td>
-                                        <td>{log.first?.hours}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
                     </div>
-                )}
-            </div>
+
+                    <table className="guide-logs-table">
+                        <thead>
+                            <tr>
+                                <th>Activity Name</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Hours</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {selectedGuideLogs.map((log, index) => (
+                                <tr
+                                    key={index}
+                                    className={selectedLogId === log.id ? "selected-row" : ""}
+                                    onClick={() => handleLogRowClick(log.id)}
+                                >
+                                    <td>
+                                        {log.third?.type === "HIGHSCHOOL_TOUR" && log.third?.schoolName}
+                                        {log.third?.type === "INDIVIDUAL_TOUR" && "Individual Tour"}
+                                        {log.third?.type === "FAIR" && log.third?.schoolName}
+                                    </td>
+                                    <td>
+                                        {log.third?.type === "HIGHSCHOOL_TOUR" && "High School Tour"}
+                                        {log.third?.type === "INDIVIDUAL_TOUR" && "Individual Tour"}
+                                        {log.third?.type === "FAIR" && "Fair"}
+                                    </td>
+                                    <td>{log.first?.date ? dayjs(log.first?.date).format("DD.MM.YY") : ""}</td>
+                                    <td className={log.first?.paid ? "status-paid" : "status-unpaid"}>
+                                        {log.first?.paid ? "Paid" : "Unpaid"}
+                                    </td>
+                                    <td>{log.first?.hours}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    {/* Restore confirmation popup */}
+                    {isPopupVisible && (
+                        <ConfirmationPopup
+                            onConfirm={handleConfirmMarkAllAsPaid}
+                            onCancel={handleCancelMarkAllAsPaid}
+                        />
+                    )}
+                </div>
+            )}
         </div>
     );
 }

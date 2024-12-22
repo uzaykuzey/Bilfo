@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import api from "./api/axios_config.js";
 import './fair_application.css';
+import './terms_conditions.css';
 
 export default function FairApplicationForm() {
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [schoolsList, setSchoolsList] = useState([]);
+    const [isTermsPopupOpen, setIsTermsPopupOpen] = useState(false);
     const [formData, setFormData] = useState({
         schoolName: '',
         city: '',
@@ -138,6 +140,15 @@ export default function FairApplicationForm() {
         }
     };
 
+    const openTermsPopup = (e) => {
+        e.preventDefault();
+        setIsTermsPopupOpen(true);
+    };
+
+    const closeTermsPopup = () => {
+        setIsTermsPopupOpen(false);
+    };
+
     return (
         <div className="home-layout">
             {/* Sidebar Navigation */}
@@ -159,6 +170,7 @@ export default function FairApplicationForm() {
                 <div className="nav-links">
                     <a href="/" className="nav-link">Campus Tours</a>
                     <a href="/fair_application" className="nav-link">Fair Application</a>
+                    <a href="/edit_event" className="nav-link">Edit Event</a>
                     <a href="/feedback" className="nav-link">Feedback</a>
                     <a href="/login" className="nav-link" id = "login">Log In</a>
                 </div>
@@ -297,8 +309,9 @@ export default function FairApplicationForm() {
                             onChange={handleCheckboxChange}
                             required
                         />
-                        
-                        I have read and accepted the <a href="/terms-conditions">Terms & Conditions</a>
+                        <span>
+                            I have read and accepted the <a href="#" onClick={openTermsPopup} className="terms-link">Terms & Conditions</a>
+                        </span>
                         {formData.formErrors.termsAccepted && (
                             <span className="error">{formData.formErrors.termsAccepted}</span>
                         )}
@@ -310,6 +323,21 @@ export default function FairApplicationForm() {
                     </button>
                 </form>
             </div>
+
+            {isTermsPopupOpen && (
+                <div className="popup-overlay">
+                    <div className="popup-content">
+                        <h3 id = "terms-header">Terms and Conditions</h3>
+                        <p className= 'terms'>1- Here are the terms and conditions...</p>
+                        <p className= 'terms'>2- Here are the terms and conditions...</p>
+                        <p className= 'terms'>3- Here are the terms and conditions...</p>
+                        <p className= 'terms'>4- Here are the terms and conditions...</p>
+                        <p className= 'terms'>5- Here are the terms and conditions...</p>
+                        <button onClick={closeTermsPopup} className="close-terms">I Understand</button>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }

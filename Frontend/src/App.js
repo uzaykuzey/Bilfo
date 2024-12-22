@@ -20,6 +20,7 @@ import PuantajLayout from './puantaj_table';
 import ForgotPasswordLayout from './forgot_password';
 import PuantajTableGuideLayout from './puantaj_table_guide';
 import DashboardLayout from './dashboard';
+import EditEvent from './edit_event';
 
 function App() {
   const { user } = useAuth();
@@ -43,6 +44,7 @@ function App() {
         <Route path="/feedback" element={<PublicOnlyRoute><FeedbackLayout/></PublicOnlyRoute>} />
         <Route path="/forgot_password" element={<PublicOnlyRoute><ForgotPasswordLayout/></PublicOnlyRoute>} />
         <Route path="/dashboard" element={<PublicOnlyRoute><DashboardLayout /></PublicOnlyRoute>} />
+        <Route path="/edit_event" element={<PublicOnlyRoute><EditEvent/></PublicOnlyRoute>} />
 
         {/* Protected routes */}
        <Route

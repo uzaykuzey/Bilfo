@@ -5,7 +5,7 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import "./tour_fair_list.css";
 import NavbarLayout from "./navbar";
-import { FaTimes } from "react-icons/fa"; // Ensure you have `react-icons` installed for the cross icon.
+import { FaTimes } from "react-icons/fa"; 
 
 export default function TourListLayout() {
   const { bilkentId } = useParams();
@@ -32,6 +32,7 @@ export default function TourListLayout() {
   const [detailSuggested, setDetailsSuggested] = useState([]);
   const [isLoadingGuides, setIsLoadingGuides] = useState(false);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);  
+  const [isFirstLoad, setFirstLoad] = useState(null);
   const [guideId,setGuideId] = useState(null);// For loading state
 
 
@@ -521,8 +522,9 @@ export default function TourListLayout() {
     const fetchTours = async () => {
       try {
         let tours;
-        if (statusUser === "GUIDE" && selectedStatus === "Accepted") {
-          // Fetch only "Accepted" tours for guides on initial load
+        setFirstLoad(true);
+        if ((selectedStatus == "GUIDE" && isFirstLoad) ||selectedStatus === "Accepted") {
+          setFirstLoad(false);
           const response = await api.get("/event/getEvents", {
             params: { type: selectedType, state: "ONGOING" },
           });

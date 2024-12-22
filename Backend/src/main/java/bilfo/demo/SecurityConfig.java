@@ -33,7 +33,8 @@ public class SecurityConfig{
                                                                 "/log/markLogAsPaid", "/log/markAllLogsAsPaid", "/dashboard/createDashboard", "/event/offerEvent").permitAll()
                         .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/event", "/form", "/getAvailability", "/getFeedback", "/getAdvisorsOfTheDay","/getUserInfo"
                                                                 , "/event/getScheduleOfWeek","/form/getForms", "/event/getEvents", "/school/cityNames", "/school/districtNames", "/school/schoolNames",
-                                                                  "/log/getLogs", "/log/getEventsOfUserThatDontHaveLogsAndFinished","/log/getAllGuidesLogTable", "/guidesAvailable").permitAll()
+                                                                  "/log/getLogs", "/log/getEventsOfUserThatDontHaveLogsAndFinished","/log/getAllGuidesLogTable", "/guidesAvailable",
+                                                                    "/event/getGuidesOfEvent").permitAll()
                         .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfigurationSource()))

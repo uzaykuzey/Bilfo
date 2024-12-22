@@ -462,4 +462,18 @@ public class UserService {
         return false;
     }
 
+    public List<Optional<User>> getSuggestedForEvent(ObjectId eventId){
+        List<User> allGuides = userRepository.findAll();
+        List<Optional<User>> suggestedUsers = new ArrayList<>();
+        for(User guide : allGuides){
+            List<ObjectId> ids = guide.getSuggestedEvents();
+            for(ObjectId id:ids){
+                if(id.equals(eventId)){
+                    suggestedUsers.add(Optional.of(guide));
+                    continue;
+                }
+            }
+        }
+        return suggestedUsers;
+    }
 }

@@ -1,11 +1,13 @@
 package bilfo.demo.EventCollection;
 
 import bilfo.demo.EventCollection.feedbackCollection.Feedback;
+import bilfo.demo.Triple;
 import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.EVENT_STATES;
 import bilfo.demo.enums.EVENT_TYPES;
 import bilfo.demo.formCollection.Form;
 import bilfo.demo.formCollection.FormManager;
+import bilfo.demo.userCollection.User;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -100,5 +102,12 @@ public class EventManager {
     @GetMapping("/hasSuggestedEvents")
     public ResponseEntity<Boolean> hasSuggestedEvents(@RequestParam int bilkentId) {
         return new ResponseEntity<>(eventService.hasSuggestedEvents(bilkentId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getGuidesOfEvent")
+    public ResponseEntity<Triple<List<Optional<User>>,List<Optional<User>>,List<Optional<User>>>> getGuidesOfEvent(@RequestParam Map<String,String> event){
+        ObjectId eventId = new ObjectId(event.get("eventId"));
+        Triple<List<Optional<User>>,List<Optional<User>>,List<Optional<User>>> allGuides = eventService.getGuidesOfEvent(eventId);
+        return new ResponseEntity<>(allGuides,HttpStatus.OK);
     }
 }

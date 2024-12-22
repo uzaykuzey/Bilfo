@@ -11,6 +11,10 @@
     padding-top: 4rem;
   }
 
+  .main-content-tour-fair-list h2 {
+    margin-bottom: 2rem;
+  }
+
   .tour-table {
     width: 100%;
     border-collapse: collapse;
@@ -86,21 +90,25 @@
   .assign-button {
     background-color: #4CAF50;
     color: white;
+    border-radius: 4px;
   }
   
   .claim-button {
     background-color: #2196F3;
     color: white;
+    border-radius: 4px;
   }
   
   .cancel-button {
     background-color: #f44336;
     color: white;
+    border-radius: 4px;
   }
   
   .details-button {
     background-color: #555;
     color: white;
+    border-radius: 4px;
   }
   
   

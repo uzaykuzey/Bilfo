@@ -63,56 +63,58 @@ export default function ForgotPasswordLayout() {
   };
 
   return (
-    <div className="forgot-password-modal">
-      <button onClick={goToLogin} className="close-button">&times;</button>
-      {emailSent ? (
-        <>
-          <h2>Enter the link code:</h2>
-          <input
-            type="text"
-            placeholder="Link Code"
-            className="password-input"
-            value={linkCode}
-            onChange={(e) => setLinkCode(e.target.value)}
-          />
-          <h2>Enter your new password:</h2>
-          <input
-            type="password"
-            placeholder="New Password"
-            className="password-input"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-          <h2>Enter it again:</h2>
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            className="password-input"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <button onClick={handleChangePassword} className="send-email-button">
-            Change Password
-          </button>
-        </>
-      ) : (
-        <>
-          <h2>Enter Your Bilkent ID</h2>
-          <input
-            type="text"
-            placeholder="Bilkent ID"
-            className="email-input"
-            pattern="\d{8}" // Ensures only 8 digits
-            maxLength={8}   // Limits the input to 8 characters
-            title="Bilkent ID must be exactly 8 digits"
-            value={bilkentID}
-            onChange={(e) => setBilkentID(e.target.value)}
-          />
-          <button onClick={handleSendEmail} className="send-email-button">
-            Send Email
-          </button>
-        </>
-      )}
+    <div className = "forgot-password-page">
+      <div className="forgot-password-modal">
+        <button onClick={goToLogin} className="close-button">&times;</button>
+        {emailSent ? (
+          <>
+            <h2>Enter the link code:</h2>
+            <input
+              type="text"
+              placeholder="Link Code"
+              className="password-input"
+              value={linkCode}
+              onChange={(e) => setLinkCode(e.target.value)}
+            />
+            <h2>Enter your new password:</h2>
+            <input
+              type="password"
+              placeholder="New Password"
+              className="password-input"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <h2>Enter it again:</h2>
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              className="password-input"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <button onClick={handleChangePassword} className="send-email-button">
+              Change Password
+            </button>
+          </>
+        ) : (
+          <>
+            <h2>Enter Your Bilkent ID</h2>
+            <input
+              type="text"
+              placeholder="Bilkent ID"
+              className="email-input"
+              pattern="\d{8}" // Ensures only 8 digits
+              maxLength={8}   // Limits the input to 8 characters
+              title="Bilkent ID must be exactly 8 digits"
+              value={bilkentID}
+              onChange={(e) => setBilkentID(e.target.value)}
+            />
+            <button onClick={handleSendEmail} className="send-email-button">
+              Send Email
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }

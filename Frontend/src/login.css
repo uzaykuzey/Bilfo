@@ -1,5 +1,5 @@
 /* General Container */
-.login-container {
+  .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,7 +16,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
-    gap: 2rem;
+
   }
   
   /* Close Button */
@@ -32,9 +32,13 @@
   
   /* Logo Section */
   .logo-section {
-    flex: 1;
+    flex: 3;
     display: flex;
     justify-content: center;
+  }
+
+  .login-form {
+    flex: 2;
   }
   
   .university-logo {

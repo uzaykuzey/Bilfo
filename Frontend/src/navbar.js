@@ -76,7 +76,10 @@ export default function NavbarLayout(){
             <a className="nav-link" onClick={goToGuideList}>Guide List</a>
           )}
 
-          <a className="nav-link" onClick={goToPuantajTable}>Puantaj Table</a>
+          {(statusUser === "ADVISOR" || statusUser === "GUIDE") && (
+            <a className="nav-link" onClick={goToPuantajTable}>Puantaj Table</a>
+          )}
+          
 
           {(statusUser === "ADVISOR" || statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR" || statusUser === "ADMIN") && (
             <a className="nav-link" onClick={goToPuantajTableGuide}>Puantaj Table: Guides</a>

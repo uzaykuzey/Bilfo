@@ -106,11 +106,11 @@
   }
   
   .actions button:nth-child(1) {
-    background-color: #007bff;
+    background-color: #28a745;
   }
   
   .actions button:nth-child(2) {
-    background-color: #28a745;
+    color: black;
   }
   
   .actions button:nth-child(3) {

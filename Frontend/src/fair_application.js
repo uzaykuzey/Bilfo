@@ -160,7 +160,7 @@ export default function FairApplicationForm() {
                     <a href="/" className="nav-link">Campus Tours</a>
                     <a href="/fair_application" className="nav-link">Fair Application</a>
                     <a href="/feedback" className="nav-link">Feedback</a>
-                    <a href="/login" className="nav-link">Log In</a>
+                    <a href="/login" className="nav-link" id = "login">Log In</a>
                 </div>
 
                 <div className="language-switcher">

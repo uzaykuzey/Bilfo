@@ -42,8 +42,18 @@
   color: white;
   text-decoration: none;
   border-radius: 1rem;
-  text-align: center;
+  text-align: left;
   transition: background-color 0.3s;
+}
+
+.nav-link-logout {
+  padding: 1rem;
+  color: white;
+  text-decoration: none;
+  border-radius: 1rem;
+  text-align: left;
+  transition: background-color 0.3s;
+  margin-top: 2rem;
 }
 
 

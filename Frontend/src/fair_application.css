@@ -67,6 +67,10 @@
   transition: background-color 0.3s;
 }
 
+#login {
+  margin-top: 2rem;
+}
+
 .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }

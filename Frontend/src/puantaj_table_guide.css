@@ -304,18 +304,19 @@
 }
 
 .guide-logs-table th {
-    background-color: #1e5aa8;
-    color: white;
-    padding: 15px;
-    text-transform: uppercase;
-    font-weight: 500;
+    background-color: #1e5aa8; /* Primary color for headers */
+    color: white; /* White text for contrast */
+    font-weight: normal; /* Make headers stand out */
+    text-transform: uppercase; /* Transform text to uppercase for uniformity */
     letter-spacing: 0.5px;
+    padding: 15px;
 }
 
 .guide-logs-table td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    text-align: center;
+  padding: 12px 15px; /* Add padding for better spacing */
+  border: 1px solid #ddd; /* Add a consistent border for each cell */
+  text-align: center; /* Align content to center for a clean look */
+  font-size: 16px; /* Slightly larger font for better readability */
 }
 
 .guide-logs-table tr:nth-child(even) {

@@ -120,62 +120,80 @@ export default function PuantajLayout() {
     setLogToDelete(log);  // Set the log to be deleted
   };
 
+  // Add a function to format the tour type
+  const formatTourType = (type) => {
+    switch(type) {
+        case 'HIGHSCHOOL_TOUR':
+            return 'High School Tour';
+        case 'INDIVIDUAL_TOUR':
+            return 'Individual Tour';
+        default:
+            return type;
+    }
+  };
+
   return (
     <div className="home-layout">
       <NavbarLayout />
       <div className="main-content-puantaj">
         <h1>My Logs</h1>
-        <div className="month-navigation">
-          <button onClick={handlePreviousMonth} className="month-btn">◀ Previous</button>
-          <span className="current-month">{currentMonth.format("MMMM YYYY")}</span>
-          <button onClick={handleNextMonth} className="month-btn">Next ▶</button>
+        
+        <div className="header-controls">
+            <div className="month-navigation">
+                <button onClick={handlePreviousMonth} className="month-btn">◀</button>
+                <span className="current-month">{currentMonth.format("MMMM YYYY")}</span>
+                <button onClick={handleNextMonth} className="month-btn">▶</button>
+            </div>
         </div>
-        {error && <p className="error-message">{error}</p>}
-        <div className="log-table-container-normal">
-          {isLoading ? (
-            <p>Loading logs...</p>
-          ) : logs.length > 0 ? (
-            <table className="log-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Date</th>
-                  <th>Hour</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {logs.map((log, index) => (
-                  <tr key={index}>
-                    <td>{log.third?.schoolName}</td>
-                    <td>{log.third?.type}</td>
-                    <td>{log.second?.date 
-                      ? new Date(log.second.date).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "2-digit",
-                        })
-                      : ""}</td>
-                    <td>{log.first?.hours}</td>
-                    <td>
-                      <button
-                        className="delete-btn"
-                        onClick={() => confirmDelete(log)} // Show confirmation modal
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p className="no-data-message">No logs found.</p>
-          )}
-          <button className="add-log-btn" onClick={handleAddLog}>
+
+        <button className="add-log-btn" onClick={handleAddLog}>
             Add Log
-          </button>
+        </button>
+
+        {error && <p className="error-message">{error}</p>}
+        
+        <div className="log-table-container-normal">
+            {isLoading ? (
+                <p>Loading logs...</p>
+            ) : logs.length > 0 ? (
+                <table className="log-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Hour</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {logs.map((log, index) => (
+                            <tr key={index}>
+                                <td>{log.third?.schoolName}</td>
+                                <td>{formatTourType(log.third?.type)}</td>
+                                <td>{log.second?.date 
+                                    ? new Date(log.second.date).toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "2-digit",
+                                    })
+                                    : ""}</td>
+                                <td>{log.first?.hours}</td>
+                                <td>
+                                    <button
+                                        className="delete-btn"
+                                        onClick={() => confirmDelete(log)} // Show confirmation modal
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            ) : (
+                <p className="no-data-message">No logs found.</p>
+            )}
         </div>
       </div>
 

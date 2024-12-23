@@ -35,7 +35,7 @@ public class YokAtlasScraper {
     }
 
     public static void main(String[] args) {
-        
+        boolean fullSuccess = false;
 
         WebDriver driver = null;
         try {
@@ -44,11 +44,13 @@ public class YokAtlasScraper {
             int overlayError = 0;
             int noHSelements = 0;
 
-            System.setProperty("webdriver.chrome.driver", "C:/Users/nazli/Downloads/chromedriver-win64/chromedriver.exe");
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            String driverPath = classLoader.getResource("chromedriver.exe").getPath();
+            System.setProperty("webdriver.chrome.driver", driverPath);
             driver = new ChromeDriver();
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(2000));
 
-            try (FileWriter writer = new FileWriter("highschools.txt")) {
+            try (FileWriter writer = new FileWriter("highschools_not_ready.txt")) {
 
                 // Navigate to the main page
                 driver.get(BASE_URL + "/lisans-anasayfa.php");
@@ -226,6 +228,7 @@ public class YokAtlasScraper {
                 System.out.println( "Overlay fails: " + overlayError + "/n");
                 System.out.println( "No Overlay: " + noOverlayCount + "/n");
                 System.out.println( "No HS elements: " + noHSelements + "/n");
+                fullSuccess=true;
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -237,6 +240,11 @@ public class YokAtlasScraper {
             // WebDriver is closed
             if (driver != null) {
                 driver.quit();
+            }
+
+            if(fullSuccess)
+            {
+                System.out.println("dfsfs");
             }
         }
     }

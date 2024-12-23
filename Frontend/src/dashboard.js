@@ -115,10 +115,6 @@ export default function DashboardLayout() {
     navigate(`/userHome/${bilkentId}/dashboard/counselors`);
   };
 
-  const handleSchoolsClick = () => {
-    navigate(`/userHome/${bilkentId}/dashboard/schools`);
-  };
-
   const handleFeedbacksClick = () => {
     navigate(`/userHome/${bilkentId}/dashboard/feedbacks`);
   };
@@ -208,16 +204,6 @@ export default function DashboardLayout() {
               <div className="button-content">
                 <i className="fas fa-users"></i>
                 <span>Counselors</span>
-              </div>
-            </button>
-
-            <button 
-              className="dashboard-button schools"
-              onClick={handleSchoolsClick}
-            >
-              <div className="button-content">
-                <i className="fas fa-school"></i>
-                <span>Schools</span>
               </div>
             </button>
 

@@ -9,8 +9,6 @@ export default function FeedbackList() {
   const { bilkentId } = useParams();
   const [feedbacks, setFeedbacks] = useState([]);
   const [selectedFeedback, setSelectedFeedback] = useState(null);
-  const [filterSchool, setFilterSchool] = useState("");
-  const [filterDate, setFilterDate] = useState("");
 
   useEffect(() => {
     fetchFeedbacks();
@@ -27,52 +25,30 @@ export default function FeedbackList() {
     }
   };
 
-  const filteredFeedbacks = feedbacks.filter(feedback => {
-    const matchesSchool = feedback.schoolName.toLowerCase().includes(filterSchool.toLowerCase());
-    const matchesDate = !filterDate || feedback.date.includes(filterDate);
-    return matchesSchool && matchesDate;
-  });
-
   return (
     <div className="home-layout">
       <NavbarLayout />
       <div className="content-list">
         <h2>Feedback List</h2>
 
-        <div className="filters">
-          <div className="filter-group">
-            <input
-              type="text"
-              placeholder="Filter by school name..."
-              value={filterSchool}
-              onChange={(e) => setFilterSchool(e.target.value)}
-            />
-            <input
-              type="date"
-              value={filterDate}
-              onChange={(e) => setFilterDate(e.target.value)}
-            />
-          </div>
-        </div>
-
         <div className="table-container">
           <table className="feedback-table">
             <thead>
               <tr>
-                <th>School</th>
+                <th>Event Name</th>
+                <th>Event Type</th>
                 <th>Date</th>
-                <th>Guide</th>
                 <th>Rating</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredFeedbacks.length > 0 ? (
-                filteredFeedbacks.map((feedback) => (
+              {feedbacks.length > 0 ? (
+                feedbacks.map((feedback) => (
                   <tr key={feedback.id}>
-                    <td>{feedback.schoolName}</td>
+                    <td>{feedback.eventName}</td>
+                    <td>{feedback.eventType}</td>
                     <td>{feedback.date}</td>
-                    <td>{feedback.guideName}</td>
                     <td>{feedback.rating}/5</td>
                     <td>
                       <button 
@@ -86,10 +62,9 @@ export default function FeedbackList() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5">No feedbacks available.</td> {/* Adjusted colspan */}
+                  <td colSpan="5">No feedbacks available.</td>
                 </tr>
-              )
-              }
+              )}
             </tbody>
           </table>
         </div>
@@ -104,12 +79,18 @@ export default function FeedbackList() {
             <h2>Feedback Details</h2>
             {selectedFeedback && (
               <div className="feedback-details">
-                <p><strong>School:</strong> {selectedFeedback.schoolName}</p>
+                <p><strong>Event Name:</strong> {selectedFeedback.eventName}</p>
+                <p><strong>Event Type:</strong> {selectedFeedback.eventType}</p>
                 <p><strong>Date:</strong> {selectedFeedback.date}</p>
-                <p><strong>Guide:</strong> {selectedFeedback.guideName}</p>
                 <p><strong>Rating:</strong> {selectedFeedback.rating}/5</p>
                 <p><strong>Number of Students:</strong> {selectedFeedback.studentCount}</p>
                 <p><strong>Duration:</strong> {selectedFeedback.duration} minutes</p>
+                <div className="feedback-guides">
+                  <h3>Guides</h3>
+                  {selectedFeedback.guides?.map((guide, index) => (
+                    <p key={index}>{guide.name} - {guide.email}</p>
+                  ))}
+                </div>
                 <div className="feedback-comments">
                   <h3>Comments</h3>
                   <p>{selectedFeedback.comments}</p>

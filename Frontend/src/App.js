@@ -23,7 +23,6 @@ import DashboardLayout from './dashboard';
 import EditEvent from './edit_event';
 import UserList from './user_list';
 import CounselorList from './counselor_list';
-import SchoolList from './school_list';
 import FeedbackList from './feedback_list';
 import SuggestedToursLayout from './suggested_tours';
 
@@ -164,15 +163,6 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
               <CounselorList />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/userHome/:bilkentId/dashboard/schools"
-          element={
-            <ProtectedRoute allowedRoles={['COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
-              <SchoolList />
             </ProtectedRoute>
           }
         />

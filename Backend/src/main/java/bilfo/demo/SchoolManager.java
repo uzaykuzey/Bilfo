@@ -146,11 +146,11 @@ public class SchoolManager {
 
     /**
      * A custom comparator class because java.text.Collator class was slow.
-     * Should only be used with capital turkish/english letters: ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ
+     * Should only be used with the following characters: " .-()0123456789ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ"
      */
     private static class TurkishComparator implements Comparator<String> {
 
-        public static final String comprehensiveAlphabet = " .0123456789ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ";
+        public static final String comprehensiveAlphabet = " .-()0123456789ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ";
         @Override
         public int compare(String o1, String o2) {
             int len = Math.min(o1.length(), o2.length());

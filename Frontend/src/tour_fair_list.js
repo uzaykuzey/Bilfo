@@ -33,7 +33,7 @@ export default function TourListLayout() {
   const [detailSuggested, setDetailsSuggested] = useState([]);
   const [isLoadingGuides, setIsLoadingGuides] = useState(false);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);  
-  const [isFirstLoad, setFirstLoad] = useState(null);
+  const [isFirstLoad, setFirstLoad] = useState(true);
   const [guideId, setGuideId] = useState(null);
   const [selectedCancel, setSelectedCancel] = useState(null);
   const [cancelPopupOpen, setCancelPopupOpen] = useState(false);
@@ -577,7 +577,7 @@ export default function TourListLayout() {
       }
     };
     fetchTours();
-  }, [selectedStatus, selectedType, selectedSort]);
+  }, [selectedStatus,statusUser, selectedType, selectedSort]);
 
   
 

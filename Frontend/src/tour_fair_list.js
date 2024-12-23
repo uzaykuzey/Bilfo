@@ -590,11 +590,19 @@ export default function TourListLayout() {
     const getTableHeaders = () => {
       switch (selectedType) {
         case "HIGHSCHOOL_TOUR":
-          return ["School Name", "City", "Date", "Day", "Time", "Visitor Count", "Actions"];
+          if (selectedStatus !== "Accepted") {
+            return ["School Name", "City", "Date", "Day", "Time", "Visitor Count","Admissions", "Percentage", "Actions"];
+          } else {
+            return ["School Name", "City", "Date", "Day", "Time", "Visitor Count", "Actions"];
+          }
         case "INDIVIDUAL_TOUR":
           return ["Names", "Department", "Date", "Day", "Time", "Visitor Count", "Actions"];
         case "FAIR":
-          return ["School Name", "City", "Date", "Day", "Time", "Actions"];
+          if (selectedStatus !== "Accepted") {
+            return ["School Name", "City", "Date", "Day","Admissions", "Percentage", "Actions"];
+          }else{
+            return ["School Name", "City", "Date", "Day",  "Actions"];
+          }
         default:
           return [];
       }
@@ -604,7 +612,7 @@ export default function TourListLayout() {
       switch (selectedType) {
         case "HIGHSCHOOL_TOUR":
           if (selectedStatus !== "Accepted") {
-            var firstPossibleTime = tour.possibleTimes?.[0];
+            var firstPossibleTime = tour.form?.possibleTimes?.[0];
             var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
             var rawTime = firstPossibleTime?.second || "N/A";
             var formattedTime = mapTime(rawTime);
@@ -612,12 +620,14 @@ export default function TourListLayout() {
             var formattedDate = formatDate(date);
             return (
               <>
-                <td>{tour.schoolName}</td>
-                <td>{tour.city}</td>
+                <td>{tour.form?.schoolName}</td>
+                <td>{tour.form?.city}</td>
                 <td>{formattedDate}</td>
                 <td>{day}</td>
                 <td>{formattedTime}</td>
-                <td>{tour.visitorCount}</td>
+                <td>{tour.form?.visitorCount}</td>
+                <td>{tour.bilkentAdmissions}</td>
+                <td>{tour.bilkentAdmissionsPercentage}</td>
                 <td>{renderActions(tour)}</td>
               </>
             );
@@ -681,7 +691,7 @@ export default function TourListLayout() {
           }
         case "FAIR":
           if (selectedStatus !== "Accepted") {
-            var firstPossibleTime = tour.possibleTimes?.[0];
+            var firstPossibleTime = tour.form?.possibleTimes?.[0];
             var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
             var rawTime = firstPossibleTime?.second || "N/A";
             var formattedTime = mapTime(rawTime);
@@ -689,11 +699,12 @@ export default function TourListLayout() {
             var formattedDate = formatDate(date);
             return (
               <>
-                <td>{tour.schoolName}</td>
-                <td>{tour.city}</td>
+                <td>{tour.form?.schoolName}</td>
+                <td>{tour.form?.city}</td>
                 <td>{formattedDate}</td>
                 <td>{day}</td>
-                <td>{formattedTime}</td>
+                <td>{tour.bilkentAdmissions}</td>
+                <td>{tour.bilkentAdmissionsPercentage}</td>
                 <td>{renderActions(tour)}</td>
               </>
             );
@@ -710,7 +721,6 @@ export default function TourListLayout() {
                 <td>{tour.second?.city}</td>
                 <td>{formattedDateAccepted}</td>
                 <td>{dayAccepted}</td>
-                <td>{formattedTimeAccepted}</td>
                 <td>{renderActions(tour)}</td>
               </>
             );

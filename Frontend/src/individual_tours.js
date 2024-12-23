@@ -193,10 +193,11 @@ export default function IndividualToursForm() {
             <div className="form-container">
                 <div className="form-header">
                     <h2>Submit Individual Tour Application</h2>
+                    <h3>* symbol denotes the mandatory fields to be filled</h3>
                 </div>
                 <form onSubmit={handleSubmit} className="tour-form">
                     <label>
-                        Names of applicants:
+                        *Names of applicants:
                         <input
                             type="text"
                             name="applicantNames"
@@ -208,7 +209,7 @@ export default function IndividualToursForm() {
                     </label>
 
                     <label>
-                        First time preference (date):
+                        *First time preference (date):
                         <input
                             type="date"
                             name="firstTimeDate"
@@ -219,7 +220,7 @@ export default function IndividualToursForm() {
                     </label>
 
                     <label>
-                        First time preference (hour):
+                        *First time preference (hour):
                         <select
                             name="firstTimeHour"
                             value={formData.firstTimeHour}
@@ -245,7 +246,6 @@ export default function IndividualToursForm() {
                             name="secondTimeDate"
                             value={formData.secondTimeDate}
                             onChange={handleChange}
-                            required
                         />
                     </label>
 
@@ -255,7 +255,6 @@ export default function IndividualToursForm() {
                             name="secondTimeHour"
                             value={formData.secondTimeHour}
                             onChange={handleTimeChange}
-                            required
                         >
                             <option value="">Select Hour</option>
                             {timeOptions.map((time) => (
@@ -296,7 +295,7 @@ export default function IndividualToursForm() {
                     </label>
 
                     <label>
-                        Number of visitors:
+                        *Number of visitors:
                         <input
                             type="number"
                             name="numberOfVisitors"
@@ -310,7 +309,7 @@ export default function IndividualToursForm() {
                     </label>
 
                     <label>
-                        Major of interest:
+                        *Major of interest:
                         <select
                             name="majorOfInterest"
                             value={formData.majorOfInterest}
@@ -327,7 +326,7 @@ export default function IndividualToursForm() {
                     </label>
 
                     <label>
-                        Contact email:
+                        *Contact email:
                         <input
                             type="email"
                             name="contactEmail"

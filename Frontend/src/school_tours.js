@@ -226,10 +226,12 @@ export default function SchoolToursForm() {
             <div className="form-container">
                 <div className="form-header">
                     <h2>Submit Tour Application</h2>
+                    <h3>* symbol denotes the mandatory fields to be filled</h3>
                 </div>
                 <form onSubmit={handleSubmit} className="tour-form">
+
                     <label>
-                        City:
+                        *City:
                         <select
                             name="city"
                             value={formData.city}
@@ -246,7 +248,7 @@ export default function SchoolToursForm() {
                     </label>
 
                     <label>
-                        District:
+                        *District:
                         <select
                             name="district"
                             value={formData.district}
@@ -264,7 +266,7 @@ export default function SchoolToursForm() {
                     </label>
 
                     <label>
-                        School Name:
+                        *School Name:
                         <select
                             name="schoolName"
                             value={formData.schoolName}
@@ -282,7 +284,7 @@ export default function SchoolToursForm() {
                     </label>
 
                     <label>
-                        First time preference (date):
+                        *First time preference (date):
                         <input
                             type="date"
                             name="firstTimeDate"
@@ -293,7 +295,7 @@ export default function SchoolToursForm() {
                     </label>
 
                     <label>
-                        First time preference (hour):
+                        *First time preference (hour):
                         <select
                             name="firstTimeHour"
                             value={formData.firstTimeHour}
@@ -316,7 +318,6 @@ export default function SchoolToursForm() {
                             name="secondTimeDate"
                             value={formData.secondTimeDate}
                             onChange={handleChange}
-                            required
                         />
                     </label>
 
@@ -326,7 +327,6 @@ export default function SchoolToursForm() {
                             name="secondTimeHour"
                             value={formData.secondTimeHour}
                             onChange={handleChange}
-                            required
                         >
                             <option value="">Select Hour</option>
                             {timeOptions.map((time) => (
@@ -364,7 +364,7 @@ export default function SchoolToursForm() {
                     </label>
 
                     <label>
-                        Number of visitors:
+                        *Number of visitors:
                         <input
                             type="number"
                             name="numberOfVisitors"
@@ -378,7 +378,7 @@ export default function SchoolToursForm() {
                     </label>
 
                     <label>
-                        Counsellor:
+                        *Counsellor:
                         <input
                             type="text"
                             name="counselorName"
@@ -389,7 +389,7 @@ export default function SchoolToursForm() {
                     </label>
 
                     <label>
-                        Counsellor's phone number:
+                        *Counsellor's phone number:
                         <input
                             type="tel"
                             name="counselorPhone"
@@ -400,7 +400,7 @@ export default function SchoolToursForm() {
                     </label>
 
                     <label>
-                        Counsellor's e-mail:
+                        *Counsellor's e-mail:
                         <input
                             type="email"
                             name="counselorEmail"

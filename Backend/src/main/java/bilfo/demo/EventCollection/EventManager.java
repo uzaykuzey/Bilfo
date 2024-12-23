@@ -55,6 +55,19 @@ public class EventManager {
         return new ResponseEntity<>("Unsuccesful claim", HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/rejectSuggestedEvent")
+    public ResponseEntity<String> rejectSuggestedEvent(@RequestBody Map<String, String> eventRejectRequest)
+    {
+        int bilkentId = Integer.parseInt(eventRejectRequest.get("bilkentId"));
+        ObjectId eventId = new ObjectId(eventRejectRequest.get("eventId"));
+
+        if(eventService.rejectSuggestedEvent(bilkentId, eventId))
+        {
+            return new ResponseEntity<>("Successfully rejected event", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Unsuccesful reject event", HttpStatus.BAD_REQUEST);
+    }
+
     @PostMapping("/feedback")
     public ResponseEntity<String> feedback(@RequestBody Map<String, String> eventFeedbackRequest)
     {

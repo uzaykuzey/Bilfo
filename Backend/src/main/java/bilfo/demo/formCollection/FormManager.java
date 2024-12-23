@@ -141,7 +141,7 @@ public class FormManager {
     }
 
     @GetMapping("/getForms")
-    public ResponseEntity<List<Triple<Form, Integer, Integer>>> getForms(@RequestParam Map<String, String> getFormsRequest)
+    public ResponseEntity<List<FormService.FormWithStats>> getForms(@RequestParam Map<String, String> getFormsRequest)
     {
         FORM_STATES state = FORM_STATES.valueOf(getFormsRequest.get("state").toUpperCase());
         EVENT_TYPES type = EVENT_TYPES.valueOf(getFormsRequest.get("type").toUpperCase());

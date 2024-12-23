@@ -158,7 +158,10 @@ public class EventManager {
         ObjectId eventId = new ObjectId(changeTimeOfEventRequest.get("eventId"));
         Date date=FormManager.stringToDate(changeTimeOfEventRequest.get("date"));
         TOUR_TIMES time = TOUR_TIMES.stringToTourTime(changeTimeOfEventRequest.get("time"));
-
-        return null;
+        if(eventService.changeTimeOfEvent(eventId, date, time))
+        {
+            return new ResponseEntity<>("Successfully changed event", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Unsuccesful change", HttpStatus.BAD_REQUEST);
     }
 }

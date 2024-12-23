@@ -563,7 +563,36 @@ public class EventService {
 
     public boolean changeTimeOfEvent(ObjectId eventId, Date date, TOUR_TIMES time)
     {
-        return false;
+        Optional<Event> optionalEvent=eventRepository.findEventById(eventId);
+        if(optionalEvent.isEmpty())
+        {
+            return false;
+        }
+        Event event = optionalEvent.get();
+        if(event.getEventType()==EVENT_TYPES.FAIR)
+        {
+            return false;
+        }
+        event.setTime(time);
+        event.setDate(date);
+        List<Integer> usersOfEvent=event.getGuides();
+        usersOfEvent.addAll(event.getTrainees());
+
+        for(int bilkentId: usersOfEvent)
+        {
+            Optional<User> user=userService.getUser(bilkentId);
+            if(user.isEmpty())
+            {
+                continue;
+            }
+            if(!isUserAvailable(user.get(), date, time, true))
+            {
+                event.getGuides().remove(bilkentId);
+            }
+        }
+        mailSenderService.sendEmail(formService.getForm(event.getOriginalForm()).get().getContactMail(), "Your Event's date has been changed!", "New time: "+date.toString().replace("00:00:00 TRT ", "")+" at "+time.toString());
+        eventRepository.save(event);
+        return true;
     }
 }
 

@@ -42,12 +42,16 @@ export default function TourListLayout() {
   // Set initial state based on the user role
   useEffect(() => {
     setFirstLoad(true);
-    if (statusUser === "GUIDE" && isFirstLoad) {
+    if (statusUser === "GUIDE") {
       setSelectedStatus("Accepted");
+      // Hide other status options for guides
+      const statusSelect = document.getElementById("status");
+      if (statusSelect) {
+        statusSelect.style.display = "none";
+      }
     } else {
       setSelectedStatus("Pending");
     }
-    
   }, [statusUser]);
 
   const handleDateChange = (e, index) => {
@@ -272,7 +276,8 @@ export default function TourListLayout() {
       <div className="assign-popup-content">
         <h3>Assign Guide</h3>
         <p>Select a guide to assign for the tour.</p>
-        <table className="guide-table">
+        <div className="guide-table-popup-container">
+        <table className="guide-table-popup">
           <thead>
             <tr>
               <th>Name</th>
@@ -299,6 +304,7 @@ export default function TourListLayout() {
             ))}
           </tbody>
         </table>
+        </div>
         <button onClick={closeAssignPopup} className="cancel-button">
           Cancel
         </button>
@@ -315,7 +321,7 @@ export default function TourListLayout() {
   
     return (
       <div className="popup-overlay">
-        <div className="popup-content">
+        <div className="popup-details-content">
           {/* Close Icon */}
           <div className="popup-close-icon" onClick={closeDetailsPopup}>
             ×
@@ -371,8 +377,10 @@ export default function TourListLayout() {
       <div className="cancel-popup-content">
         <h3>Cancel Tour</h3>
         <p>Are you sure you want to cancel this tour?</p>
-        <button onClick={() => cancelTour(selectedCancel)}>Confirm Cancel</button>
-        <button onClick={() => setCancelPopupOpen(false)}>Cancel</button>
+        <div className="cancel-popup-buttons">
+        <button className="reject-btn" onClick={() => cancelTour(selectedCancel)}>Confirm Cancel</button>
+        <button className="claim-btn" onClick={() => setCancelPopupOpen(false)}>Cancel</button>
+        </div>
       </div>
     );
   };
@@ -536,8 +544,10 @@ export default function TourListLayout() {
       <div className="claim-popup-content">
         <h3>Claim Tour</h3>
         <p>Are you sure you want to claim this tour?</p>
-        <button onClick={() => confirmClaim(selectedClaimTour)}>Confirm Claim</button>
-        <button onClick={() => setClaimPopupOpen(false)}>Cancel</button>
+        <div className="claim-popup-buttuns">
+          <button className="claim-btn" onClick={() => confirmClaim(selectedClaimTour)}>Confirm Claim</button>
+          <button className="reject-btn" onClick={() => setClaimPopupOpen(false)}>Cancel</button>
+        </div>
       </div>
     );
   };
@@ -590,15 +600,33 @@ export default function TourListLayout() {
       if (selectedStatus === "Accepted") {
         return (
           <>
-            <button className="assign-button" onClick={() => openAssignPopup(tour)}>Assign Guide</button>
-            <button className="claim-button" onClick={() => claimTour(tour)}>Claim</button>
-            <button className="cancel-button" onClick={() => openCancelPopup(tour)}>Cancel</button>
-            <button className="details-button" onClick={() => openDetailsPopup(tour)}>Details</button>
+            {/* Show Assign Guide button for coordinator, acting director, admin, and advisor */}
+            {statusUser !== "GUIDE" && (
+              <button className="assign-button" onClick={() => openAssignPopup(tour)}>
+                Assign Guide
+              </button>
+            )}
+            
+            {/* Show Claim button only for guides and advisors */}
+            {(statusUser === "GUIDE" || statusUser === "ADVISOR") && (
+              <button className="claim-button" onClick={() => claimTour(tour)}>
+                Claim
+              </button>
+            )}
+            
+            <button className="cancel-button" onClick={() => openCancelPopup(tour)}>
+              Cancel
+            </button>
+            <button className="details-button" onClick={() => openDetailsPopup(tour)}>
+              Details
+            </button>
           </>
         );
       } else if (selectedStatus === "Pending") {
         return (
-          <button className="evaluate-button" onClick={() => openPopup(tour)}>Evaluate</button>
+          <button className="evaluate-button" onClick={() => openPopup(tour)}>
+            Evaluate
+          </button>
         );
       } else {
         return (
@@ -777,16 +805,20 @@ export default function TourListLayout() {
       <div className="main-content-tour-fair-list">
         <h2>Tours and Fairs</h2>
         <div className="filters">
-          <label htmlFor="status">Status: </label>
-          <select
-            id="status"
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-          >
-            <option value="Pending">Pending</option>
-            <option value="Accepted">Accepted</option>
-            <option value="Rejected">Rejected</option>
-          </select>
+          {statusUser !== "GUIDE" && (
+            <>
+              <label htmlFor="status">Status: </label>
+              <select
+                id="status"
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+              >
+                <option value="Pending">Pending</option>
+                <option value="Accepted">Accepted</option>
+                <option value="Rejected">Rejected</option>
+              </select>
+            </>
+          )}
 
           <label htmlFor="type">Type: </label>
           <select
@@ -796,7 +828,9 @@ export default function TourListLayout() {
           >
             <option value="HIGHSCHOOL_TOUR">High School Tours</option>
             <option value="INDIVIDUAL_TOUR">Individual Tours</option>
-            <option value="FAIR">Fairs</option>
+            {statusUser !== "GUIDE" && statusUser !== "ADVISOR" && (
+              <option value="FAIR">Fairs</option>
+            )}
           </select>
 
           {/* NEW: Only show sort dropdown when status is "Pending" */}

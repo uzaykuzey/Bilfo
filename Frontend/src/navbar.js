@@ -112,19 +112,6 @@ export default function NavbarLayout(){
           
 
         </div>
-
-        <div className="language-switcher">
-          <img
-            src="/Flag_England.png?height=32&width=40"
-            alt="English"
-            className="language-icon"
-          />
-          <img
-            src="/Flag_of_Turkey.png?height=32&width=40"
-            alt="Turkish"
-            className="language-icon"
-          />
-        </div>
       </nav>
   );
 }

@@ -12,8 +12,8 @@ import java.util.List;
 @TypeAlias("guide")
 public class Guide extends User{
 
-    public Guide(ObjectId id, int bilkentId, USER_STATUS status, String username, String email, String phoneNo, String password, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability, String photo) {
-        super(id, bilkentId, status, username, email, phoneNo, password, department, logs, suggestedEvents, trainee, availability, photo);
+    public Guide(ObjectId id, int bilkentId, USER_STATUS status, String username, String email, String phoneNo, String password, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability) {
+        super(id, bilkentId, status, username, email, phoneNo, password, department, logs, suggestedEvents, trainee, availability);
     }
 
 }

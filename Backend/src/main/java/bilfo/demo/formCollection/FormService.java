@@ -56,6 +56,15 @@ public class FormService {
     public Optional<Form> createForm(EVENT_TYPES type, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleDates, String contactMail, String city, String district, String schoolName, int visitorCount, String visitorNotes, String counselorEmail, String[] names, DEPARTMENT department) {
         logger.info("Creating Form");
 
+        Date today = new Date();
+        /*for(var pair : possibleDates)
+        {
+            if(pair.getFirst().before(today) || DAY.dayDifference(today, pair.getFirst()) < 14)
+            {
+                return Optional.empty();
+            }
+        }*/
+
         if(type!=EVENT_TYPES.INDIVIDUAL_TOUR)
         {
             if(!SchoolManager.getInstance().schoolExists(city, district, schoolName))
@@ -76,7 +85,6 @@ public class FormService {
 
 
         Form form;
-        Date today = new Date();
         switch (type)
         {
             case FAIR -> form = new FairForm(new ObjectId(), today, approved, possibleDates, contactMail, city, district, schoolName);
@@ -97,7 +105,7 @@ public class FormService {
     public Optional<Event> evaluateForm(ObjectId formId, FORM_STATES state, Date chosenDate, TOUR_TIMES chosenTime, String rejectionMessage)
     {
         Optional<Form> form = formRepository.findById(formId);
-        if (form.isEmpty()) {
+        if (form.isEmpty() || form.get().getApproved() != FORM_STATES.NOT_REVIEWED) {
             return Optional.empty();
         }
 

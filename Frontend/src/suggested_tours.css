@@ -1,8 +1,19 @@
 .home-layout {
     display: flex;
     min-height: 100vh;
-  }
-  .table-container {
+}
+
+.content-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#suggested-header {
+  padding-top: 4rem;
+}
+
+.table-container {
     display: flex;
     flex-direction: column;
     gap: 20px; /* Adds space between the tables */
@@ -32,12 +43,18 @@
   color: #888;
   margin: 10px 0;
 }
-.popup-content {
+.popup-content-suggested {
   padding: 20px;
   background-color: white;
   border-radius: 8px;
   text-align: center;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.popup-content {
+  background-color: transparent;
+  border: transparent;
+  box-shadow: none;
 }
 
 .popup-content button {

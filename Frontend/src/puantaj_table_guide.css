@@ -60,20 +60,25 @@
 
 .log-table-container {
   display: flex;
-  justify-content: center;
-  gap: 20px;
   width: 100%;
-  overflow-x: auto;
-  padding: 10px; /* Add some padding for spacing around the table */
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+  max-height: 730px;
+  overflow-y: scroll;
+  margin-top: 2rem;
+}
+
+.log-table-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.log-table-container::-webkit-scrollbar-thumb {
+    background-color: #ddd;
+    border-radius: 5px;
 }
 
 .log-table {
   width: 100%;
-  max-width: 800px;
   border-collapse: collapse;
+  margin-top: 0rem;
   border-radius: 8px; /* Rounded corners for a softer look */
   overflow: hidden; /* Clip overflow content for rounded corners */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow for depth */
@@ -93,6 +98,8 @@
   font-weight: normal; /* Make headers stand out */
   text-transform: uppercase; /* Transform text to uppercase for uniformity */
   letter-spacing: 0.5px; /* Add spacing between letters for a clean look */
+  position: sticky;
+  top: 0px;
 }
 
 .log-table tr:nth-child(even) {
@@ -170,16 +177,6 @@
 }
 
 .popup-content-puantajg {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 90%;
-    text-align: center;
-}
-
-.popup-content {
     background-color: white;
     padding: 2rem;
     border-radius: 8px;
@@ -301,6 +298,7 @@
 .month-navigation {
     margin-bottom: 1.5rem;
 }
+
 
 /* Update the table styles specifically for guide logs */
 .guide-logs-table {
@@ -584,11 +582,7 @@
 }
 
 /* Table container alignment */
-.log-table-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+
 
 /* Content container */
 .log-details-container {
@@ -636,13 +630,7 @@
 }
 
 /* Common table container width for both views */
-.log-table-container,
-.guide-logs-table,
-.log-details-container {
-    width: 100%;
-    max-width: 900px;  /* Reduced to match the main view width */
-    margin: 0 auto;
-}
+
 
 /* Header section */
 .guide-logs-header {
@@ -665,9 +653,4 @@
     padding: 0;
 }
 
-/* Table styles for both views */
-table {
-    width: 100%;
-    max-width: 900px;  /* Match container width */
-    margin: 0 auto;
-}
+

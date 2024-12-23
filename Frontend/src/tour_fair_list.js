@@ -417,6 +417,7 @@ export default function TourListLayout() {
     };
   
     return (
+      <div className="popup-content">
       <div className="popup-content-evaluate">
         {/* Cross icon for closing */}
         <div className="popup-close-icon" onClick={handleCancel}>
@@ -504,6 +505,7 @@ export default function TourListLayout() {
             </div>
           </div>
         )}
+      </div>
       </div>
     );
   };

@@ -236,6 +236,7 @@ export default function CounselorList() {
           onClose={() => setEditCounselor(null)}
           modal
         >
+          <div className="popup-content">
           <div className="popup-container">
             <h2>Edit Counselor</h2>
             <div className="input-group">
@@ -278,6 +279,7 @@ export default function CounselorList() {
               <button onClick={() => setEditCounselor(null)}>Cancel</button>
             </div>
           </div>
+          </div>
         </Popup>
 
         {/* Delete Confirmation Popup */}
@@ -286,6 +288,7 @@ export default function CounselorList() {
           onClose={() => setDeleteCounselor(null)}
           modal
         >
+          <div className="popup-content">
           <div className="popup-container">
             <h2>Confirm Deletion</h2>
             <p>Are you sure you want to delete {deleteCounselor?.name}?</p>
@@ -293,6 +296,7 @@ export default function CounselorList() {
               <button onClick={handleDeleteCounselor}>Delete</button>
               <button onClick={() => setDeleteCounselor(null)}>Cancel</button>
             </div>
+          </div>
           </div>
         </Popup>
 
@@ -302,6 +306,7 @@ export default function CounselorList() {
           onClose={() => setIsAddPopupOpen(false)}
           modal
         >
+          <div className="popup-content">
           <div className="popup-container">
             <h2>Add Counselor</h2>
             <div className="input-group">
@@ -372,6 +377,7 @@ export default function CounselorList() {
             <div className="popup-actions">
               <button onClick={handleAddCounselor}>Save</button>
               <button onClick={() => setIsAddPopupOpen(false)}>Cancel</button>
+            </div>
             </div>
           </div>
         </Popup>

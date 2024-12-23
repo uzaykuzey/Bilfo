@@ -30,11 +30,12 @@ public class SecurityConfig{
                                                                 "/addGuide","/removeUser", "/addAdvisor", "/addCoordinator", "/addActingDirector",
                                                                 "/changeAvailability", "/event/feedback", "/event/claimEvent", "/forgotPasswordMail",
                                                                 "/forgotPasswordChangeRequest", "/demoteUser", "/log/addLog", "/editUser", "/log/deleteLog",
-                                                                "/log/markLogAsPaid", "/log/markAllLogsAsPaid", "/event/offerEvent", "/counselors/edit", "/counselors/delete").permitAll()
+                                                                "/log/markLogAsPaid", "/log/markAllLogsAsPaid", "/dashboard/createDashboard", "/event/offerEvent", "/counselor/edit", "/counselor/delete", "/counselor/add").permitAll()
                         .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/getAllUsers", "/event", "/form", "/getAvailability", "/getFeedback", "/getAdvisorsOfTheDay","/getUserInfo"
                                                                 , "/event/getScheduleOfWeek","/form/getForms", "/event/getEvents", "/school/cityNames", "/school/districtNames", "/school/schoolNames",
                                                                   "/log/getLogs", "/log/getEventsOfUserThatDontHaveLogsAndFinished","/log/getAllGuidesLogTable", "/guidesAvailable",
-                                                                    "/event/getGuidesOfEvent", "/counselors/getAll", "/form/getEventDetails","/dashboard/getDashboard").permitAll()
+                                                                    "/event/getGuidesOfEvent", "/counselor/getAll", "/form/getEventDetails").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfigurationSource()))

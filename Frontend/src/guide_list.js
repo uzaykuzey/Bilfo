@@ -284,15 +284,16 @@ export default function GuideListLayout() {
                 </select>
               </div>
               <div className="form-group">
-                <label>
+                <label id="check-trainee">
+                  Trainee:
                   <input
                     type="checkbox"
+                    id="cheackbox-trainee"
                     checked={newGuide.trainee}
                     onChange={(e) =>
                       setNewGuide({ ...newGuide, trainee: e.target.checked })
                     }
                   />
-                  Trainee
                 </label>
               </div>
               {formError && <p style={{ color: "red" }}>{formError}</p>}
@@ -319,7 +320,7 @@ export default function GuideListLayout() {
           modal
           closeOnDocumentClick
         >
-          <div>
+          <div className="popup-container">
             <h2>Confirm Removal</h2>
             <p>
               Are you sure you want to remove{" "}
@@ -346,7 +347,7 @@ export default function GuideListLayout() {
           modal
           closeOnDocumentClick
         >
-          <div>
+          <div className="popup-container">
             <h2>Confirm Promotion</h2>
             <p>
               Are you sure you want to promote{" "}
@@ -390,7 +391,7 @@ export default function GuideListLayout() {
           modal
           closeOnDocumentClick
         >
-          <div>
+          <div className="popup-container">
             <h2>Confirm Demotion</h2>
             <p>
               Are you sure you want to demote{" "}

@@ -23,16 +23,34 @@ export default function CounselorList() {
     name: "",
     email: "",
     phoneNo: "",
-    school: ""
+    school: "",
+    city: "",
+    district: ""
   });
+
+  const [cities, setCities] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [schoolsList, setSchoolsList] = useState([]);
 
   useEffect(() => {
     fetchCounselors();
   }, []);
 
+  useEffect(() => {
+    if (newCounselor.city) {
+      fetchDistricts();
+    }
+  }, [newCounselor.city]);
+
+  useEffect(() => {
+    if (newCounselor.city && newCounselor.district) {
+      fetchSchools();
+    }
+  }, [newCounselor.district]);
+
   const fetchCounselors = async () => {
     try {
-      const response = await api.get("/counselors/getAll");
+      const response = await api.get("/counselor/getAll");
       if (response.status === 200) {
         setCounselors(response.data);
       }
@@ -41,9 +59,44 @@ export default function CounselorList() {
     }
   };
 
+  const fetchCities = async () => {
+    try {
+      console.log("Fetching cities...");
+      const response = await api.get("/school/cityNames");
+      console.log("Cities received:", response.data);
+      setCities(response.data);
+    } catch (error) {
+      console.error("Failed to fetch cities:", error);
+    }
+  };
+
+  const fetchDistricts = async () => {
+    try {
+      console.log("Fetching districts for city:", newCounselor.city);
+      const response = await api.get(`/school/districtNames?city=${newCounselor.city}`);
+      console.log("Districts received:", response.data);
+      setDistricts(response.data);
+      setNewCounselor(prev => ({ ...prev, district: '', school: '' }));
+    } catch (error) {
+      console.error("Failed to fetch districts:", error);
+    }
+  };
+
+  const fetchSchools = async () => {
+    try {
+      console.log("Fetching schools for city:", newCounselor.city, "and district:", newCounselor.district);
+      const response = await api.get(`/school/schoolNames?city=${newCounselor.city}&district=${newCounselor.district}`);
+      console.log("Schools received:", response.data);
+      setSchoolsList(response.data);
+      setNewCounselor(prev => ({ ...prev, school: '' }));
+    } catch (error) {
+      console.error("Failed to fetch schools:", error);
+    }
+  };
+
   const handleEditSubmit = async () => {
     try {
-      const response = await api.post("/counselors/edit", editForm);
+      const response = await api.post("/counselor/edit", editForm);
       if (response.status === 200) {
         await fetchCounselors();
         setEditCounselor(null);
@@ -56,35 +109,61 @@ export default function CounselorList() {
 
   const handleDeleteCounselor = async () => {
     try {
-      const response = await api.post("/counselors/delete", {
+      console.log("Attempting to delete counselor with ID:", deleteCounselor.id);
+      const response = await api.post("/counselor/delete", {
         id: deleteCounselor.id
       });
+      console.log("Delete response:", response);
       if (response.status === 200) {
         setCounselors(counselors.filter(c => c.id !== deleteCounselor.id));
         setDeleteCounselor(null);
       }
     } catch (error) {
       console.error("Error deleting counselor:", error);
-      alert("Failed to delete counselor");
+      console.error("Error response:", error.response);
+      alert("Failed to delete counselor: " + (error.response?.data || error.message));
     }
   };
 
   const handleAddCounselor = async () => {
     try {
-      const response = await api.post("/counselors/add", newCounselor);
-      if (response.status === 200) {
-        await fetchCounselors();
-        setIsAddPopupOpen(false);
-        setNewCounselor({
-          name: "",
-          email: "",
-          phoneNo: "",
-          school: ""
-        });
-      }
+        if (!newCounselor.name || !newCounselor.email || !newCounselor.phoneNo || !newCounselor.school) {
+            alert("Please fill in all fields");
+            return;
+        }
+
+        const counselorData = {
+            name: newCounselor.name,
+            email: newCounselor.email,
+            phoneNo: newCounselor.phoneNo,
+            school: newCounselor.school
+        };
+
+        const response = await api.post("/counselor/add", counselorData);
+
+        if (response.status === 200) {
+            await fetchCounselors();
+            setIsAddPopupOpen(false);
+            setNewCounselor({
+                name: "",
+                email: "",
+                phoneNo: "",
+                school: "",
+                city: "",
+                district: ""
+            });
+        }
     } catch (error) {
-      console.error("Error adding counselor:", error);
-      alert("Failed to add counselor");
+        alert("Failed to add counselor. Email might already exist.");
+    }
+  };
+
+  const handleAddPopupOpen = async () => {
+    try {
+        await fetchCities(); // Fetch cities when opening the popup
+        setIsAddPopupOpen(true);
+    } catch (error) {
+        console.error("Error fetching initial data:", error);
     }
   };
 
@@ -93,7 +172,7 @@ export default function CounselorList() {
       <NavbarLayout />
       <div className="content-list">
         <h2>Counselor List</h2>
-        <button className="add-btn" onClick={() => setIsAddPopupOpen(true)}>
+        <button className="add-btn" onClick={handleAddPopupOpen}>
           Add Counselor
         </button>
 
@@ -246,12 +325,42 @@ export default function CounselorList() {
               />
             </div>
             <div className="input-group">
+              <label>City:</label>
+              <select
+                value={newCounselor.city}
+                onChange={(e) => setNewCounselor({...newCounselor, city: e.target.value})}
+              >
+                <option value="">Select City</option>
+                {cities.map((city) => (
+                  <option key={city} value={city}>{city}</option>
+                ))}
+              </select>
+            </div>
+            <div className="input-group">
+              <label>District:</label>
+              <select
+                value={newCounselor.district}
+                onChange={(e) => setNewCounselor({...newCounselor, district: e.target.value})}
+                disabled={!newCounselor.city}
+              >
+                <option value="">Select District</option>
+                {districts.map((district) => (
+                  <option key={district} value={district}>{district}</option>
+                ))}
+              </select>
+            </div>
+            <div className="input-group">
               <label>School:</label>
-              <input
-                type="text"
+              <select
                 value={newCounselor.school}
                 onChange={(e) => setNewCounselor({...newCounselor, school: e.target.value})}
-              />
+                disabled={!newCounselor.district}
+              >
+                <option value="">Select School</option>
+                {schoolsList.map((school) => (
+                  <option key={school} value={school}>{school}</option>
+                ))}
+              </select>
             </div>
             <div className="popup-actions">
               <button onClick={handleAddCounselor}>Save</button>

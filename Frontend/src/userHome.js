@@ -147,10 +147,12 @@ export default function UserHomeLayout() {
               <p>
                 <strong>Role:</strong> {profile.role}
               </p>
+              {profile.role === "ADVISOR" && (
               <p>
                 <strong>Day of Advisor:</strong>{" "}
                 {profile.dayOfAdvisor === "NOT_ASSIGNED" ? "Not Assigned" : profile.dayOfAdvisor}
               </p>
+              )}
               <p>
                 <strong>Total Hours of Service:</strong> {profile.totalHours}
               </p>

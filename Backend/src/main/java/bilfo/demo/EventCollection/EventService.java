@@ -474,7 +474,7 @@ public class EventService {
         return eventRepository;
     }
 
-    public boolean cancelEvent(ObjectId formId ,ObjectId eventId)
+    public boolean cancelEvent(ObjectId formId)
     {
         Optional<Form> optionalForm = formService.getForm(formId);
         if(optionalForm.isEmpty())
@@ -487,7 +487,7 @@ public class EventService {
             return false;
         }
 
-        Optional<Event> optionalEvent = eventRepository.findEventById(eventId);
+        Optional<Event> optionalEvent = eventRepository.findEventByOriginalForm(formId);
         formPasswordService.deleteFormPassword(formPassword.get());
 
         if(optionalEvent.isEmpty())
@@ -501,9 +501,9 @@ public class EventService {
         List<User> users=userService.allUsers();
         for(User user: users)
         {
-            if(user.getSuggestedEvents().contains(eventId))
+            if(user.getSuggestedEvents().contains(optionalEvent.get().getId()))
             {
-                user.getSuggestedEvents().remove(eventId);
+                user.getSuggestedEvents().remove(optionalEvent.get().getId());
                 userService.saveUser(user);
             }
         }
@@ -560,5 +560,10 @@ public class EventService {
         return total;
     }
 
+
+    public boolean changeTimeOfEvent(ObjectId eventId, Date date, TOUR_TIMES time)
+    {
+        return false;
+    }
 }
 

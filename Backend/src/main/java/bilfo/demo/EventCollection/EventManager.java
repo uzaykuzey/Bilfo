@@ -5,6 +5,7 @@ import bilfo.demo.Triple;
 import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.EVENT_STATES;
 import bilfo.demo.enums.EVENT_TYPES;
+import bilfo.demo.enums.TOUR_TIMES;
 import bilfo.demo.formCollection.Form;
 import bilfo.demo.formCollection.FormManager;
 import bilfo.demo.userCollection.User;
@@ -87,7 +88,7 @@ public class EventManager {
     }
 
     @GetMapping("/getFeedback")
-    public ResponseEntity<Feedback> getFeedback(@RequestParam String eventId) {
+    public ResponseEntity<Feedback> getFeedback(@RequestBody String eventId) {
         Optional<Feedback> feedback = eventService.getFeedback(new ObjectId(eventId));
         return new ResponseEntity<>(feedback.orElse(null), feedback.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
@@ -134,21 +135,30 @@ public class EventManager {
     }
 
     @PostMapping("/cancelEvent")
-    public ResponseEntity<String> cancelEvent(@RequestParam String formId, @RequestParam String eventId)
+    public ResponseEntity<String> cancelEvent(@RequestBody String formId)
     {
         ObjectId form=new ObjectId(formId);
-        ObjectId event=new ObjectId(eventId);
-        if(eventService.cancelEvent(form,event))
+        if(eventService.cancelEvent(form))
         {
             return new ResponseEntity<>("Successfully cancelled event", HttpStatus.OK);
         }
         return new ResponseEntity<>("Unsuccesful cancel", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/getNoOfEventRequestsAtThisDate")
+    @GetMapping("/getNoOfEventRequestsAtThisDate")
     public ResponseEntity<Integer> getNoOfEventRequestsAtThisDate(@RequestParam String date)
     {
         Date dateObject = FormManager.stringToDate(date);
         return new ResponseEntity<>(eventService.getEventRequestInThisDate(dateObject), HttpStatus.OK);
+    }
+
+    @PostMapping("/changeTimeOfEvent")
+    public ResponseEntity<String> changeTimeOfEvent(@RequestBody Map<String, String> changeTimeOfEventRequest)
+    {
+        ObjectId eventId = new ObjectId(changeTimeOfEventRequest.get("eventId"));
+        Date date=FormManager.stringToDate(changeTimeOfEventRequest.get("date"));
+        TOUR_TIMES time = TOUR_TIMES.stringToTourTime(changeTimeOfEventRequest.get("time"));
+
+        return null;
     }
 }

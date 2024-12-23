@@ -117,4 +117,17 @@ th {
 .popup-actions button:last-child {
   background-color: #6c757d;
   color: white;
+}
+
+.input-group select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.input-group select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
 } 

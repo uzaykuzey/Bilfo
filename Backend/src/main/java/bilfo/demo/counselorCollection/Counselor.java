@@ -1,5 +1,7 @@
 package bilfo.demo.counselorCollection;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import bilfo.demo.ObjectIdSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 public class Counselor {
     @Id
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
 
     private String name;

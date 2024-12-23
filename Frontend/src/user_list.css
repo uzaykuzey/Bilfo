@@ -6,6 +6,10 @@
   align-items: center;
 }
 
+#user-list-header {
+  font-size: 2.5rem;
+}
+
 .user-table-container {
   margin: 20px auto;
   border-radius: 10px;
@@ -21,14 +25,21 @@
 
 .user-table th,
 .user-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
+  padding: 10px;
+}
+
+.user-table tr {
+  border-bottom: 1px solid #ddd;
+
 }
 
 .user-table th {
-  background-color: #f8f9fa;
-  font-weight: 600;
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+.user-table tr:hover {
+  background-color: #f5f5f5;
 }
 
 .add-user-btn {
@@ -38,25 +49,11 @@
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-top: 1rem;
 }
 
-.edit-btn, .delete-btn {
-  padding: 6px 12px;
-  margin: 0 4px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.edit-btn {
-  background-color: #007bff;
-  color: white;
-}
-
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
+.add-user-btn:hover {
+  background-color: #0056b3;
 }
 
 .user-modal {
@@ -85,13 +82,42 @@
   margin-top: 20px;
 }
 
-.promote-btn {
+.actions-ulist {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.actions-ulist button {
+  margin: 0 5px;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.actions-ulist button:hover {
+  opacity: 0.9;
+}
+
+.actions-ulist .promote-btn {
   background-color: #28a745;
   color: white;
 }
 
-.demote-btn {
-  background-color: #6c757d;
+.actions-ulist .demote-btn {
+
+  color: black;
+}
+
+.actions-ulist .edit-btn {
+  background-color: #ffc107;
+  color: white;
+}
+
+.actions-ulist .remove-btn {
+  background-color: #dc3545;
   color: white;
 }
 
@@ -106,24 +132,8 @@
   color: #666;
 }
 
-.actions button {
-  margin: 0 5px;
-  padding: 5px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9em;
-}
 
-.edit-btn {
-  background-color: #ffc107;
-  color: black;
-}
 
-.remove-btn {
-  background-color: #dc3545;
-  color: white;
-}
 
 .popup-container {
   background: white;
@@ -174,18 +184,5 @@
   color: white;
 }
 
-.promote-btn {
-  background-color: #28a745;
-  color: white;
-}
 
-.demote-btn {
-  background-color: #6c757d;
-  color: white;
-}
-
-.actions {
-  display: flex;
-  gap: 5px;
-}
 

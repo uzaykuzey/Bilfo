@@ -271,7 +271,7 @@ export default function UserList() {
                   <td>{user.email}</td>
                   <td>{user.bilkentId}</td>
                   <td>{user.status}</td>
-                  <td className="actions">
+                  <td className="actions-ulist">
                     <button 
                       className="promote-btn"
                       onClick={() => handlePromoteClick(user)}

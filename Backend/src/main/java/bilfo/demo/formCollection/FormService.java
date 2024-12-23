@@ -7,6 +7,7 @@ import bilfo.demo.SchoolManager;
 import bilfo.demo.enums.*;
 import bilfo.demo.mailSender.MailSenderService;
 import bilfo.demo.passwordCollection.eventPasswordCollection.FormPassword;
+import bilfo.demo.passwordCollection.eventPasswordCollection.FormPasswordRepository;
 import bilfo.demo.passwordCollection.eventPasswordCollection.FormPasswordService;
 import bilfo.demo.userCollection.UserManager;
 import org.bson.types.ObjectId;
@@ -32,6 +33,9 @@ public class FormService {
     @Autowired
     @Lazy
     FormPasswordService formPasswordService;
+    @Autowired
+    @Lazy
+    FormPasswordRepository formPasswordRepository;
     @Autowired
     @Lazy
     private EventService eventService;
@@ -100,13 +104,56 @@ public class FormService {
     {
         List<Form> forms = formRepository.findAllByTypeAndApproved(type, state);
         Comparator<Form> comparator = switch (sort) {
-            case BY_DATE_OF_FORM -> Comparator.comparing(Form::getDateOfForm);
-            case BY_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(Form::getBilkentAdmissions);
-            case BY_PERCENTAGE_OF_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(Form::getPercentageOfBilkentAdmissions);
+            case BY_DATE_OF_FORM -> Comparator.comparing(
+                    Form::getDateOfForm,
+                    Comparator.nullsFirst(Comparator.naturalOrder())
+            );
+            case BY_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(
+                    form -> Optional.ofNullable(form.getBilkentAdmissions()).orElse(0)
+            );
+            case BY_PERCENTAGE_OF_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(
+                    form -> Optional.ofNullable(form.getPercentageOfBilkentAdmissions()).orElse(0)
+            );
+            default -> throw new IllegalArgumentException("Unsupported sorting type: " + sort);
         };
         forms.sort(comparator);
 
         return forms;
     }
 
+    public Pair<Optional<Form>,Optional<Event>> getDetailsFromPass(String password){
+        List<FormPassword> passwords = formPasswordRepository.findAll();
+        Optional<Form> form = Optional.empty();
+        for(FormPassword formPassword: passwords){
+            if(passwordEncoder.matches(password,formPassword.getHashedPassword())){
+                form = formRepository.findFormById(formPassword.getFormId());
+                break;
+            }
+        }
+        if(form.isEmpty()){
+            return null;
+        }
+        Optional<Event> event = Optional.empty();
+        List<Event> allEvents = eventService.allEvents();
+        for(Event currEvent : allEvents){
+            if(currEvent.getOriginalForm().equals(form.get().getId())){
+                event = Optional.of(currEvent);;
+                break;
+            }
+        }
+        return Pair.of(form,event);
+    }
+
+    public boolean cancelByCounselor(String id){
+        ObjectId formId = new ObjectId(id);
+        Optional<Form> form = formRepository.findFormById(formId);
+        if(form.isEmpty()){
+            return false;
+        }
+        if(form.get().getApproved() == FORM_STATES.NOT_REVIEWED){
+            formPasswordRepository.deleteByFormId(formId);
+            formRepository.deleteById(formId);
+        }
+        return true;
+    }
 }

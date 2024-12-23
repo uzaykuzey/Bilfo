@@ -5,6 +5,7 @@ import bilfo.demo.counselorCollection.Counselor;
 import bilfo.demo.counselorCollection.CounselorRepository;
 import bilfo.demo.counselorCollection.CounselorService;
 import bilfo.demo.enums.*;
+import bilfo.demo.passwordCollection.eventPasswordCollection.FormPassword;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -145,6 +146,22 @@ public class FormManager {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(formService.getForms(type, state, sort), HttpStatus.OK);
+    }
+
+    @GetMapping("/getEventDetails")
+    public ResponseEntity<Pair<Optional<Form>,Optional<Event>>> getEventDetails(@RequestParam Map<String,String> edit){
+        String password = edit.get("editId");
+        return new ResponseEntity<>(formService.getDetailsFromPass(password),HttpStatus.OK);
+    }
+
+    @PostMapping("/cancelEventCounselor")
+    public ResponseEntity<String> cancelByCounselor(@RequestBody Map<String,String> form){
+        String formId = form.get("formId");
+        System.out.println(formId);
+        boolean cancelSuccessful = formService.cancelByCounselor(formId);
+        if(cancelSuccessful)
+            return new ResponseEntity<>("Successfully Cancelled",HttpStatus.OK);
+        return new ResponseEntity<>("Error while cancelling",HttpStatus.BAD_REQUEST);
     }
 
 

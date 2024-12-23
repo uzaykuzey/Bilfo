@@ -6,6 +6,7 @@ import "reactjs-popup/dist/index.css";
 import "./tour_fair_list.css";
 import NavbarLayout from "./navbar";
 import { FaTimes } from "react-icons/fa"; 
+import { render } from "@testing-library/react";
 
 export default function TourListLayout() {
   const { bilkentId } = useParams();
@@ -34,12 +35,13 @@ export default function TourListLayout() {
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);  
   const [isFirstLoad, setFirstLoad] = useState(null);
   const [guideId, setGuideId] = useState(null);
-
-  // NEW: sort option (only relevant for "Pending" status)
+  const [selectedCancel, setSelectedCancel] = useState(null);
+  const [cancelPopupOpen, setCancelPopupOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState("BY_DATE_OF_FORM");
 
   // Set initial state based on the user role
   useEffect(() => {
+    setFirstLoad(true);
     if (statusUser === "GUIDE" && isFirstLoad) {
       setSelectedStatus("Accepted");
     } else {
@@ -222,6 +224,15 @@ export default function TourListLayout() {
     setDetailsPopupOpen(false);
   };
 
+  const openCancelPopup = (tour) => {
+    setSelectedCancel(tour);
+    setCancelPopupOpen(true);
+  }
+  const closeCancelPopup = () => {
+    setSelectedCancel(null);
+    setCancelPopupOpen(false);
+  }
+
   const confirmAssignGuide = async (guideId) => {
     try {
       const response = await api.post("/event/offerEvent", {
@@ -342,9 +353,9 @@ export default function TourListLayout() {
   };
 
   const cancelTour = async (tour) => {
-    // Cancel the tour
+    console.log(tour);
     try {
-      const response = await api.post("/form/cancelTour", { formId: tour.id });
+      const response = await api.post("/event/cancelEvent", { formId: tour.second?.id });
       if (response.status === 200) {
         alert("Tour canceled successfully!");
       } else {
@@ -354,7 +365,17 @@ export default function TourListLayout() {
       alert("An error occurred while canceling the tour.");
     }
   };
-
+  
+  const renderCancelPopupContent = () => {
+    return (
+      <div className="cancel-popup-content">
+        <h3>Cancel Tour</h3>
+        <p>Are you sure you want to cancel this tour?</p>
+        <button onClick={() => cancelTour(selectedCancel)}>Confirm Cancel</button>
+        <button onClick={() => setCancelPopupOpen(false)}>Cancel</button>
+      </div>
+    );
+  };
   const renderPopupContent = () => {
     const [showConfirmModal, setShowConfirmModal] = useState(false); // State for showing confirmation modal
     const [rejectionReason, setRejectionReason] = useState(""); // State for rejection reason
@@ -362,7 +383,7 @@ export default function TourListLayout() {
     if (!selectedTour) return null;
   
     // Format the tour date
-    const date = new Date(selectedTour.date);
+    const date = new Date(selectedTour.form?.date);
     const formattedDate = formatDate(date);
   
     // Handle the time selection (radio buttons)
@@ -398,7 +419,7 @@ export default function TourListLayout() {
     const handleReject = async () => {
       try {
         await api.post("/form/eva", {
-          formId: selectedTour.id,
+          formId: selectedTour.form?.id,
           state: "REJECTED",
           index: 0,
           rejectionMessage: rejectionReason.trim(),
@@ -425,33 +446,33 @@ export default function TourListLayout() {
         </div>
   
         <h3>Evaluate Tour</h3>
-        {selectedTour.type === "HIGHSCHOOL_TOUR" && (
+        {selectedTour.form?.type === "HIGHSCHOOL_TOUR" && (
           <div className="tour-details">
-            <p><strong>Tour Name:</strong> {selectedTour.name}</p>
-            <p><strong>City:</strong> {selectedTour.city}</p>
+            <p><strong>Tour Name:</strong> {selectedTour.form?.name}</p>
+            <p><strong>City:</strong> {selectedTour.form?.city}</p>
             <p><strong>Date:</strong> {formattedDate}</p>
           </div>
         )}
         {/* Additional details for INDIVIDUAL_TOUR */}
-        {selectedTour.type === "INDIVIDUAL_TOUR" && (
+        {selectedTour.form?.type === "INDIVIDUAL_TOUR" && (
           <div className="individual-tour-details">
             <h4>Visitor Information</h4>
-            <p><strong>Number of Visitors:</strong> {selectedTour.visitorCount}</p>
+            <p><strong>Number of Visitors:</strong> {selectedTour.form?.visitorCount}</p>
             <strong>Names:</strong>
             <ul>
-              {selectedTour.names.map((visitor, index) => (
+              {selectedTour.form?.names.map((visitor, index) => (
                 <li key={index}>{visitor}</li>
               ))}
             </ul>
-            <p><strong>Department</strong> {selectedTour.department}</p>
-            <p><strong>Contact Mail:</strong> {selectedTour.contactMail}</p>
+            <p><strong>Department</strong> {selectedTour.form?.department}</p>
+            <p><strong>Contact Mail:</strong> {selectedTour.form?.contactMail}</p>
           </div>
         )}
   
         <div className="possible-times">
           <h4>Select Time:</h4>
-          {selectedTour.possibleTimes &&
-            selectedTour.possibleTimes.map((time, index) => (
+          {selectedTour.form?.possibleTimes &&
+            selectedTour.form?.possibleTimes.map((time, index) => (
               <div key={index} className="time-radio">
                 <input
                   className="radio-possible-times"
@@ -526,7 +547,7 @@ export default function TourListLayout() {
     const fetchTours = async () => {
       try {
         let tours;
-        setFirstLoad(true);
+        
         console.log(selectedSort);
         if ((selectedStatus === "GUIDE" && isFirstLoad) || selectedStatus === "Accepted") {
           setFirstLoad(false);
@@ -556,7 +577,7 @@ export default function TourListLayout() {
       }
     };
     fetchTours();
-  }, [selectedStatus, selectedType, statusUser, selectedSort]);
+  }, [selectedStatus, selectedType, selectedSort]);
 
   
 
@@ -571,7 +592,7 @@ export default function TourListLayout() {
           <>
             <button className="assign-button" onClick={() => openAssignPopup(tour)}>Assign Guide</button>
             <button className="claim-button" onClick={() => claimTour(tour)}>Claim</button>
-            <button className="cancel-button" onClick={() => cancelTour(tour)}>Cancel</button>
+            <button className="cancel-button" onClick={() => openCancelPopup(tour)}>Cancel</button>
             <button className="details-button" onClick={() => openDetailsPopup(tour)}>Details</button>
           </>
         );
@@ -627,7 +648,7 @@ export default function TourListLayout() {
                 <td>{formattedTime}</td>
                 <td>{tour.form?.visitorCount}</td>
                 <td>{tour.bilkentAdmissions}</td>
-                <td>{tour.bilkentAdmissionsPercentage}</td>
+                <td>{tour.bilkentAdmissionsPercentage}%</td>
                 <td>{renderActions(tour)}</td>
               </>
             );
@@ -704,7 +725,7 @@ export default function TourListLayout() {
                 <td>{formattedDate}</td>
                 <td>{day}</td>
                 <td>{tour.bilkentAdmissions}</td>
-                <td>{tour.bilkentAdmissionsPercentage}</td>
+                <td>{tour.bilkentAdmissionsPercentage}%</td>
                 <td>{renderActions(tour)}</td>
               </>
             );
@@ -813,6 +834,10 @@ export default function TourListLayout() {
 
       <Popup open={detailsPopupOpen} onClose={closeDetailsPopup} modal>
         {renderDetailsPopupContent()}
+      </Popup>
+
+      <Popup open={cancelPopupOpen} onClose={closeCancelPopup} modal>
+        {renderCancelPopupContent()}
       </Popup>
     </div>
   );

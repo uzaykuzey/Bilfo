@@ -29,7 +29,7 @@ public class SecurityConfig{
                                                                     ,"/form/hsform", "/form/indform", "/form/fairform", "/promoteUser", "/form/evaluate",
                                                                 "/addGuide","/removeUser", "/addAdvisor", "/addCoordinator", "/addActingDirector",
                                                                 "/changeAvailability", "/event/feedback", "/event/claimEvent", "/forgotPasswordMail",
-                                                                "/forgotPasswordChangeRequest", "/demoteUser", "/log/addLog", "/editUser", "/log/deleteLog",
+                                                                "/forgotPasswordChangeRequest", "/demoteUser", "/log/addLog", "/editUser", "/log/deleteLog","/event/cancelEvent",
                                                                 "/log/markLogAsPaid", "/yokAtlas/scrapeSchools","/log/markAllLogsAsPaid", "/event/offerEvent", "/counselor/edit", "/counselor/delete", "/counselor/add", "/event/rejectSuggestedEvent").permitAll()
                         .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/getAllUsers", "/event", "/form", "/getAvailability", "/getFeedback", "/getAdvisorsOfTheDay","/getUserInfo"
                                                                 , "/event/getScheduleOfWeek","/form/getForms", "/event/getEvents", "/school/cityNames", "/school/districtNames", "/school/schoolNames",

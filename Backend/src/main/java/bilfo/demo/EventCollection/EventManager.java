@@ -97,6 +97,7 @@ public class EventManager {
         return new ResponseEntity<>(eventService.getAllFeedbacks(), HttpStatus.OK);
     }
 
+
     @GetMapping("/getScheduleOfWeek")
     public ResponseEntity<String[]> getScheduleOfWeek(@RequestParam Map<String, String> getScheduleOfWeekRequest) {
         int bilkentId = Integer.parseInt(getScheduleOfWeekRequest.get("bilkentId"));

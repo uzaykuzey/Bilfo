@@ -16,7 +16,7 @@ export default function FeedbackList() {
 
   const fetchFeedbacks = async () => {
     try {
-      const response = await api.get("/feedbacks/getAll");
+      const response = await api.get("/event/getAllFeedbacks");
       if (response.status === 200) {
         setFeedbacks(response.data);
       }

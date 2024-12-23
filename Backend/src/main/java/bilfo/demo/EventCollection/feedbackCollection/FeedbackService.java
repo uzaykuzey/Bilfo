@@ -3,6 +3,7 @@ package bilfo.demo.EventCollection.feedbackCollection;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,5 +22,9 @@ public class FeedbackService {
 
     public Optional<Feedback> findFeedbackById(ObjectId id) {
         return feedbackRepository.findById(id);
+    }
+
+    public List<Feedback> getAllFeedbacks() {
+        return feedbackRepository.findAll();
     }
 }

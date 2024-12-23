@@ -311,7 +311,7 @@ export default function UserList() {
         modal
         closeOnDocumentClick
       >
-        <div className="popup-container">
+        <div className="popup-container-ulist">
           <h2>Edit User</h2>
           <div className="input-group">
             <label>Name:</label>
@@ -366,7 +366,7 @@ export default function UserList() {
         modal
         closeOnDocumentClick
       >
-        <div className="popup-container">
+        <div className="popup-container-ulist">
           <h2>Confirm Promotion</h2>
           <p>
             Are you sure you want to promote <strong>{promoteUser?.username}</strong>?
@@ -385,7 +385,7 @@ export default function UserList() {
         modal
         closeOnDocumentClick
       >
-        <div className="popup-container">
+        <div className="popup-container-ulist">
           <h2>Confirm Demotion</h2>
           <p>
             Are you sure you want to demote <strong>{demoteUser?.username}</strong>?
@@ -404,7 +404,7 @@ export default function UserList() {
         modal
         closeOnDocumentClick
       >
-        <div className="popup-container">
+        <div className="popup-container-ulist">
           <h2>Confirm Deletion</h2>
           <p>
             Are you sure you want to remove <strong>{deleteUser?.username}</strong>?
@@ -423,7 +423,7 @@ export default function UserList() {
         modal
         closeOnDocumentClick
       >
-        <div className="popup-container">
+        <div className="popup-container-ulist">
           <h2>Add User</h2>
           <div className="input-group">
             <label>Name:</label>

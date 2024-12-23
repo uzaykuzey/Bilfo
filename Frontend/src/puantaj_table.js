@@ -218,6 +218,12 @@ export default function PuantajLayout() {
         onClose={() => setIsAddLogPopupOpen(false)} // Close the popup when the user cancels or closes
         modal
         nested
+        contentStyle={{
+          maxWidth: '1200px', 
+          width: '90%', 
+          padding: '20px', 
+          margin: '0 auto', 
+        }}
       >
         <div className="add-log-modal">
           <h2>Select a Log to Add</h2>
@@ -272,8 +278,6 @@ export default function PuantajLayout() {
           <button onClick={() => setIsAddLogPopupOpen(false)}>Cancel</button>
         </div>
       </Popup>
-
-
 
     </div>
   );

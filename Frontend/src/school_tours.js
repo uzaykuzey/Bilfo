@@ -99,7 +99,8 @@ export default function SchoolToursForm() {
         if (!formData.city.trim()) errors.city = "City is required.";
         if (!formData.firstTimeDate.trim()) errors.firstTimeDate = "First time preference (date) is required.";
         if (!formData.firstTimeHour.trim()) errors.firstTimeHour = "First time preference (hour) is required.";
-        if (!formData.numberOfVisitors || formData.numberOfVisitors <= 0) errors.numberOfVisitors = "Visitor count must be greater than 0.";
+        if (!formData.numberOfVisitors || formData.numberOfVisitors <= 0)  
+            errors.numberOfVisitors = "Visitor count must be greater than 0.";
         if (!formData.counselorName.trim()) errors.counselorName = "Counselor's name is required.";
         if (!formData.counselorPhone.trim()) errors.counselorPhone = "Counselor's phone number is required.";
         if (!formData.counselorEmail || !/\S+@\S+\.\S+/.test(formData.counselorEmail)) errors.counselorEmail = "Please enter a valid email address.";

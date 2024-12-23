@@ -1,5 +1,5 @@
 import "./dashboard.css";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, data } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import api from "./api/axios_config";
@@ -53,15 +53,30 @@ export default function DashboardLayout() {
         setIsLoading(true);
         console.log('Making request to:', '/dashboard/getDashboard');
         
-        const response = await api.post('/dashboard/getDashboard', {});
-        console.log('Response:', response);
+        const response = await api.get('/dashboard/getDashboard');
+        console.log('Response:', response.data);
         
         if (response.status === 200) {
           // Transform the data to match the expected format
           const transformedData = {
-            cityDistribution: Object.values(response.data.cityDistribution || {}),
+            cityDistribution: [
+              response.data.cityDistribution?.ISTANBUL || 0,
+              response.data.cityDistribution?.ANKARA || 0,
+              response.data.cityDistribution?.İZMİR || 0,
+              response.data.cityDistribution?.BURSA || 0,
+              response.data.cityDistribution?.ADANA || 0,
+              response.data.cityDistribution?.ANTALYA || 0,
+              response.data.cityDistribution?.KONYA || 0,
+              response.data.cityDistribution?.SAMSUN || 0,
+              response.data.cityDistribution?.ERZURUM || 0,
+              response.data.cityDistribution?.Other || 0
+            ],
             weekDistribution: Object.values(response.data.weeklySchedule || {}),
-            categoryDistribution: Object.values(response.data.formDistribution || {}),
+            categoryDistribution: [
+              response.data.formDistribution?.accepted || 0,
+              response.data.formDistribution?.pending|| 0,
+              response.data.formDistribution?.rejected || 0,
+            ],
             tourCounts: {
               individual: response.data.tourStats?.completed || 0,
               school: response.data.tourStats?.ongoing || 0,
@@ -83,12 +98,29 @@ export default function DashboardLayout() {
   }, []);
 
   const cityData = {
-    labels: ['Istanbul', 'Ankara', 'İzmir', 'Bursa', 'Adana', 'Antalya', 'Konya', 'Samsun', 'Erzurum', 'Others'],
-    datasets: [{
-      data: dashboardData.cityDistribution,
-      backgroundColor: 'rgba(90, 120, 190, 0.7)',
-    }]
-  };
+    labels: ['Istanbul', 'Ankara', 'Izmir', 'Bursa', 'Adana', 'Antalya', 'Konya', 'Samsun', 'Erzurum', 'Others'],
+    datasets: [
+      {
+        label: 'City Distribution',
+        data: dashboardData.cityDistribution,
+        backgroundColor: [
+          '#FF6384', // Soft Red
+          '#36A2EB', // Soft Blue
+          '#FFCE56', // Soft Yellow
+          '#4BC0C0', // Teal
+          '#9966FF', // Purple
+          '#FF9F40', // Orange
+          '#C9CBCF', // Light Gray
+          '#8DD35F', // Lime Green
+          '#6A5ACD', // Slate Blue
+          '#F48FB1'  // Pink
+        ],
+        
+      },
+    ],
+};
+
+
 
   const weekData = {
     labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
@@ -102,11 +134,11 @@ export default function DashboardLayout() {
   };
 
   const categoryData = {
-    labels: ['Starred', 'Nurturing', 'Maintenance'],
+    labels: ['Accepted', 'Pending', 'Rejected'],
     datasets: [{
       data: dashboardData.categoryDistribution,
       backgroundColor: [
-        '#FF99CC', '#B3B3CC', '#99CCFF',
+        '#E6B3CC', '#99CCFF', '#B3B3CC',
       ],
     }]
   };
@@ -142,7 +174,7 @@ export default function DashboardLayout() {
         <div className="dashboard-container">
           <div className="chart-grid">
             <div className="chart-box">
-              <h2>Category Distribution</h2>
+              <h2>Form Distribution</h2>
               {dashboardData.categoryDistribution.some(val => val > 0) ? (
                 <Pie data={categoryData} options={{ responsive: true }} />
               ) : (
@@ -169,14 +201,7 @@ export default function DashboardLayout() {
                 <div className="no-data">No city data available</div>
               )}
             </div>
-            <div className="chart-box">
-              <h2>Week of the Day Distribution</h2>
-              {dashboardData.weekDistribution.some(val => val > 0) ? (
-                <Pie data={weekData} options={{ responsive: true }} />
-              ) : (
-                <div className="no-data">No weekly distribution data available</div>
-              )}
-            </div>
+            
             <div className="stats-box">
               <div className="stat-item">
                 <h3>Individual Tours</h3>

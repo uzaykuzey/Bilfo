@@ -1,12 +1,13 @@
 import "./feedback_list.css";
 import NavbarLayout from "./navbar";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import api from "./api/axios_config";
 import Popup from "reactjs-popup";
 
 export default function FeedbackList() {
   const { bilkentId } = useParams();
+  const { state } = useLocation();
   const [feedbacks, setFeedbacks] = useState([]);
   const [selectedFeedback, setSelectedFeedback] = useState(null);
 
@@ -19,6 +20,7 @@ export default function FeedbackList() {
       const response = await api.get("/event/getAllFeedbacks");
       if (response.status === 200) {
         setFeedbacks(response.data);
+        console.log("Feedbacks fetched:", response.data);
       }
     } catch (err) {
       console.error("Error fetching feedbacks:", err);
@@ -35,10 +37,11 @@ export default function FeedbackList() {
           <table className="feedback-table">
             <thead>
               <tr>
-                <th>Event Name</th>
+                <th>School Name</th>
                 <th>Event Type</th>
                 <th>Date</th>
                 <th>Rating</th>
+                <th>Visitor Count</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -46,10 +49,24 @@ export default function FeedbackList() {
               {feedbacks.length > 0 ? (
                 feedbacks.map((feedback) => (
                   <tr key={feedback.id}>
-                    <td>{feedback.eventName}</td>
-                    <td>{feedback.eventType}</td>
-                    <td>{feedback.date}</td>
-                    <td>{feedback.rating}/5</td>
+                    <td>
+                      {feedback.second?.type !== "INDIVIDUAL_TOUR"
+                        ? feedback.second?.schoolName || "N/A"
+                        : feedback.second?.names
+                        ? feedback.second.names[0]
+                        : "N/A"}
+                    </td>
+
+                    <td>{feedback.first?.eventType || "N/A"}</td>
+                    <td>{feedback.first?.date
+                      ? new Date(feedback.first.date).toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        })
+                      : "N/A"}</td>
+                    <td>{feedback.third?.rate || "No rating"}/10</td>
+                    <td>{feedback.second?.visitorCount || 0}</td>
                     <td>
                       <button 
                         className="details-btn"
@@ -62,7 +79,7 @@ export default function FeedbackList() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5">No feedbacks available.</td>
+                  <td colSpan="6">No feedbacks available.</td>
                 </tr>
               )}
             </tbody>
@@ -79,25 +96,35 @@ export default function FeedbackList() {
             <h2>Feedback Details</h2>
             {selectedFeedback && (
               <div className="feedback-details">
-                <p><strong>Event Name:</strong> {selectedFeedback.eventName}</p>
-                <p><strong>Event Type:</strong> {selectedFeedback.eventType}</p>
-                <p><strong>Date:</strong> {selectedFeedback.date}</p>
-                <p><strong>Rating:</strong> {selectedFeedback.rating}/5</p>
-                <p><strong>Number of Students:</strong> {selectedFeedback.studentCount}</p>
-                <p><strong>Duration:</strong> {selectedFeedback.duration} minutes</p>
-                <div className="feedback-guides">
-                  <h3>Guides</h3>
-                  {selectedFeedback.guides?.map((guide, index) => (
-                    <p key={index}>{guide.name} - {guide.email}</p>
-                  ))}
-                </div>
+                <p>
+                    <strong>School Name:</strong>{" "}
+                    {selectedFeedback.second?.type !== "INDIVIDUAL_TOUR"
+                      ? selectedFeedback.second?.schoolName || "N/A"
+                      : selectedFeedback.second?.names
+                      ? selectedFeedback.second.names[0]
+                      : "N/A"}
+                  </p>
+
+                <p><strong>Event Type:</strong> {selectedFeedback.first?.eventType || "N/A"}</p>
+                <p>
+                  <strong>Date:</strong>{" "}
+                  {selectedFeedback.first?.date
+                    ? new Date(selectedFeedback.first.date).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })
+                    : "N/A"}
+                </p>
+                <p><strong>Rating:</strong> {selectedFeedback.third?.rate || "No rating"}/10</p>
+                <p><strong>Experience:</strong> {selectedFeedback.third?.experience || "N/A"}</p>
+                <p><strong>Visitor Count:</strong> {selectedFeedback.second?.visitorCount || 0}</p>
+                <p><strong>Visitor Notes:</strong> {selectedFeedback.second?.visitorNotes || "None"}</p>
+                <p><strong>City:</strong> {selectedFeedback.second?.city || "N/A"}</p>
+                <p><strong>District:</strong> {selectedFeedback.second?.district || "N/A"}</p>
                 <div className="feedback-comments">
                   <h3>Comments</h3>
-                  <p>{selectedFeedback.comments}</p>
-                </div>
-                <div className="feedback-notes">
-                  <h3>Additional Notes</h3>
-                  <p>{selectedFeedback.notes}</p>
+                  <p>{selectedFeedback.third?.recommendations || "No comments"}</p>
                 </div>
               </div>
             )}
@@ -109,4 +136,4 @@ export default function FeedbackList() {
       </div>
     </div>
   );
-} 
+}

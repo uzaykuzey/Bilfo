@@ -17,8 +17,8 @@ import java.util.List;
 public class Advisor extends Guide {
     private DAY dayOfAdvisor;
 
-    public Advisor(ObjectId id, int bilkentId, USER_STATUS status, String username, String email, String phoneNo, String password, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean[] availability, String photo, DAY dayOfAdvisor) {
-        super(id, bilkentId, status, username, email, phoneNo, password, department, logs, suggestedEvents, false, availability, photo);
+    public Advisor(ObjectId id, int bilkentId, USER_STATUS status, String username, String email, String phoneNo, String password, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean[] availability, DAY dayOfAdvisor) {
+        super(id, bilkentId, status, username, email, phoneNo, password, department, logs, suggestedEvents, false, availability);
         this.dayOfAdvisor = dayOfAdvisor;
     }
 }

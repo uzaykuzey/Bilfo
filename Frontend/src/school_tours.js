@@ -5,6 +5,7 @@ import './terms_conditions.css';
 
 export default function SchoolToursForm() {
     const [cities, setCities] = useState([]);
+    const [busyDays, setBusyDays] = useState({});
     const [districts, setDistricts] = useState([]);
     const [schoolsList, setSchoolsList] = useState([]);
     const [isTermsPopupOpen, setIsTermsPopupOpen] = useState(false);
@@ -181,7 +182,36 @@ export default function SchoolToursForm() {
     const closeTermsPopup = () => {
         setIsTermsPopupOpen(false);
     };
+    const checkDateBusy = async (dateKey, dateValue) => {
+        if (dateValue) {
+            try {
+                const response = await api.get("/event/getNoOfEventRequestsAtThisDate", {params: {date: dateValue}});
+                const isBusy = response.data.count > 5;
+                setBusyDays((prev) => ({ ...prev, [dateKey]: isBusy }));
+            } catch (error) {
+                console.error("Failed to check busy day:", error);
+            }
+        } else {
+            setBusyDays((prev) => ({ ...prev, [dateKey]: false }));
+        }
+    };
 
+    // Handle changes in date fields
+    const handleDateChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        // Check if the selected date is busy
+        if (name === 'firstTimeDate' || name === 'secondTimeDate' || name === 'thirdTimeDate') {
+            checkDateBusy(name, value);
+        }
+    };
+    const renderBusyDayWarning = (dateKey) => {
+        if (busyDays[dateKey]) {
+            return <span className="warning">Busy day! Consider choosing a different date.</span>;
+        }
+        return null;
+    };
     return (
         <div className="home-layout">
             {/* Sidebar Component */}
@@ -292,6 +322,7 @@ export default function SchoolToursForm() {
                             onChange={handleChange}
                             required
                         />
+                        {renderBusyDayWarning('firstTimeDate')}
                     </label>
 
                     <label>
@@ -319,6 +350,7 @@ export default function SchoolToursForm() {
                             value={formData.secondTimeDate}
                             onChange={handleChange}
                         />
+                        {renderBusyDayWarning('secondTimeDate')}
                     </label>
 
                     <label>
@@ -345,6 +377,7 @@ export default function SchoolToursForm() {
                             value={formData.thirdTimeDate}
                             onChange={handleChange}
                         />
+                        {renderBusyDayWarning('thirdTimeDate')}
                     </label>
 
                     <label>

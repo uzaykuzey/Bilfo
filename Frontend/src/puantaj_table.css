@@ -209,11 +209,46 @@
     margin-top: 10px;
 }
 
+.delete-modal {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 700px; /* Increase the max width */
+    width: 350px; /* Ensure responsiveness */
+    margin: 0 auto; /* Center the modal */
+}
+
 .delete-modal-actions {
     display: flex;
     justify-content: center;
     gap: 1rem;
     margin-top: 1rem;
+}
+
+.delete-modal-actions button {
+    background-color: #1e5aa8;
+    color: white;
+    border: none;
+    padding: 8px 16px; /* Adjust padding to match smaller text */
+    font-size: 14px; /* Smaller font size */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-modal-actions button:hover {
+    background-color: #164785;
+}
+
+.delete-modal h2 {
+    font-size: 16px; /* Reduce the font size */
+    font-weight: normal; /* Adjust font weight */
+    margin: 0; /* Remove margins */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Prevent text overflow */
+    text-overflow: ellipsis; /* Add ellipsis if text is too long */
 }
 
 /* Header controls container */

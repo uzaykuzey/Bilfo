@@ -225,7 +225,7 @@ export default function SchoolToursForm() {
             <div className="form-container">
                 <div className="form-header">
                     <h2>Submit Tour Application</h2>
-                    <h3>* symbol denotes mandatory fields to be filled</h3>
+                    <h3>* symbol denotes the mandatory fields to be filled</h3>
                 </div>
                 <form onSubmit={handleSubmit} className="tour-form">
 

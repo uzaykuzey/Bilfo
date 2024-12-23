@@ -144,4 +144,11 @@ public class EventManager {
         }
         return new ResponseEntity<>("Unsuccesful cancel", HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping("/getNoOfEventRequestsAtThisDate")
+    public ResponseEntity<Integer> getNoOfEventRequestsAtThisDate(@RequestParam String date)
+    {
+        Date dateObject = FormManager.stringToDate(date);
+        return new ResponseEntity<>(eventService.getEventRequestInThisDate(dateObject), HttpStatus.OK);
+    }
 }

@@ -536,5 +536,28 @@ public class EventService {
         return result;
     }
 
+    public int getEventRequestInThisDate(Date startDate)
+    {
+        Date endDate=DAY.add(startDate, 1);
+        List<Form> forms=formRepository.findAll();
+        int total=0;
+        for(Form form: forms)
+        {
+            if(form.getApproved()==FORM_STATES.REJECTED)
+            {
+                continue;
+            }
+
+            for(var pair: form.getPossibleTimes())
+            {
+                if(startDate.before(pair.getFirst()) && endDate.after(pair.getFirst()))
+                {
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
+
 }
 

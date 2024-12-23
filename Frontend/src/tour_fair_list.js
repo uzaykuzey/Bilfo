@@ -272,7 +272,8 @@ export default function TourListLayout() {
       <div className="assign-popup-content">
         <h3>Assign Guide</h3>
         <p>Select a guide to assign for the tour.</p>
-        <table className="guide-table">
+        <div className="guide-table-popup-container">
+        <table className="guide-table-popup">
           <thead>
             <tr>
               <th>Name</th>
@@ -299,6 +300,7 @@ export default function TourListLayout() {
             ))}
           </tbody>
         </table>
+        </div>
         <button onClick={closeAssignPopup} className="cancel-button">
           Cancel
         </button>
@@ -536,8 +538,10 @@ export default function TourListLayout() {
       <div className="claim-popup-content">
         <h3>Claim Tour</h3>
         <p>Are you sure you want to claim this tour?</p>
-        <button onClick={() => confirmClaim(selectedClaimTour)}>Confirm Claim</button>
-        <button onClick={() => setClaimPopupOpen(false)}>Cancel</button>
+        <div className="claim-popup-buttuns">
+          <button className="claim-btn" onClick={() => confirmClaim(selectedClaimTour)}>Confirm Claim</button>
+          <button className="reject-btn" onClick={() => setClaimPopupOpen(false)}>Cancel</button>
+        </div>
       </div>
     );
   };

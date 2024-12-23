@@ -24,6 +24,10 @@ export default function NavbarLayout(){
     e.preventDefault();
     navigate(`/userHome/${bilkentId}/tour_fair_list`, { state: { statusUser } });
   };
+  const goToSuggestedTours = (e) => {
+    e.preventDefault();
+    navigate(`/userHome/${bilkentId}/suggested_tours`, { state: { statusUser } });
+  };
   const goToUserHome = (e) => {
     e.preventDefault();
     navigate(`/userHome/${bilkentId}`, { state: { statusUser } })
@@ -73,6 +77,10 @@ export default function NavbarLayout(){
           
           <a className="nav-link" onClick={goToUserHome}>Profile</a>
           <a className="nav-link" onClick={goToTourFairList}>Tours and Fairs</a>
+
+          {(statusUser === "GUIDE") && (
+            <a className="nav-link" onClick={goToSuggestedTours}>Suggested Tours</a>
+          )}
 
           {(statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR") && (
             <a className="nav-link" onClick={goToAdvisorlist}>Advisor List</a>

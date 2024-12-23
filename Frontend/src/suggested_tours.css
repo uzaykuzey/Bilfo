@@ -1,0 +1,34 @@
+.home-layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  .table-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Adds space between the tables */
+}
+
+.table-section {
+    margin-bottom: 20px; /* Optional, adds more space between tables */
+}
+
+.tour-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tour-table th, .tour-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.tour-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+.table-section p {
+  font-style: italic;
+  color: #888;
+  margin: 10px 0;
+}

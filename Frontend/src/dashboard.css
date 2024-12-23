@@ -6,7 +6,8 @@
 .content {
   flex: 1;
   padding: 20px;
-  margin-left: 250px;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 .content h1 {
@@ -18,7 +19,8 @@
 /* Dashboard Buttons at the top */
 .dashboard-buttons {
   display: flex;
-  gap: 15px;
+  justify-content: center;
+  gap: 50px;
   margin-bottom: 30px;
 }
 
@@ -31,6 +33,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   width: 200px;
+  height: 60px;
 }
 
 .button-content {
@@ -81,7 +84,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .stat-item {
@@ -142,6 +145,10 @@
 
 .dashboard-button.feedbacks {
   background: linear-gradient(135deg, #FF9800, #F57C00);
+}
+
+.dashboard-button:hover {
+  opacity: 0.9;
 }
 
 /* Responsive Design */

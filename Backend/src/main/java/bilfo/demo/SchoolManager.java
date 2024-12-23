@@ -77,7 +77,15 @@ public class SchoolManager {
 
     public int getAdmissionsToBilkent(String city, String district, String school)
     {
-        return schools.get(city).get(district).get(school).getFirst();
+        try
+        {
+            return schools.get(city).get(district).get(school).getFirst();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     public int getBilkentToTotalAdmissionsPercentage(String city, String district, String school)

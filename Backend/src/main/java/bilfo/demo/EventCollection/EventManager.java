@@ -92,6 +92,12 @@ public class EventManager {
         return new ResponseEntity<>(feedback.orElse(null), feedback.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
+    @GetMapping("/getAllFeedbacks")
+    public ResponseEntity<List<Feedback>> getAllFeedbacks() {
+        List<Feedback> feedbacks = eventService.getAllFeedbacks();
+        return new ResponseEntity<>(feedbacks, HttpStatus.OK);
+    }
+
     @GetMapping("/getScheduleOfWeek")
     public ResponseEntity<String[]> getScheduleOfWeek(@RequestParam Map<String, String> getScheduleOfWeekRequest) {
         int bilkentId = Integer.parseInt(getScheduleOfWeekRequest.get("bilkentId"));

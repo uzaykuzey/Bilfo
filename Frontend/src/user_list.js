@@ -325,6 +325,7 @@ export default function UserList() {
         modal
         closeOnDocumentClick
       >
+        <div className="popup-content">
         <div className="popup-container-ulist">
           <h2>Edit User</h2>
           <div className="input-group">
@@ -371,6 +372,7 @@ export default function UserList() {
             <button onClick={() => setEditUser(null)}>Cancel</button>
           </div>
         </div>
+        </div>
       </Popup>
 
       {/* Promote Confirmation Popup */}
@@ -380,6 +382,7 @@ export default function UserList() {
         modal
         closeOnDocumentClick
       >
+        <div className="popup-content">
         <div className="popup-container-ulist">
           <h2>Confirm Promotion</h2>
           <p>
@@ -390,6 +393,7 @@ export default function UserList() {
             <button onClick={() => setPromoteUser(null)}>Cancel</button>
           </div>
         </div>
+        </div>
       </Popup>
 
       {/* Demote Confirmation Popup */}
@@ -399,6 +403,7 @@ export default function UserList() {
         modal
         closeOnDocumentClick
       >
+        <div className="popup-content">
         <div className="popup-container-ulist">
           <h2>Confirm Demotion</h2>
           <p>
@@ -409,6 +414,7 @@ export default function UserList() {
             <button onClick={() => setDemoteUser(null)}>Cancel</button>
           </div>
         </div>
+        </div>
       </Popup>
 
       {/* Remove Popup */}
@@ -418,6 +424,7 @@ export default function UserList() {
         modal
         closeOnDocumentClick
       >
+        <div className="popup-content">
         <div className="popup-container-ulist">
           <h2>Confirm Deletion</h2>
           <p>
@@ -428,6 +435,7 @@ export default function UserList() {
             <button onClick={() => setDeleteUser(null)}>Cancel</button>
           </div>
         </div>
+        </div>
       </Popup>
 
       {/* Add User Popup */}
@@ -437,6 +445,7 @@ export default function UserList() {
         modal
         closeOnDocumentClick
       >
+        <div className="popup-content">
         <div className="popup-container-ulist">
           <h2>Add User</h2>
           <div className="input-group">
@@ -543,6 +552,7 @@ export default function UserList() {
             <button onClick={handleAddUser}>Save</button>
             <button onClick={() => setIsAddPopupOpen(false)}>Cancel</button>
           </div>
+        </div>
         </div>
       </Popup>
     </div>

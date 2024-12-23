@@ -148,44 +148,4 @@
     margin-top: 10px;
   }
 
-  .assign-popup-content {
-    background-color: rgb(236, 234, 234);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional for better visibility */
-    width: 400px; /* Adjust width as necessary */
-    max-width: 90vw;
-    margin: auto; /* To center the popup */
-  }
   
-  .popup-content {
-    background-color: white; /* Sets the background to white */
-    padding: 20px; /* Adds inner spacing */
-    border-radius: 8px; /* Optional: Adds rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Adds a subtle shadow */
-    width: 400px; /* Adjust the width as necessary */
-    max-width: 90vw; /* Makes it responsive on smaller screens */
-    margin: auto; /* Centers the popup */
-  }
-
-  .guide-table {
-    border: 4px solid black; /* Thick black outline */
-    border-radius: 5px; /* Optional: Adds rounded corners */
-    overflow: hidden; /* Ensures proper display of table borders */
-    margin: 10px 0; /* Optional: Adds space around the table */
-    background-color: rgb(255, 255, 255); /* Ensures the table background is visible and clean */
-  }
-
-  .claim-popup-content {
-    background-color: rgb(236, 234, 234);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional for better visibility */
-    width: 400px; /* Adjust width as necessary */
-    max-width: 90vw;
-    margin: auto; /* To center the popup */
-  }
-
-  .claim-popup-content button {
-    margin: 0 10px; /* Adds horizontal spacing between the buttons */
-  }

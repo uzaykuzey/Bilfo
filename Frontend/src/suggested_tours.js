@@ -89,137 +89,137 @@ export default function SuggestedToursLayout() {
     return (
         <div className="home-layout">
             <NavbarLayout />
-            <h1>Suggested Tours</h1>
-
-            {/* Success Message */}
-            {successMessage && <p className="success-message">{successMessage}</p>}
-
-            <div className="table-container">
-                {/* Highschool Tours Table */}
-                <div className="table-section">
-                    <h2>Highschool Tours</h2>
-                    {highschoolTours.length === 0 ? (
-                        <p>No highschool tours have been suggested.</p>
-                    ) : (
-                        <table className="tour-table">
-                            <thead>
-                                <tr>
-                                    <th>School Name</th>
-                                    <th>City</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Visitor Count</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {highschoolTours.map(tour => (
-                                    <tr key={tour.second?.id}>
-                                        <td>{tour.second?.schoolName}</td>
-                                        <td>{tour.second?.city}</td>
-                                        <td>{formatDate(tour.first?.date)}</td>
-                                        <td>{formatTime(tour.first?.time)}</td>
-                                        <td>{tour.second?.visitorCount}</td>
-                                        <td>
-                                            <Popup
-                                                trigger={<button>Claim</button>}
-                                                modal
-                                                nested
-                                            >
-                                                {close => (
-                                                    <div className="popup-content">
-                                                        <h3>Confirm Claim</h3>
-                                                        <p>Are you sure you want to claim this tour?</p>
-                                                        <button onClick={() => handleConfirmClaim(tour.second?.id, close)}>Yes, Claim</button>
-                                                        <button onClick={close}>Cancel</button>
-                                                    </div>
-                                                )}
-                                            </Popup>
-                                            <Popup
-                                                trigger={<button>Reject</button>}
-                                                modal
-                                                nested
-                                            >
-                                                {close => (
-                                                    <div className="popup-content">
-                                                        <h3>Confirm Rejection</h3>
-                                                        <p>Are you sure you want to reject this tour?</p>
-                                                        <button onClick={() => handleReject(tour.first?.id, close)}>Yes, Reject</button>
-                                                        <button onClick={close}>Cancel</button>
-                                                    </div>
-                                                )}
-                                            </Popup>
-                                        </td>
+            <div className="content-list">
+                <h1 id = "suggested-header">Suggested Tours</h1>
+                {/* Success Message */}
+                {successMessage && <p className="success-message">{successMessage}</p>}
+                <div className="table-container">
+                    {/* Highschool Tours Table */}
+                    <div className="table-section">
+                        <h2>Highschool Tours</h2>
+                        {highschoolTours.length === 0 ? (
+                            <p>No highschool tours have been suggested.</p>
+                        ) : (
+                            <table className="tour-table">
+                                <thead>
+                                    <tr>
+                                        <th>School Name</th>
+                                        <th>City</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Visitor Count</th>
+                                        <th>Actions</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
-                </div>
+                                </thead>
+                                <tbody>
+                                    {highschoolTours.map(tour => (
+                                        <tr key={tour.second?.id}>
+                                            <td>{tour.second?.schoolName}</td>
+                                            <td>{tour.second?.city}</td>
+                                            <td>{formatDate(tour.first?.date)}</td>
+                                            <td>{formatTime(tour.first?.time)}</td>
+                                            <td>{tour.second?.visitorCount}</td>
+                                            <td>
+                                                <Popup
+                                                    trigger={<button>Claim</button>}
+                                                    modal
+                                                    nested
+                                                >
+                                                    {close => (
+                                                        <div className="popup-content">
+                                                            <h3>Confirm Claim</h3>
+                                                            <p>Are you sure you want to claim this tour?</p>
+                                                            <button onClick={() => handleConfirmClaim(tour.second?.id, close)}>Yes, Claim</button>
+                                                            <button onClick={close}>Cancel</button>
+                                                        </div>
+                                                    )}
+                                                </Popup>
+                                                <Popup
+                                                    trigger={<button>Reject</button>}
+                                                    modal
+                                                    nested
+                                                >
+                                                    {close => (
+                                                        <div className="popup-content">
+                                                            <h3>Confirm Rejection</h3>
+                                                            <p>Are you sure you want to reject this tour?</p>
+                                                            <button onClick={() => handleReject(tour.first?.id, close)}>Yes, Reject</button>
+                                                            <button onClick={close}>Cancel</button>
+                                                        </div>
+                                                    )}
+                                                </Popup>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </div>
 
-                {/* Individual Tours Table */}
-                <div className="table-section">
-                    <h2>Individual Tours</h2>
-                    {individualTours.length === 0 ? (
-                        <p>No individual tours have been suggested.</p>
-                    ) : (
-                        <table className="tour-table">
-                            <thead>
-                                <tr>
-                                    <th>Names</th>
-                                    <th>Department</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Visitor Count</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {individualTours.map(tour => (
-                                    <tr key={tour.second?.id}>
-                                        <td>
-                                            {tour.second?.names.slice(0, 3).join(", ")}
-                                            {tour.second?.names.length > 3 ? "..." : ""}
-                                        </td>
-                                        <td>{tour.second?.department}</td>
-                                        <td>{formatDate(tour.first?.date)}</td>
-                                        <td>{formatTime(tour.first?.time)}</td>
-                                        <td>{tour.second?.visitorCount}</td>
-                                        <td>
-                                            <Popup
-                                                trigger={<button>Claim</button>}
-                                                modal
-                                                nested
-                                            >
-                                                {close => (
-                                                    <div className="popup-content">
-                                                        <h3>Confirm Claim</h3>
-                                                        <p>Are you sure you want to claim this tour?</p>
-                                                        <button onClick={() => handleConfirmClaim(tour.second?.id, close)}>Yes, Claim</button>
-                                                        <button onClick={close}>Cancel</button>
-                                                    </div>
-                                                )}
-                                            </Popup>
-                                            <Popup
-                                                trigger={<button>Reject</button>}
-                                                modal
-                                                nested
-                                            >
-                                                {close => (
-                                                    <div className="popup-content">
-                                                        <h3>Confirm Rejection</h3>
-                                                        <p>Are you sure you want to reject this tour?</p>
-                                                        <button onClick={() => handleReject(tour.first?.id, close)}>Yes, Reject</button>
-                                                        <button onClick={close}>Cancel</button>
-                                                    </div>
-                                                )}
-                                            </Popup>
-                                        </td>
+                    {/* Individual Tours Table */}
+                    <div className="table-section">
+                        <h2>Individual Tours</h2>
+                        {individualTours.length === 0 ? (
+                            <p>No individual tours have been suggested.</p>
+                        ) : (
+                            <table className="tour-table">
+                                <thead>
+                                    <tr>
+                                        <th>Names</th>
+                                        <th>Department</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Visitor Count</th>
+                                        <th>Actions</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
+                                </thead>
+                                <tbody>
+                                    {individualTours.map(tour => (
+                                        <tr key={tour.second?.id}>
+                                            <td>
+                                                {tour.second?.names.slice(0, 3).join(", ")}
+                                                {tour.second?.names.length > 3 ? "..." : ""}
+                                            </td>
+                                            <td>{tour.second?.department}</td>
+                                            <td>{formatDate(tour.first?.date)}</td>
+                                            <td>{formatTime(tour.first?.time)}</td>
+                                            <td>{tour.second?.visitorCount}</td>
+                                            <td>
+                                                <Popup
+                                                    trigger={<button>Claim</button>}
+                                                    modal
+                                                    nested
+                                                >
+                                                    {close => (
+                                                        <div className="popup-content">
+                                                            <h3>Confirm Claim</h3>
+                                                            <p>Are you sure you want to claim this tour?</p>
+                                                            <button onClick={() => handleConfirmClaim(tour.second?.id, close)}>Yes, Claim</button>
+                                                            <button onClick={close}>Cancel</button>
+                                                        </div>
+                                                    )}
+                                                </Popup>
+                                                <Popup
+                                                    trigger={<button>Reject</button>}
+                                                    modal
+                                                    nested
+                                                >
+                                                    {close => (
+                                                        <div className="popup-content">
+                                                            <h3>Confirm Rejection</h3>
+                                                            <p>Are you sure you want to reject this tour?</p>
+                                                            <button onClick={() => handleReject(tour.first?.id, close)}>Yes, Reject</button>
+                                                            <button onClick={close}>Cancel</button>
+                                                        </div>
+                                                    )}
+                                                </Popup>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

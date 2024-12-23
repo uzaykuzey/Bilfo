@@ -189,6 +189,7 @@ export default function AdvisorListLayout() {
       {/* Promote Popup */}
       {promoteAdvisor && (
         <Popup open={true} onClose={() => setPromoteAdvisor(null)} position="center center">
+          <div className="popup-content">
           <div className="popup-container">
             <h2>Confirm Promotion</h2>
             <p>
@@ -198,6 +199,7 @@ export default function AdvisorListLayout() {
               <button onClick={handlePromoteAdvisor}>Promote</button>
               <button onClick={() => setPromoteAdvisor(null)}>Cancel</button>
             </div>
+            </div>
           </div>
         </Popup>
       )}
@@ -205,6 +207,7 @@ export default function AdvisorListLayout() {
       {/* Demote Popup */}
       {demoteAdvisor && (
         <Popup open={true} onClose={() => setDemoteAdvisor(null)} position="center center">
+          <div className="popup-content">
           <div className="popup-container">
             <h2>Confirm Demotion</h2>
             <p>
@@ -214,6 +217,7 @@ export default function AdvisorListLayout() {
               <button onClick={handleDemoteAdvisor}>Demote</button>
               <button onClick={() => setDemoteAdvisor(null)}>Cancel</button>
             </div>
+            </div>
           </div>
         </Popup>
       )}
@@ -221,6 +225,7 @@ export default function AdvisorListLayout() {
       {/* Remove Popup */}
       {deleteAdvisor && (
         <Popup open={true} onClose={() => setDeleteAdvisor(null)} position="center center">
+          <div className="popup-content">
           <div className="popup-container">
             <h2>Confirm Deletion</h2>
             <p>
@@ -230,6 +235,7 @@ export default function AdvisorListLayout() {
               <button onClick={handleRemoveAdvisor}>Remove</button>
               <button onClick={() => setDeleteAdvisor(null)}>Cancel</button>
             </div>
+            </div>
           </div>
         </Popup>
       )}
@@ -237,6 +243,7 @@ export default function AdvisorListLayout() {
       {/* Add Advisor Popup */}
       {isAddPopupOpen && (
         <Popup open={true} onClose={() => setIsAddPopupOpen(false)} position="center center">
+          <div className="popup-content">
           <div className="popup-container">
             <h2>Add Advisor</h2>
             <div className="form-group">
@@ -334,6 +341,7 @@ export default function AdvisorListLayout() {
             <div className="popup-actions">
               <button onClick={handleAddAdvisor}>Save</button>
               <button onClick={() => setIsAddPopupOpen(false)}>Cancel</button>
+            </div>
             </div>
           </div>
         </Popup>

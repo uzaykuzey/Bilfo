@@ -325,16 +325,24 @@ export default function FairApplicationForm() {
             </div>
 
             {isTermsPopupOpen && (
-                <div className="popup-overlay">
-                    <div className="popup-content">
+                <div className="popup-overlay-terms">
+                    <div className="popup-content-terms">
                         <h3 id = "terms-header">Terms and Conditions</h3>
-                        <p className= 'terms'>1- Here are the terms and conditions...</p>
-                        <p className= 'terms'>2- Here are the terms and conditions...</p>
-                        <p className= 'terms'>3- Here are the terms and conditions...</p>
-                        <p className= 'terms'>4- Here are the terms and conditions...</p>
-                        <p className= 'terms'>5- Here are the terms and conditions...</p>
+                        <div className='terms'>
+                        <p className= 'term'><strong>Acknowledgment:</strong></p>
+                        <p className= 'term'>These are the Terms and Conditions governing the use of this Service and the agreement that operates between You and the Company. These Terms and Conditions set out the rights and obligations of all users regarding the use of the Service. Your access to and use of the Service is conditioned on Your acceptance of and compliance with these Terms and Conditions. These Terms and Conditions apply to all visitors, users, and others who access or use the Service. By accessing or using the Service, You agree to be bound by these Terms and Conditions. If You disagree with any part of these Terms and Conditions, then You may not access the Service. Your access to and use of the Service is also conditioned on Your acceptance of and compliance with the Privacy Policy of the Company. Our Privacy Policy describes Our policies and procedures on the collection, use, and disclosure of Your personal information when You use the Application or the Website and tells You about Your privacy rights and how the law protects You. Please read Our Privacy Policy carefully before using Our Service.</p>
+                        <p className= 'term'><strong>Interpretation and Definitions:</strong></p>
+                        <p className= 'term'>The words of which the initial letter is capitalized have meanings defined under the following conditions. The following definitions shall have the same meaning regardless of whether they appear in singular or in plural. For the purposes of these Terms and Conditions: <strong>Affiliate</strong> means an entity that controls, is controlled by, or is under common control with a party, where "control" means ownership of 50% or more of the shares, equity interest, or other securities entitled to vote for election of directors or other managing authority. 
+                        <strong>Company</strong> (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to Bilkent University, Bilkent Üniversitesi 06800 Bilkent/Ankara/TÜRKİYE. <strong>Service</strong> refers to the Website. <strong>Terms and Conditions</strong> (also referred to as "Terms") mean these Terms and Conditions that form the entire agreement between You and the Company regarding the use of the Service. This Terms and Conditions agreement has been created with the help of the Terms and Conditions Generator. <strong>You</strong> means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.</p>
+                        <p className= 'term'><strong>Smoke-Free Campus Policy:</strong></p>
+                        <p className= 'term'>Effective as of September 1, 2022, and pursuant to the April 25, 2018, Bilkent University Senate and University Executive Board Decision, Bilkent University has adopted a Smoke-Free Campus Policy to promote a healthy and civilized university environment for all stakeholders. As part of this policy: <strong>The use of cigarettes, other tobacco products, and electronic cigarettes is strictly prohibited in all indoor and outdoor areas of Bilkent University.</strong> Until the full implementation of the ban, smoking areas within the campus will be gradually restricted. By using the Service, you agree to comply with this Smoke-Free Campus Policy. Non-compliance may result in appropriate measures as determined by the University.</p>
+                        <p className= 'term'><strong>Campus Traffic Rules:</strong></p>
+                        <p className= 'term'>Speed Limits: The maximum allowable speed for vehicles operating on the campus is 50 kilometers per hour (km/h) unless otherwise indicated by traffic signs. At intersections or areas approaching pedestrian crossings, the speed limit is reduced to 30 kilometers per hour (km/h) to ensure safety. Pedestrian Right of Way: The principle granting pedestrians absolute priority at all designated pedestrian crossings within the campus. Vehicles must come to a complete stop behind crossing lines to allow pedestrians to pass unimpeded. Prohibited Vehicles: Driver Conduct: <strong>All drivers operating vehicles within the campus are required to:</strong> Adhere to instructions and directives issued by authorized security personnel. Refrain from actions that cause disturbance, including unnecessary use of horns, playing loud music, or disposing of trash from vehicles. Compliance with these rules is monitored through campus surveillance systems, including cameras, and enforced by authorized personnel. Non-compliance may result in penalties, including warnings, fines, or removal of access privileges to the campus.</p>
+                        <p className= 'term'>For questions, email: tanitim@bilkent.edu.tr</p>
+                        </div>
                         <button onClick={closeTermsPopup} className="close-terms">I Understand</button>
                     </div>
+                
                 </div>
             )}
 

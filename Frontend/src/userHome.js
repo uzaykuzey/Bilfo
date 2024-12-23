@@ -103,13 +103,8 @@ export default function UserHomeLayout() {
         {/* Profile Section */}
         <div className="profile-section">
           <div className="profile-card">
-            {/* Profile Header */}
+            {/* Profile Header - Simplified without image */}
             <div className="profile-header">
-              <img
-                src="/user-profile.jpg"
-                alt={profile.username}
-                className="profile-image"
-              />
               <div className="profile-header-details">
                 <h2>{profile.username}</h2>
                 <h3>

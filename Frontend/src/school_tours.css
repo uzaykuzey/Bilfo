@@ -135,3 +135,10 @@
 .submit-button:hover {
     background-color: #0051C2;
 }
+
+.error {
+  color: red; /* Make the text red */
+  font-size: 14px; /* Match the font size with the input labels */
+  font-weight: bold; /* Make it stand out */
+  margin-top: 5px; /* Add some spacing above the error message */
+}

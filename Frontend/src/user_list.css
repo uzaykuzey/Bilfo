@@ -132,6 +132,12 @@
   color: #666;
 }
 
+.popup-content {
+  background-color: transparent;
+  border: transparent;
+  box-shadow: none;
+}
+
 .popup-container {
   background: white;
   padding: 20px;

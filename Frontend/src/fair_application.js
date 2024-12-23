@@ -118,7 +118,7 @@ export default function FairApplicationForm() {
         try {
             const response = await api.post("/form/fairform", fairFormData);
             
-            if (response.status === 200) {
+            if (response.status === 201) {
                 // Reset form after successful submission
                 setFormData({
                     schoolName: '',

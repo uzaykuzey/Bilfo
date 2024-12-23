@@ -767,7 +767,7 @@ export default function TourListLayout() {
           </select>
 
           {/* NEW: Only show sort dropdown when status is "Pending" */}
-          {selectedStatus === "Pending" && (
+          {selectedStatus === "Pending" && selectedType != "INDIVIDUAL_TOUR" &&(
             <>
               <label htmlFor="sort">Sort by:</label>
               <select

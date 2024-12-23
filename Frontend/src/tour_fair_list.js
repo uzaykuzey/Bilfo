@@ -115,7 +115,7 @@ export default function TourListLayout() {
     try {
       var index = parseInt(selectedIndex);
       const payload = {
-        formId: tour.id,
+        formId: tour.form?.id,
         state: "ACCEPTED",
         index: index,
         rejectionMessage: "", // Empty as this is an acceptance

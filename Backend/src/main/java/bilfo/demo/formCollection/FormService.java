@@ -11,6 +11,7 @@ import bilfo.demo.passwordCollection.eventPasswordCollection.FormPassword;
 import bilfo.demo.passwordCollection.eventPasswordCollection.FormPasswordRepository;
 import bilfo.demo.passwordCollection.eventPasswordCollection.FormPasswordService;
 import bilfo.demo.userCollection.UserManager;
+import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +113,7 @@ public class FormService {
         return eventService.createEvent(formId, new ArrayList<>(), new ArrayList<>(), form.get().getType(), chosenDate, chosenTime);
     }
 
-    public List<Triple<Form, Integer, Integer>> getForms(EVENT_TYPES type, FORM_STATES state, SORTING_TYPES sort)
+    public List<FormWithStats> getForms(EVENT_TYPES type, FORM_STATES state, SORTING_TYPES sort)
     {
         List<Form> forms = formRepository.findAllByTypeAndApproved(type, state);
         switch (sort) {
@@ -136,14 +137,14 @@ public class FormService {
                                             });
         };
 
-        List<Triple<Form, Integer, Integer>> result = new ArrayList<>();
+        List<FormWithStats> result = new ArrayList<>();
         for(Form form : forms)
         {
             if(form.getType()==EVENT_TYPES.INDIVIDUAL_TOUR)
             {
-                result.add(Triple.of(form, 0, 0));
+                result.add(new FormWithStats(form, 0, 0));
             }
-            result.add(Triple.of(form, form.getBilkentAdmissions(), form.getPercentageOfBilkentAdmissions()));
+            result.add(new FormWithStats(form, form.getBilkentAdmissions(), form.getPercentageOfBilkentAdmissions()));
         }
         return result;
     }
@@ -169,6 +170,14 @@ public class FormService {
             }
         }
         return Pair.of(form,event);
+    }
+
+    @AllArgsConstructor
+    public static class FormWithStats
+    {
+        public Form form;
+        public int bilkentAdmissions;
+        public int bilkentAdmissionsPercentage;
     }
 
     public boolean cancelByCounselor(String id){

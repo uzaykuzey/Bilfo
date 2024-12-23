@@ -104,4 +104,9 @@ public class LogManager {
         return new ResponseEntity<>(logService.getEventsOfUserThatDontHaveLogsAndFinished(bilkentId), HttpStatus.OK);
     }
 
+    @GetMapping("/getTotalHoursOfService")
+    public ResponseEntity<Double> getTotalHoursOfService(@RequestParam int bilkentId) {
+        return new ResponseEntity<>(logService.getTotalHoursOfService(bilkentId), HttpStatus.OK);
+    }
+
 }

@@ -282,4 +282,25 @@ public class LogService {
         }
         return false;
     }
+
+    public double getTotalHoursOfService(int bilkentId)
+    {
+        Optional<User> optionalUser = userService.getUser(bilkentId);
+        if(optionalUser.isEmpty())
+        {
+            return 0;
+        }
+        User user = optionalUser.get();
+        double result = 0;
+        for(ObjectId logId: user.getLogs())
+        {
+            Optional<Log> optionalLog=logRepository.findById(logId);
+            if(optionalLog.isEmpty())
+            {
+                continue;
+            }
+            result+=optionalLog.get().getHours();
+        }
+        return result;
+    }
 }

@@ -12,6 +12,7 @@ import bilfo.demo.userCollection.User;
 import bilfo.demo.userCollection.UserManager;
 import bilfo.demo.userCollection.UserRepository;
 import bilfo.demo.userCollection.UserService;
+import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

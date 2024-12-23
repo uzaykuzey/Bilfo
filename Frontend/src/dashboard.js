@@ -51,9 +51,9 @@ export default function DashboardLayout() {
     const fetchDashboardData = async () => {
       try {
         setIsLoading(true);
-        console.log('Making request to:', '/dashboard/createDashboard');
+        console.log('Making request to:', '/dashboard/getDashboard');
         
-        const response = await api.post('/dashboard/createDashboard', {});
+        const response = await api.post('/dashboard/getDashboard', {});
         console.log('Response:', response);
         
         if (response.status === 200) {

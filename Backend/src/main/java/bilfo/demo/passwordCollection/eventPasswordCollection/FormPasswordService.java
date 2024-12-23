@@ -11,7 +11,7 @@ public class FormPasswordService {
     @Autowired
     private FormPasswordRepository formPasswordRepository;
 
-    public Optional<FormPassword> getFormPasswordWithEventId(ObjectId formId) {
+    public Optional<FormPassword> getFormPasswordWithFormId(ObjectId formId) {
         return formPasswordRepository.findByFormId(formId);
     }
 

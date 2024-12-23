@@ -480,16 +480,37 @@ public class EventService {
         {
             return false;
         }
+        Optional<FormPassword> formPassword=formPasswordService.getFormPasswordWithFormId(formId);
+        if(formPassword.isEmpty())
+        {
+            return false;
+        }
 
         Optional<Event> optionalEvent = eventRepository.findEventById(eventId);
+        formPasswordService.deleteFormPassword(formPassword.get());
 
         if(optionalEvent.isEmpty())
         {
-
-
-
+            formService.deleteForm(optionalForm.get());
+            return true;
         }
+
+        Event event = optionalEvent.get();
+
+        List<User> users=userService.allUsers();
+        for(User user: users)
+        {
+            if(user.getSuggestedEvents().contains(eventId))
+            {
+                user.getSuggestedEvents().remove(eventId);
+                userService.saveUser(user);
+            }
+        }
+
+        event.setState(EVENT_STATES.CANCELLED);
+        eventRepository.save(event);
         return false;
     }
+
 }
 

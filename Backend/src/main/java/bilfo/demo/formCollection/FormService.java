@@ -183,4 +183,8 @@ public class FormService {
         }
         return true;
     }
+
+    public void deleteForm(Form form){
+        formRepository.delete(form);
+    }
 }

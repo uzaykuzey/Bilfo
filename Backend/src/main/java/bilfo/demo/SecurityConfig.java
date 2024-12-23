@@ -35,7 +35,7 @@ public class SecurityConfig{
                                                                 , "/event/getScheduleOfWeek","/form/getForms", "/event/getEvents", "/school/cityNames", "/school/districtNames", "/school/schoolNames",
                                                                   "/log/getLogs", "/log/getEventsOfUserThatDontHaveLogsAndFinished","/log/getAllGuidesLogTable", "/guidesAvailable",
                                                                     "/event/getGuidesOfEvent", "/counselor/getAll", "/form/getEventDetails", "/dashboard/getDashboard", "/event/getSuggestedEvents",
-                                                                    "/event/getSuggestedEvents", "/event/getAllFeedbacks").permitAll()
+                                                                    "/event/getSuggestedEvents", "/event/getAllFeedbacks", "/event/getNoOfEventRequestsAtThisDate").permitAll()
 
                         .anyRequest().authenticated()
                 )

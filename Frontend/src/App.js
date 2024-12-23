@@ -22,6 +22,9 @@ import PuantajTableGuideLayout from './puantaj_table_guide';
 import DashboardLayout from './dashboard';
 import EditEvent from './edit_event';
 import UserList from './user_list';
+import CounselorList from './counselor_list';
+import SchoolList from './school_list';
+import FeedbackList from './feedback_list';
 
 function App() {
   const { user } = useAuth();
@@ -146,6 +149,33 @@ function App() {
            </ProtectedRoute>
          }
        />        
+
+        <Route
+          path="/userHome/:bilkentId/dashboard/counselors"
+          element={
+            <ProtectedRoute allowedRoles={['COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+              <CounselorList />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/userHome/:bilkentId/dashboard/schools"
+          element={
+            <ProtectedRoute allowedRoles={['COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+              <SchoolList />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/userHome/:bilkentId/dashboard/feedbacks"
+          element={
+            <ProtectedRoute allowedRoles={['COORDINATOR', 'ACTING_DIRECTOR', 'ADMIN']}>
+              <FeedbackList />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Catch-all route */}
         <Route path="*" element={

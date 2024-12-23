@@ -42,4 +42,12 @@ public class CounselorService {
 
         return Optional.of(savedcounselor);
     }
+
+    public Counselor updateCounselor(Counselor counselor) {
+        return counselorRepository.save(counselor);
+    }
+
+    public void deleteCounselor(ObjectId id) {
+        counselorRepository.deleteById(id);
+    }
 }

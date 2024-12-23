@@ -110,5 +110,42 @@
     color: white;
     border-radius: 4px;
   }
+
+  .popup-content-evaluate {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px; 
+    max-width: 90vw;
+  }
+
+  .popup-close-icon {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .tour-details {
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .tour-details p {
+    margin-bottom: 10px;
+  }
+
+  .time-radio {
+    display: flex;
+  }
+
+  .radio-possible-times {
+    width: 15px;
+    margin-right: 5px;
+  }
+
+  .rejection-area {
+    margin-top: 10px;
+  }
   
   

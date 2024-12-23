@@ -194,6 +194,10 @@
   display: flex;
 }
 
+#cheackbox-trainee {
+  width: 24px;
+  margin-left: 5px;
+}
 
 .popup-buttons {
   display: flex;

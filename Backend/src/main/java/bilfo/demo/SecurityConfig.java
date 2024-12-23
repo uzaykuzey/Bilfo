@@ -30,11 +30,11 @@ public class SecurityConfig{
                                                                 "/addGuide","/removeUser", "/addAdvisor", "/addCoordinator", "/addActingDirector",
                                                                 "/changeAvailability", "/event/feedback", "/event/claimEvent", "/forgotPasswordMail",
                                                                 "/forgotPasswordChangeRequest", "/demoteUser", "/log/addLog", "/editUser", "/log/deleteLog",
-                                                                "/log/markLogAsPaid", "/log/markAllLogsAsPaid", "/event/offerEvent", "/counselor/edit", "/counselor/delete", "/counselor/add").permitAll()
+                                                                "/log/markLogAsPaid", "/log/markAllLogsAsPaid", "/event/offerEvent", "/counselor/edit", "/counselor/delete", "/counselor/add", "/event/rejectSuggestedEvent").permitAll()
                         .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/getAllUsers", "/event", "/form", "/getAvailability", "/getFeedback", "/getAdvisorsOfTheDay","/getUserInfo"
                                                                 , "/event/getScheduleOfWeek","/form/getForms", "/event/getEvents", "/school/cityNames", "/school/districtNames", "/school/schoolNames",
                                                                   "/log/getLogs", "/log/getEventsOfUserThatDontHaveLogsAndFinished","/log/getAllGuidesLogTable", "/guidesAvailable",
-                                                                    "/event/getGuidesOfEvent", "/counselor/getAll", "/form/getEventDetails", "/dashboard/getDashboard",
+                                                                    "/event/getGuidesOfEvent", "/counselor/getAll", "/form/getEventDetails", "/dashboard/getDashboard", "/event/getSuggestedEvents",
                                                                     "/event/getSuggestedEvents").permitAll()
 
                         .anyRequest().authenticated()

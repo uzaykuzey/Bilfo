@@ -115,6 +115,7 @@ public class EventService {
         } else {
             user.getSuggestedEvents().add(event.getId());
         }
+
         userService.saveUser(user);
 
         return true;
@@ -133,6 +134,25 @@ public class EventService {
         } else {
             user.getSuggestedEvents().add(event.getId());
         }
+        userService.saveUser(user);
+        return true;
+    }
+
+    public boolean rejectSuggestedEvent(int bilkentId, ObjectId eventId)
+    {
+        Optional<User> optionalUser = userService.getUser(bilkentId);
+        Optional<Event> optionalEvent = eventRepository.findEventById(eventId);
+        if(optionalEvent.isEmpty() || optionalUser.isEmpty()) {
+            return false;
+        }
+
+        User user=optionalUser.get();
+
+        if(!user.getSuggestedEvents().contains(eventId)) {
+            return false;
+        }
+
+        user.getSuggestedEvents().remove(eventId);
         userService.saveUser(user);
         return true;
     }

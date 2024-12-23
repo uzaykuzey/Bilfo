@@ -58,6 +58,10 @@ public class FormManager {
         }
 
         List<Pair<Date, TOUR_TIMES>> dates=createPossibleTimes(formApplication);
+        if(dates==null)
+        {
+            return new ResponseEntity<>("Form creation failed", HttpStatus.BAD_REQUEST);
+        }
 
         int visitorCount=Integer.parseInt(formApplication.get("visitorCount"));
         String visitorNotes=formApplication.get("visitorNotes");
@@ -83,6 +87,10 @@ public class FormManager {
         String visitorNotes=formApplication.get("visitorNotes");
 
         List<Pair<Date, TOUR_TIMES>> dates=createPossibleTimes(formApplication);
+        if(dates==null)
+        {
+            return new ResponseEntity<>("Form creation failed", HttpStatus.BAD_REQUEST);
+        }
 
         String contactMail = formApplication.get("contactMail");
         Optional<Form> newForm = formService.createForm(EVENT_TYPES.INDIVIDUAL_TOUR, FORM_STATES.NOT_REVIEWED, dates, contactMail, "", "", null, visitorCount, visitorNotes, null, names, department);
@@ -175,9 +183,19 @@ public class FormManager {
         Date date3 = stringToDate(formApplication.get("date3"));
 
         List<Pair<Date, TOUR_TIMES>> dates=new ArrayList<>();
+        if(date1==null)
+        {
+            return null;
+        }
         dates.add(Pair.of(date1, time1));
-        dates.add(Pair.of(date2, time2));
-        dates.add(Pair.of(date3, time3));
+        if(date2!=null)
+        {
+            dates.add(Pair.of(date2, time2));
+        }
+        if(date3!=null)
+        {
+            dates.add(Pair.of(date3, time3));
+        }
         return dates;
     }
 

@@ -15,6 +15,8 @@ export default function UserSettingsLayout() {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const { bilkentId } = useParams();
   // Function to handle username change
+
+  
   const handleChangeUsername = async () => {
     if (!username || !passwordForUsername) {
       alert("Please fill out all fields for username change.");
@@ -160,16 +162,6 @@ export default function UserSettingsLayout() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Advisor Info */}
-      <div className="advisor-section">
-        <p>
-          Advisor of the day: <strong>John Smith</strong> <br />
-          <a href="mailto:johnsmith@ug.bilkent.edu.tr">
-            johnsmith@ug.bilkent.edu.tr
-          </a>
-        </p>
       </div>
     </div>
   );

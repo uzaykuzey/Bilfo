@@ -63,7 +63,7 @@ export default function SchoolList() {
         <h2>School List</h2>
 
         <div className="table-container">
-          <table>
+          <table className="schools-table">
             <thead>
               <tr>
                 <th>School Name</th>

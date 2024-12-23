@@ -56,7 +56,7 @@ export default function FeedbackList() {
         </div>
 
         <div className="table-container">
-          <table>
+          <table className="feedback-table">
             <thead>
               <tr>
                 <th>School</th>

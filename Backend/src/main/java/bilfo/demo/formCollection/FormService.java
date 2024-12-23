@@ -113,16 +113,9 @@ public class FormService {
     {
         List<Form> forms = formRepository.findAllByTypeAndApproved(type, state);
         Comparator<Form> comparator = switch (sort) {
-            case BY_DATE_OF_FORM -> Comparator.comparing(
-                    Form::getDateOfForm,
-                    Comparator.nullsFirst(Comparator.naturalOrder())
-            );
-            case BY_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(
-                    form -> Optional.ofNullable(form.getBilkentAdmissions()).orElse(0)
-            );
-            case BY_PERCENTAGE_OF_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(
-                    form -> Optional.ofNullable(form.getPercentageOfBilkentAdmissions()).orElse(0)
-            );
+            case BY_DATE_OF_FORM -> Comparator.comparing(Form::getDateOfForm);
+            case BY_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(Form::getBilkentAdmissions);
+            case BY_PERCENTAGE_OF_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(Form::getPercentageOfBilkentAdmissions);
             default -> throw new IllegalArgumentException("Unsupported sorting type: " + sort);
         };
         forms.sort(comparator);

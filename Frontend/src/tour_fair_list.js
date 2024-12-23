@@ -33,18 +33,20 @@ export default function TourListLayout() {
   const [isLoadingGuides, setIsLoadingGuides] = useState(false);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);  
   const [isFirstLoad, setFirstLoad] = useState(null);
-  const [guideId,setGuideId] = useState(null);// For loading state
+  const [guideId, setGuideId] = useState(null);
 
+  // NEW: sort option (only relevant for "Pending" status)
+  const [selectedSort, setSelectedSort] = useState("BY_DATE_OF_FORM");
 
   // Set initial state based on the user role
   useEffect(() => {
-    if (statusUser === "GUIDE") {
+    if (statusUser === "GUIDE" && isFirstLoad) {
       setSelectedStatus("Accepted");
     } else {
       setSelectedStatus("Pending");
     }
+    
   }, [statusUser]);
-
 
   const handleDateChange = (e, index) => {
     setSelectedDate(index);
@@ -72,7 +74,6 @@ export default function TourListLayout() {
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
   };
-
 
   const openPopup = (tour) => {
     setSelectedTour(tour);
@@ -127,6 +128,7 @@ export default function TourListLayout() {
       alert("An error occurred while accepting the tour.");
     }
   };
+
   const openAssignPopup = async (tour) => {
     setSelectedAssignTour(tour);
     setIsLoadingGuides(true); // Show a loading state
@@ -142,6 +144,7 @@ export default function TourListLayout() {
         dayOfWeek -= 1;
       }
       console.log("Day of the week:", dayOfWeek);
+
       // Set the date to the Sunday of the current week
       date.setDate(date.getDate() - dayOfWeek + 1);
 
@@ -152,21 +155,27 @@ export default function TourListLayout() {
 
       const time = tour.first?.time;
       let index;
-      if (time == "NINE_AM"){
+      if (time === "NINE_AM") {
         index = [7*0+dayOfWeek, 7*1+dayOfWeek, 7*2+dayOfWeek];
-      }else if (time == "ELEVEN_AM"){
+      } else if (time === "ELEVEN_AM") {
         index = [7*2+dayOfWeek, 7*3+dayOfWeek, 7*4+dayOfWeek];
-      }else if (time == "ONE_THIRTY_PM"){
+      } else if (time === "ONE_THIRTY_PM") {
         index = [7*5+dayOfWeek, 7*6+dayOfWeek, 7*7+dayOfWeek];
-      }else if (time == "FOUR_PM"){
+      } else if (time === "FOUR_PM") {
         index = [7*7+dayOfWeek, 7*8+dayOfWeek, 7*9+dayOfWeek];
       }  
+
       console.log(index);
-      const response = await api.get("/guidesAvailable",{params: {date: formattedDate,
-                                                                  eventId: tour.first?.id,
-                                                                  index1: index[0],
-                                                                  index2: index[1],
-                                                                  index3: index[2]}}); 
+      const response = await api.get("/guidesAvailable", {
+        params: {
+          date: formattedDate,
+          eventId: tour.first?.id,
+          index1: index[0],
+          index2: index[1],
+          index3: index[2],
+        }
+      });
+
       if (response.status === 200) {
         console.log(response.data);
         setAvailableGuides(response.data);
@@ -182,8 +191,6 @@ export default function TourListLayout() {
     }
   };
 
-  
-  
   const closeAssignPopup = () => {
     setSelectedAssignTour(null);
     setGuideId("");
@@ -193,27 +200,28 @@ export default function TourListLayout() {
   const openDetailsPopup = async (tour) => {
     setSelectedDetailsTour(tour);
     setIsLoadingDetails(true); // Show a loading state
-    try{
-        const response = await api.get("/event/getGuidesOfEvent", {params: {eventId: tour.first?.id}});
-
-        console.log(response.data);
-        setDetailsGuides(response.data.first);
-        setDetailsTrainee(response.data.second);
-        setDetailsSuggested(response.data.third);
-        
-    }catch (error){
+    try {
+      const response = await api.get("/event/getGuidesOfEvent", {
+        params: { eventId: tour.first?.id }
+      });
+      console.log(response.data);
+      setDetailsGuides(response.data.first);
+      setDetailsTrainee(response.data.second);
+      setDetailsSuggested(response.data.third);
+    } catch (error) {
       console.error("Error fetching guides:", error);
       alert("An error occurred while fetching guides.");
-    }finally{
+    } finally {
       setIsLoadingDetails(false);
       setDetailsPopupOpen(true); // Show the popup after fetching guides
     }
-  };  
+  };
 
   const closeDetailsPopup = () => {
     setSelectedDetailsTour(null);
     setDetailsPopupOpen(false);
-  }
+  };
+
   const confirmAssignGuide = async (guideId) => {
     try {
       const response = await api.post("/event/offerEvent", {
@@ -231,7 +239,7 @@ export default function TourListLayout() {
       alert("An error occurred while assigning the guide.");
     }
   };
-  
+
   const renderAssignPopupContent = () => {
     if (isLoadingGuides) {
       return <div>Loading available guides...</div>;
@@ -286,12 +294,13 @@ export default function TourListLayout() {
       </div>
     );
   };
-  
+
   const renderDetailsPopupContent = () => {
     if (!selectedDetailsTour) return null; // Ensure a tour is selected
     console.log(selectedDetailsTour);
     // Format the tour date
-    const formattedDate = new Date(selectedDetailsTour.date).toLocaleDateString("en-US");
+    // (Just a placeholder if you want to display it somewhere)
+    // e.g. const formattedDate = new Date(selectedDetailsTour.date).toLocaleDateString("en-US");
   
     return (
       <div className="popup-overlay">
@@ -302,10 +311,10 @@ export default function TourListLayout() {
           </div>
           <h3>Tour Details</h3>
           {selectedDetailsTour.second.type === "HIGHSCHOOL_TOUR" && (
-           <p><strong>Counselor Mail: </strong>{selectedDetailsTour.second?.contactMail}</p>
+            <p><strong>Counselor Mail: </strong>{selectedDetailsTour.second?.contactMail}</p>
           )}
           {selectedDetailsTour.second.type === "INDIVIDUAL_TOUR" && (
-           <p><strong>Contact Mail: </strong>{selectedDetailsTour.second?.contactMail}</p>
+            <p><strong>Contact Mail: </strong>{selectedDetailsTour.second?.contactMail}</p>
           )}
           <h4>Guides</h4>
           <ul>
@@ -314,7 +323,6 @@ export default function TourListLayout() {
             ))}
           </ul>
           
-          {/* Details Trainee */}
           <h4>Trainees</h4>
           <ul>
             {detailsTrainee.map((trainee, index) => (
@@ -322,22 +330,16 @@ export default function TourListLayout() {
             ))}
           </ul>
           
-          {/* Details Suggested */}
           <h4>Suggested Guides</h4>
           <ul>
             {detailSuggested.map((suggestion, index) => (
               <li key={index}>ID: {suggestion.bilkentId} Name: {suggestion.username}</li>
             ))}
           </ul>
-          
-          
-  
-         
         </div>
       </div>
     );
   };
-  
 
   const cancelTour = async (tour) => {
     // Cancel the tour
@@ -353,7 +355,6 @@ export default function TourListLayout() {
     }
   };
 
-  
   const renderPopupContent = () => {
     const [showConfirmModal, setShowConfirmModal] = useState(false); // State for showing confirmation modal
     const [rejectionReason, setRejectionReason] = useState(""); // State for rejection reason
@@ -375,7 +376,6 @@ export default function TourListLayout() {
         alert("Please select a time.");
         return;
       }
-  
       acceptHighSchoolTour(selectedTour, selectedDate); // Pass the selected index
       closePopup();
     };
@@ -452,7 +452,8 @@ export default function TourListLayout() {
           {selectedTour.possibleTimes &&
             selectedTour.possibleTimes.map((time, index) => (
               <div key={index} className="time-radio">
-                <input className="radio-possible-times"
+                <input
+                  className="radio-possible-times"
                   type="radio"
                   id={`time-${index}`}
                   name="time-selection"
@@ -518,12 +519,14 @@ export default function TourListLayout() {
     );
   };
 
+  // When "selectedStatus" or "selectedType" changes, fetch data
   useEffect(() => {
     const fetchTours = async () => {
       try {
         let tours;
         setFirstLoad(true);
-        if ((selectedStatus == "GUIDE" && isFirstLoad) ||selectedStatus === "Accepted") {
+        console.log(selectedSort);
+        if ((selectedStatus === "GUIDE" && isFirstLoad) || selectedStatus === "Accepted") {
           setFirstLoad(false);
           const response = await api.get("/event/getEvents", {
             params: { type: selectedType, state: "ONGOING" },
@@ -532,7 +535,7 @@ export default function TourListLayout() {
           setFilteredTours(tours);
         } else if (selectedStatus === "Pending") {
           const response = await api.get("/form/getForms", {
-            params: { type: selectedType, state: "NOT_REVIEWED" },
+            params: { type: selectedType, state: "NOT_REVIEWED", sort: selectedSort },
           });
           tours = response.data;
           setFilteredTours(tours);
@@ -550,13 +553,12 @@ export default function TourListLayout() {
         console.error("Error fetching filtered tours:", error);
       }
     };
-  
     fetchTours();
-  }, [selectedStatus, selectedType, statusUser]);
+  }, [selectedStatus, selectedType, statusUser, selectedSort]);
+
   
 
   const renderTable = () => {
-    
     if (!filteredTours || filteredTours.length === 0) {
       return <p>No data available for the selected type.</p>;
     }
@@ -571,18 +573,18 @@ export default function TourListLayout() {
             <button className="details-button" onClick={() => openDetailsPopup(tour)}>Details</button>
           </>
         );
-      } else if (selectedStatus === "Pending"){
+      } else if (selectedStatus === "Pending") {
         return (
           <button className="evaluate-button" onClick={() => openPopup(tour)}>Evaluate</button>
         );
       } else {
-        return(
+        return (
           <button className="details-button">Details</button>
-        );  
+        );
       }
     };
   
-    // Define column headers and rows dynamically based on `selectedType`
+    // Define column headers and rows dynamically based on selectedType
     const getTableHeaders = () => {
       switch (selectedType) {
         case "HIGHSCHOOL_TOUR":
@@ -597,10 +599,9 @@ export default function TourListLayout() {
     };
   
     const renderRowData = (tour) => {
-
       switch (selectedType) {
         case "HIGHSCHOOL_TOUR":
-          if(selectedStatus != "Accepted"){
+          if (selectedStatus !== "Accepted") {
             var firstPossibleTime = tour.possibleTimes?.[0];
             var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
             var rawTime = firstPossibleTime?.second || "N/A";
@@ -618,27 +619,28 @@ export default function TourListLayout() {
                 <td>{renderActions(tour)}</td>
               </>
             );
-          }else{
-            var firstPossibleTime = tour.first?.date;
-            var date = firstPossibleTime ? new Date(firstPossibleTime) : null;
-            var rawTime = tour.first?.time || "N/A";
-            var formattedTime = mapTime(rawTime);
-            var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
-            var formattedDate = formatDate(date);
+          } else {
+            // Accepted tours come with different data structure
+            var firstAcceptedTime = tour.first?.date;
+            var dateAccepted = firstAcceptedTime ? new Date(firstAcceptedTime) : null;
+            var rawTimeAccepted = tour.first?.time || "N/A";
+            var formattedTimeAccepted = mapTime(rawTimeAccepted);
+            var dayAccepted = dateAccepted ? dateAccepted.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+            var formattedDateAccepted = formatDate(dateAccepted);
             return (
               <>
                 <td>{tour.second?.schoolName}</td>
                 <td>{tour.second?.city}</td>
-                <td>{formattedDate}</td>
-                <td>{day}</td>
-                <td>{formattedTime}</td>
+                <td>{formattedDateAccepted}</td>
+                <td>{dayAccepted}</td>
+                <td>{formattedTimeAccepted}</td>
                 <td>{tour.second?.visitorCount}</td>
                 <td>{renderActions(tour)}</td>
               </>
             );
           }
         case "INDIVIDUAL_TOUR":
-          if(selectedStatus != "Accepted"){
+          if (selectedStatus !== "Accepted") {
             var firstPossibleTime = tour.possibleTimes?.[0];
             var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
             var rawTime = firstPossibleTime?.second || "N/A";
@@ -656,27 +658,27 @@ export default function TourListLayout() {
                 <td>{renderActions(tour)}</td>
               </>
             );
-          }else{
-            var firstPossibleTime = tour.first?.date;
-            var date = firstPossibleTime ? new Date(firstPossibleTime) : null;
-            var rawTime = tour.first?.time || "N/A";
-            var formattedTime = mapTime(rawTime);
-            var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
-            var formattedDate = formatDate(date);
+          } else {
+            var firstAcceptedTime = tour.first?.date;
+            var dateAccepted = firstAcceptedTime ? new Date(firstAcceptedTime) : null;
+            var rawTimeAccepted = tour.first?.time || "N/A";
+            var formattedTimeAccepted = mapTime(rawTimeAccepted);
+            var dayAccepted = dateAccepted ? dateAccepted.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+            var formattedDateAccepted = formatDate(dateAccepted);
             return (
               <>
                 <td>{tour.second?.names}</td>
                 <td>{tour.second?.department}</td>
-                <td>{formattedDate}</td>
-                <td>{day}</td>
-                <td>{formattedTime}</td>
+                <td>{formattedDateAccepted}</td>
+                <td>{dayAccepted}</td>
+                <td>{formattedTimeAccepted}</td>
                 <td>{tour.second?.visitorCount}</td>
                 <td>{renderActions(tour)}</td>
               </>
             );
           }
         case "FAIR":
-          if(selectedStatus != "Accepted"){
+          if (selectedStatus !== "Accepted") {
             var firstPossibleTime = tour.possibleTimes?.[0];
             var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
             var rawTime = firstPossibleTime?.second || "N/A";
@@ -693,20 +695,20 @@ export default function TourListLayout() {
                 <td>{renderActions(tour)}</td>
               </>
             );
-          }else{
-            var firstPossibleTime = tour.first?.date;
-            var date = firstPossibleTime ? new Date(firstPossibleTime) : null;
-            var rawTime = tour.first?.time || "N/A";
-            var formattedTime = mapTime(rawTime);
-            var day = date ? date.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
-            var formattedDate = formatDate(date);
+          } else {
+            var firstAcceptedTime = tour.first?.date;
+            var dateAccepted = firstAcceptedTime ? new Date(firstAcceptedTime) : null;
+            var rawTimeAccepted = tour.first?.time || "N/A";
+            var formattedTimeAccepted = mapTime(rawTimeAccepted);
+            var dayAccepted = dateAccepted ? dateAccepted.toLocaleDateString("en-US", { weekday: "long" }) : "N/A";
+            var formattedDateAccepted = formatDate(dateAccepted);
             return (
               <>
                 <td>{tour.second?.schoolName}</td>
                 <td>{tour.second?.city}</td>
-                <td>{formattedDate}</td>
-                <td>{day}</td>
-                <td>{formattedTime}</td>
+                <td>{formattedDateAccepted}</td>
+                <td>{dayAccepted}</td>
+                <td>{formattedTimeAccepted}</td>
                 <td>{renderActions(tour)}</td>
               </>
             );
@@ -735,7 +737,6 @@ export default function TourListLayout() {
       </table>
     );
   };
-  
 
   return (
     <div className="home-layout">
@@ -764,6 +765,22 @@ export default function TourListLayout() {
             <option value="INDIVIDUAL_TOUR">Individual Tours</option>
             <option value="FAIR">Fairs</option>
           </select>
+
+          {/* NEW: Only show sort dropdown when status is "Pending" */}
+          {selectedStatus === "Pending" && (
+            <>
+              <label htmlFor="sort">Sort by:</label>
+              <select
+                id="sort"
+                value={selectedSort}
+                onChange={(e) => setSelectedSort(e.target.value)}
+              >
+                <option value="BY_DATE_OF_FORM">Date</option>
+                <option value="BY_ADMISSIONS_TO_BILKENT">Admissions to Bilkent</option>
+                <option value="BY_PERCENTAGE_OF_ADMISSIONS_TO_BILKENT">Percentage of Admissions</option>
+              </select>
+            </>
+          )}
         </div>
         <div className="tour-list">
           {renderTable()}
@@ -777,9 +794,11 @@ export default function TourListLayout() {
       <Popup open={claimPopupOpen} onClose={() => setClaimPopupOpen(false)} modal>
         {renderClaimPopupContent()}
       </Popup>
+
       <Popup open={assignPopupOpen} onClose={closeAssignPopup} modal>
         {renderAssignPopupContent()}
       </Popup>
+
       <Popup open={detailsPopupOpen} onClose={closeDetailsPopup} modal>
         {renderDetailsPopupContent()}
       </Popup>

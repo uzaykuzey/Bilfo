@@ -1,5 +1,6 @@
 package bilfo.demo.userCollection;
 
+import bilfo.demo.EventCollection.Event;
 import bilfo.demo.EventCollection.EventService;
 import bilfo.demo.enums.DAY;
 import bilfo.demo.enums.DEPARTMENT;
@@ -112,6 +113,12 @@ public class UserService {
 
         // Remove the user from the repository
         try {
+            List<Event> events = eventService.allEvents();
+            for (Event event : events) {
+                event.getGuides().removeIf(userId -> userId == user.get().getBilkentId());
+                event.getTrainees().removeIf(userId -> userId == user.get().getBilkentId());
+                eventService.saveEvent(event);
+            }
             userRepository.delete(user.get());
             return true;
         } catch (Exception e) {

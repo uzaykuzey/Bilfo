@@ -81,6 +81,11 @@ public class EventService {
         User user = optionalUser.get();
         Event event = optionalEvent.get();
 
+        if(event.getState() != EVENT_STATES.ONGOING)
+        {
+            return false;
+        }
+
         Optional<Form> optionalForm = formService.getForm(formId);
         if (optionalForm.isEmpty()) {
             return false;
@@ -93,6 +98,7 @@ public class EventService {
 
         if(!isUserAvailable(user, event.getDate(), event.getTime(), !voluntary))
         {
+            user.getSuggestedEvents().remove(event.getId());
             return false;
         }
 
@@ -106,6 +112,7 @@ public class EventService {
         }
 
         if (event.getGuides().size() > guideCount) {
+            user.getSuggestedEvents().remove(event.getId());
             return false;
         }
 
@@ -287,6 +294,11 @@ public class EventService {
                     continue;
                 }
                 optionalForm.get().setApproved(FORM_STATES.ACCEPTED_AND_COMPLETED);
+                for(User user: userService.allUsers())
+                {
+                    user.getSuggestedEvents().remove(event.getId());
+                    userService.saveUser(user);
+                }
                 formRepository.save(optionalForm.get());
                 eventRepository.save(event);
             }
@@ -593,6 +605,11 @@ public class EventService {
         mailSenderService.sendEmail(formService.getForm(event.getOriginalForm()).get().getContactMail(), "Your Event's date has been changed!", "New time: "+date.toString().replace("00:00:00 TRT ", "")+" at "+time.toString());
         eventRepository.save(event);
         return true;
+    }
+
+    public void saveEvent(Event event)
+    {
+        eventRepository.save(event);
     }
 }
 

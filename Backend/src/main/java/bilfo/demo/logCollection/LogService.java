@@ -47,16 +47,8 @@ public class LogService {
     public Optional<Log> createLog(double hours, ObjectId eventId, boolean paid) {
         logger.info("Creating Log");
 
-        // Check if Log already exists
-        //TODO
-        /*Optional<Log> existingUser = LogRepository.findLogById(id);
-        if (existingUser.isPresent()) {
-            logger.warn("Log with ID {} already exists. User creation failed.", id);
-            return Optional.empty();
-        }*/
-
         Optional<Event> event = eventService.getEvent(eventId);
-        if(event.isEmpty())
+        if(event.isEmpty() || event.get().getState()!=EVENT_STATES.COMPLETED)
         {
             return Optional.empty();
         }
@@ -75,17 +67,13 @@ public class LogService {
     {
         Optional<User> user = userService.getUser(bilkentId);
         List<ObjectId> userLogs = user.get().getLogs();
-        for(int i = 0;i<userLogs.size();i++){
-            Optional<Log> log = logRepository.findLogById(userLogs.get(i));
-            if(log.isPresent()) {
+        for (ObjectId userLog : userLogs) {
+            Optional<Log> log = logRepository.findLogById(userLog);
+            if (log.isPresent()) {
                 if (log.get().getEventId().toString().equals(eventId.toString())) {
                     return Optional.empty();
                 }
             }
-        }
-        if(user.isEmpty())
-        {
-            return Optional.empty();
         }
 
         Optional<Log> log = createLog(hours, eventId, paid);

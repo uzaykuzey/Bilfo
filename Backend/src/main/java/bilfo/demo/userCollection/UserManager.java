@@ -225,8 +225,6 @@ public class UserManager {
         return new ResponseEntity<>(user.orElse(null), user.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
-
-
     @PostMapping("/promoteUser")
     public ResponseEntity<String> promoteUser(@RequestBody Map<String,String> promoteRequest) {
 

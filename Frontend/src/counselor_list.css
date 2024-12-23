@@ -54,27 +54,29 @@
   background-color: #f5f5f5;
 }
 
-.actions {
+.actions-counselor {
   display: flex;
   gap: 5px;
 }
 
-.edit-btn {
-  background-color: #ffc107;
-  color: black;
-}
-
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
-}
-
-.actions button {
+.actions-counselor button {
   padding: 5px 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
+
+.edit-btn {
+  background-color: #ffc107;
+  color: white;
+}
+
+.delete-btn-g {
+  background-color: #dc3545;
+  color: white;
+}
+
+
 
 .popup-container {
   background: white;

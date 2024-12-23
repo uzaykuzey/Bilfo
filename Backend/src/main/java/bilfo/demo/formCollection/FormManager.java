@@ -172,7 +172,6 @@ public class FormManager {
         return new ResponseEntity<>("Error while cancelling",HttpStatus.BAD_REQUEST);
     }
 
-
     private List<Pair<Date, TOUR_TIMES>> createPossibleTimes(Map<String, String> formApplication) {
         TOUR_TIMES time1 = TOUR_TIMES.stringToTourTime(formApplication.get("time1"));
         TOUR_TIMES time2 = TOUR_TIMES.stringToTourTime(formApplication.get("time2"));

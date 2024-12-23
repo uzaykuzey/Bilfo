@@ -113,9 +113,9 @@ public class DashboardService {
         formStats.put("rejected", 0);
 
         // Count forms by state for all types at once since they all follow the same pattern
-        List<Form> pendingForms = formRepository.findAllByType(FORM_STATES.NOT_REVIEWED);
-        List<Form> acceptedForms = formRepository.findAllByType(FORM_STATES.ACCEPTED);
-        List<Form> rejectedForms = formRepository.findAllByType(FORM_STATES.REJECTED);
+        List<Form> pendingForms = formRepository.findAllByApproved(FORM_STATES.NOT_REVIEWED);
+        List<Form> acceptedForms = formRepository.findAllByApproved(FORM_STATES.ACCEPTED);
+        List<Form> rejectedForms = formRepository.findAllByApproved(FORM_STATES.REJECTED);
 
         formStats.put("pending", pendingForms.size());
         formStats.put("accepted", acceptedForms.size());
@@ -170,7 +170,7 @@ public class DashboardService {
         int totalTours = completedTours + cancelledTours + ongoingTours;
 
         // Pending forms (not yet accepted or rejected)
-        int pendingForms = formRepository.findAllByType(FORM_STATES.NOT_REVIEWED).size();
+        int pendingForms = formRepository.findAllByApproved(FORM_STATES.NOT_REVIEWED).size();
 
         stats.put("total", totalTours);
         stats.put("completed", completedTours);

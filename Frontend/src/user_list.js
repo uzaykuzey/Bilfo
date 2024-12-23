@@ -266,46 +266,53 @@ export default function UserList() {
             </thead>
             <tbody>
               {users.length > 0 ? (
-                users.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.username}</td>
-                    <td>{user.email}</td>
-                    <td>{user.bilkentId}</td>
-                    <td>{user.status}</td>
-                    <td className="actions-ulist">
-                      <button 
-                        className="promote-btn"
-                        onClick={() => handlePromoteClick(user)}
-                      >
-                        Promote
-                      </button>
-                      <button 
-                        className="demote-btn"
-                        onClick={() => handleDemoteClick(user)}
-                      >
-                        Demote
-                      </button>
-                      <button 
-                        className="edit-btn"
-                        onClick={() => handleEditClick(user)}
-                      >
-                        Edit
-                      </button>
-                      <button 
-                        className="remove-btn"
-                        onClick={() => handleRemoveClick(user)}
-                      >
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                users
+                  .filter(user => user.status !== 'ADMIN') // Filter out admin users
+                  .map((user) => (
+                    <tr key={user.id}>
+                      <td>{user.username}</td>
+                      <td>{user.email}</td>
+                      <td>{user.bilkentId}</td>
+                      <td>{user.status}</td>
+                      <td className="actions-ulist">
+                        {/* Show promote button only if not Acting Director or Coordinator */}
+                        {user.status !== 'ACTING_DIRECTOR' && user.status !== 'COORDINATOR' && (
+                          <button 
+                            className="promote-btn"
+                            onClick={() => handlePromoteClick(user)}
+                          >
+                            Promote
+                          </button>
+                        )}
+                        {/* Show demote button only if not Acting Director */}
+                        {user.status !== 'ACTING_DIRECTOR' && (
+                          <button 
+                            className="demote-btn"
+                            onClick={() => handleDemoteClick(user)}
+                          >
+                            Demote
+                          </button>
+                        )}
+                        <button 
+                          className="edit-btn"
+                          onClick={() => handleEditClick(user)}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className="remove-btn"
+                          onClick={() => handleRemoveClick(user)}
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  ))
               ) : (
                 <tr>
-                  <td colSpan="5">No advisors available.</td> {/* Adjusted colspan */}
+                  <td colSpan="5">No users available.</td>
                 </tr>
-              )
-              }
+              )}
             </tbody>
           </table>
         </div>

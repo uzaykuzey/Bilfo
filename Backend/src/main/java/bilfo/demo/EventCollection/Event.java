@@ -23,7 +23,7 @@ public class Event implements Comparable<Event> {
     @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
     private ObjectId originalForm;
-    private List<Integer> guides; //store bilkent ids
+    private List<Integer> guides;
     private List<Integer> trainees;
     private EVENT_TYPES eventType;
     private Date date;

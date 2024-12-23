@@ -569,6 +569,10 @@ public class EventService {
             return false;
         }
         Event event = optionalEvent.get();
+        if(event.getEventType()==EVENT_TYPES.FAIR)
+        {
+            return false;
+        }
         event.setTime(time);
         event.setDate(date);
         List<Integer> usersOfEvent=event.getGuides();
@@ -586,6 +590,7 @@ public class EventService {
                 event.getGuides().remove(bilkentId);
             }
         }
+        mailSenderService.sendEmail(formService.getForm(event.getOriginalForm()).get().getContactMail(), "Your Event's date has been changed!", "New time: "+date.toString().replace("00:00:00 TRT ", "")+" at "+time.toString());
         eventRepository.save(event);
         return true;
     }

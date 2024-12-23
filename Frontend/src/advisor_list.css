@@ -94,6 +94,7 @@
   /* Center the popup on the screen */
   
   .actions button {
+    min-width: 80px;
     margin: 0 4px;
     padding: 6px 12px;
     font-size: 14px;
@@ -122,6 +123,7 @@
   .popup-container {
     padding: 20px;
     font-family: "Arial", sans-serif;
+    min-width: 350px;
   }
   
   .popup-container h2 {
@@ -153,7 +155,8 @@
   }
   
   .popup-actions button {
-    margin: 0 5px;
+    min-width: 150px;
+    margin: 0 8px;
     padding: 8px 16px;
     font-size: 14px;
     color: #fff;

@@ -150,19 +150,20 @@ export default function UserHomeLayout() {
                     : profile.dayOfAdvisor}
                 </p>
               )}
-              <p>
-                <strong>Total Hours of Service:</strong> {profile.totalHours}
-              </p>
             </div>
 
             {/* Profile Actions */}
             <div className="profile-actions">
-              <button className="action-button" onClick={goToSchedule}>
-                See Tour Schedule
-              </button>
-              <button className="action-button" onClick={goToAvailability}>
-                See Availability Schedule
-              </button>
+              {(profile.role === "GUIDE" || profile.role === "ADVISOR") && (
+                <>
+                  <button className="action-button" onClick={goToSchedule}>
+                    See Tour Schedule
+                  </button>
+                  <button className="action-button" onClick={goToAvailability}>
+                    See Availability Schedule
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

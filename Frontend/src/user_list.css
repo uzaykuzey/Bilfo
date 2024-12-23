@@ -1,19 +1,22 @@
-.main-content-users {
-  padding: 20px;
-  margin-top: 60px;
+.content-list-user {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 4rem;
+  align-items: center;
 }
 
 .user-table-container {
-  margin-top: 20px;
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .user-table {
   width: 100%;
   border-collapse: collapse;
+  text-align: left;
 }
 
 .user-table th,
@@ -103,58 +106,6 @@
   color: #666;
 }
 
-.home-layout {
-  display: flex;
-  min-height: 100vh;
-}
-
-.content-list {
-  flex: 1;
-  padding: 20px;
-  margin-left: 250px;
-}
-
-#user-list-header {
-  text-align: center;
-  font-size: 2.5em;
-  margin-bottom: 20px;
-}
-
-.add-user-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  font-size: 1em;
-}
-
-.user-table-container {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
-
-.user-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.user-table th {
-  background-color: #f8f9fa;
-  padding: 12px;
-  text-align: left;
-  border-bottom: 2px solid #dee2e6;
-}
-
-.user-table td {
-  padding: 12px;
-  border-bottom: 1px solid #dee2e6;
-}
-
 .actions button {
   margin: 0 5px;
   padding: 5px 15px;
@@ -238,7 +189,3 @@
   gap: 5px;
 }
 
-.actions button {
-  padding: 5px 10px;
-  white-space: nowrap;
-}

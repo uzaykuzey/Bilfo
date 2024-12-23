@@ -247,7 +247,7 @@ export default function UserList() {
   return (
     <div className="home-layout">
       <NavbarLayout />
-      <div className="content-list">
+      <div className="content-list-user">
         <h2 id="user-list-header">User List</h2>
         <button className="add-user-btn" onClick={() => setIsAddPopupOpen(true)}>
           Add User

@@ -112,7 +112,7 @@ public class FormService {
         return eventService.createEvent(formId, new ArrayList<>(), new ArrayList<>(), form.get().getType(), chosenDate, chosenTime);
     }
 
-    public List<Form> getForms(EVENT_TYPES type, FORM_STATES state, SORTING_TYPES sort)
+    public List<Triple<Form, Integer, Integer>> getForms(EVENT_TYPES type, FORM_STATES state, SORTING_TYPES sort)
     {
         List<Form> forms = formRepository.findAllByTypeAndApproved(type, state);
         switch (sort) {
@@ -136,8 +136,16 @@ public class FormService {
                                             });
         };
 
-
-        return forms;
+        List<Triple<Form, Integer, Integer>> result = new ArrayList<>();
+        for(Form form : forms)
+        {
+            if(form.getType()==EVENT_TYPES.INDIVIDUAL_TOUR)
+            {
+                result.add(Triple.of(form, 0, 0));
+            }
+            result.add(Triple.of(form, form.getBilkentAdmissions(), form.getPercentageOfBilkentAdmissions()));
+        }
+        return result;
     }
 
     public Pair<Optional<Form>,Optional<Event>> getDetailsFromPass(String password){

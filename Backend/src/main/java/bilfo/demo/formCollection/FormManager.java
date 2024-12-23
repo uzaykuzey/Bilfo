@@ -1,6 +1,7 @@
 package bilfo.demo.formCollection;
 
 import bilfo.demo.EventCollection.Event;
+import bilfo.demo.Triple;
 import bilfo.demo.counselorCollection.Counselor;
 import bilfo.demo.counselorCollection.CounselorRepository;
 import bilfo.demo.counselorCollection.CounselorService;
@@ -8,6 +9,7 @@ import bilfo.demo.enums.*;
 import bilfo.demo.passwordCollection.eventPasswordCollection.FormPassword;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -139,7 +141,7 @@ public class FormManager {
     }
 
     @GetMapping("/getForms")
-    public ResponseEntity<List<Form>> getForms(@RequestParam Map<String, String> getFormsRequest)
+    public ResponseEntity<List<Triple<Form, Integer, Integer>>> getForms(@RequestParam Map<String, String> getFormsRequest)
     {
         FORM_STATES state = FORM_STATES.valueOf(getFormsRequest.get("state").toUpperCase());
         EVENT_TYPES type = EVENT_TYPES.valueOf(getFormsRequest.get("type").toUpperCase());

@@ -472,5 +472,23 @@ public class EventService {
     public EventRepository getEventRepository() {
         return eventRepository;
     }
+
+    public boolean cancelEvent(ObjectId formId ,ObjectId eventId)
+    {
+        Optional<Form> optionalForm = formService.getForm(formId);
+        if(optionalForm.isEmpty())
+        {
+            return false;
+        }
+
+        Optional<Event> optionalEvent = eventRepository.findEventById(eventId);
+
+        if(optionalEvent.isEmpty())
+        {
+
+
+
+        }
+    }
 }
 

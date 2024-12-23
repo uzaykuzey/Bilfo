@@ -126,4 +126,12 @@ public class EventManager {
         Triple<List<Optional<User>>,List<Optional<User>>,List<Optional<User>>> allGuides = eventService.getGuidesOfEvent(eventId);
         return new ResponseEntity<>(allGuides,HttpStatus.OK);
     }
+
+    @PostMapping("/cancelEvent")
+    public ResponseEntity<String> cancelEvent(@RequestParam String formId, @RequestParam String eventId)
+    {
+        ObjectId form=new ObjectId(formId);
+        ObjectId event=new ObjectId(eventId);
+        return null;
+    }
 }

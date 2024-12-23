@@ -4,6 +4,7 @@ package bilfo.demo.formCollection;
 import bilfo.demo.EventCollection.Event;
 import bilfo.demo.EventCollection.EventService;
 import bilfo.demo.SchoolManager;
+import bilfo.demo.Triple;
 import bilfo.demo.enums.*;
 import bilfo.demo.mailSender.MailSenderService;
 import bilfo.demo.passwordCollection.eventPasswordCollection.FormPassword;
@@ -54,15 +55,23 @@ public class FormService {
     public Optional<Form> createForm(EVENT_TYPES type, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleDates, String contactMail, String city, String district, String schoolName, int visitorCount, String visitorNotes, String counselorEmail, String[] names, DEPARTMENT department) {
         logger.info("Creating Form");
 
-        // Check if Form already exists
-        //TODO
-        /*Optional<Form> existingUser = FormRepository.findFormById(id);
-        if (existingUser.isPresent()) {
-            logger.warn("Form with ID {} already exists. User creation failed.", id);
+        if(type!=EVENT_TYPES.INDIVIDUAL_TOUR && !SchoolManager.getInstance().schoolExists(city, district, schoolName))
+        {
             return Optional.empty();
-        }*/
+        }
 
-        Form form = new Form();
+        var forms=formRepository.findAllByApproved(FORM_STATES.ACCEPTED);
+        forms.addAll(formRepository.findAllByApproved(FORM_STATES.NOT_REVIEWED));
+        var cityDistrictSchool= Triple.of(city, district, schoolName);
+        for(Form form: forms)
+        {
+            if(form.getCityDistrictSchool().equals(cityDistrictSchool))
+            {
+                return Optional.empty();
+            }
+        }
+
+        Form form;
         Date today = new Date();
         switch (type)
         {

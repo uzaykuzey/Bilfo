@@ -1,4 +1,4 @@
-package bilfo.demo.dashboardCollection;
+package bilfo.demo.dashboard;
 
 import lombok.Data;
 import org.bson.types.ObjectId;

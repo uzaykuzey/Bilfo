@@ -135,9 +135,9 @@ public class EventManager {
     }
 
     @PostMapping("/cancelEvent")
-    public ResponseEntity<String> cancelEvent(@RequestBody String formId)
+    public ResponseEntity<String> cancelEvent(@RequestBody Map<String,String> formId)
     {
-        ObjectId form=new ObjectId(formId);
+        ObjectId form=new ObjectId(formId.get("formId"));
         if(eventService.cancelEvent(form))
         {
             return new ResponseEntity<>("Successfully cancelled event", HttpStatus.OK);

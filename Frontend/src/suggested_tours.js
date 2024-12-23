@@ -93,13 +93,14 @@ export default function SuggestedToursLayout() {
                 <h1 id = "suggested-header">Suggested Tours</h1>
                 {/* Success Message */}
                 {successMessage && <p className="success-message">{successMessage}</p>}
-                <div className="table-container">
+                <div className="table-container-suggested">
                     {/* Highschool Tours Table */}
                     <div className="table-section">
-                        <h2>Highschool Tours</h2>
+                        <h2 id = "suggested-h1">Highschool Tours</h2>
                         {highschoolTours.length === 0 ? (
                             <p>No highschool tours have been suggested.</p>
                         ) : (
+                            <div className="tour-table-container">
                             <table className="tour-table">
                                 <thead>
                                     <tr>
@@ -121,30 +122,30 @@ export default function SuggestedToursLayout() {
                                             <td>{tour.second?.visitorCount}</td>
                                             <td>
                                                 <Popup
-                                                    trigger={<button>Claim</button>}
+                                                    trigger={<button className = "claim-btn">Claim</button>}
                                                     modal
                                                     nested
                                                 >
                                                     {close => (
-                                                        <div className="popup-content">
+                                                        <div className="popup-container">
                                                             <h3>Confirm Claim</h3>
                                                             <p>Are you sure you want to claim this tour?</p>
-                                                            <button onClick={() => handleConfirmClaim(tour.second?.id, close)}>Yes, Claim</button>
-                                                            <button onClick={close}>Cancel</button>
+                                                            <button className="claim-btn" onClick={() => handleConfirmClaim(tour.second?.id, close)}>Yes, Claim</button>
+                                                            <button className="reject-btn" onClick={close}>Cancel</button>
                                                         </div>
                                                     )}
                                                 </Popup>
                                                 <Popup
-                                                    trigger={<button>Reject</button>}
+                                                    trigger={<button className="reject-btn">Reject</button>}
                                                     modal
                                                     nested
                                                 >
                                                     {close => (
-                                                        <div className="popup-content">
+                                                        <div className="popup-container">
                                                             <h3>Confirm Rejection</h3>
                                                             <p>Are you sure you want to reject this tour?</p>
-                                                            <button onClick={() => handleReject(tour.first?.id, close)}>Yes, Reject</button>
-                                                            <button onClick={close}>Cancel</button>
+                                                            <button className="reject-btn" onClick={() => handleReject(tour.first?.id, close)}>Yes, Reject</button>
+                                                            <button className="claim-btn" onClick={close}>Cancel</button>
                                                         </div>
                                                     )}
                                                 </Popup>
@@ -152,13 +153,16 @@ export default function SuggestedToursLayout() {
                                         </tr>
                                     ))}
                                 </tbody>
+                            
                             </table>
+                            </div>
                         )}
+
                     </div>
 
                     {/* Individual Tours Table */}
                     <div className="table-section">
-                        <h2>Individual Tours</h2>
+                        <h2 id = "suggested-h2">Individual Tours</h2>
                         {individualTours.length === 0 ? (
                             <p>No individual tours have been suggested.</p>
                         ) : (

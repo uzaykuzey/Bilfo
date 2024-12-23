@@ -138,11 +138,11 @@ export default function PuantajTableGuideLayout() {
     const ConfirmationPopup = ({ onConfirm, onCancel }) => {
         return (
             <div className="popup-overlay">
-                <div className="popup-content">
+                <div className="popup-content-puantajg">
                     <h3>Are you sure you want to mark all logs as paid?</h3>
                     <div className="popup-buttons">
-                        <button onClick={onCancel} className="cancel-btn">Cancel</button>
                         <button onClick={onConfirm} className="confirm-btn">Confirm</button>
+                        <button onClick={onCancel} className="cancel-btn">Cancel</button>
                     </div>
                 </div>
             </div>

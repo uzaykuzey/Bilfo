@@ -67,22 +67,29 @@ export default function FeedbackList() {
               </tr>
             </thead>
             <tbody>
-              {filteredFeedbacks.map((feedback) => (
-                <tr key={feedback.id}>
-                  <td>{feedback.schoolName}</td>
-                  <td>{feedback.date}</td>
-                  <td>{feedback.guideName}</td>
-                  <td>{feedback.rating}/5</td>
-                  <td>
-                    <button 
-                      className="details-btn"
-                      onClick={() => setSelectedFeedback(feedback)}
-                    >
-                      Details
-                    </button>
-                  </td>
+              {filteredFeedbacks.length > 0 ? (
+                filteredFeedbacks.map((feedback) => (
+                  <tr key={feedback.id}>
+                    <td>{feedback.schoolName}</td>
+                    <td>{feedback.date}</td>
+                    <td>{feedback.guideName}</td>
+                    <td>{feedback.rating}/5</td>
+                    <td>
+                      <button 
+                        className="details-btn"
+                        onClick={() => setSelectedFeedback(feedback)}
+                      >
+                        Details
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">No feedbacks available.</td> {/* Adjusted colspan */}
                 </tr>
-              ))}
+              )
+              }
             </tbody>
           </table>
         </div>

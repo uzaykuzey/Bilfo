@@ -74,34 +74,41 @@ export default function SchoolList() {
               </tr>
             </thead>
             <tbody>
-              {schools.map((school) => (
-                <tr key={school.id}>
-                  <td>{school.name}</td>
-                  <td>{school.city}</td>
-                  <td>{school.district}</td>
-                  <td>{school.lastVisitDate}</td>
-                  <td className="actions">
-                    <button 
-                      className="details-btn"
-                      onClick={() => setSelectedSchool(school)}
-                    >
-                      Details
-                    </button>
-                    <button 
-                      className="feedback-btn"
-                      onClick={() => fetchSchoolFeedbacks(school.id)}
-                    >
-                      Feedbacks
-                    </button>
-                    <button 
-                      className="delete-btn"
-                      onClick={() => setDeleteSchool(school)}
-                    >
-                      Delete
-                    </button>
-                  </td>
+              {schools.length > 0 ? (
+                schools.map((school) => (
+                  <tr key={school.id}>
+                    <td>{school.name}</td>
+                    <td>{school.city}</td>
+                    <td>{school.district}</td>
+                    <td>{school.lastVisitDate}</td>
+                    <td className="actions">
+                      <button 
+                        className="details-btn"
+                        onClick={() => setSelectedSchool(school)}
+                      >
+                        Details
+                      </button>
+                      <button 
+                        className="feedback-btn"
+                        onClick={() => fetchSchoolFeedbacks(school.id)}
+                      >
+                        Feedbacks
+                      </button>
+                      <button 
+                        className="delete-btn"
+                        onClick={() => setDeleteSchool(school)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">No schools available.</td> {/* Adjusted colspan */}
                 </tr>
-              ))}
+              )
+              }
             </tbody>
           </table>
         </div>

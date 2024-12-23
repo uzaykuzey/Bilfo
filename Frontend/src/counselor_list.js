@@ -188,37 +188,44 @@ export default function CounselorList() {
               </tr>
             </thead>
             <tbody>
-              {counselors.map((counselor) => (
-                <tr key={counselor.id}>
-                  <td>{counselor.name}</td>
-                  <td>{counselor.email}</td>
-                  <td>{counselor.phoneNo}</td>
-                  <td>{counselor.school}</td>
-                  <td className="actions">
-                    <button 
-                      className="edit-btn"
-                      onClick={() => {
-                        setEditCounselor(counselor);
-                        setEditForm({
-                          id: counselor.id,
-                          name: counselor.name,
-                          email: counselor.email,
-                          phoneNo: counselor.phoneNo,
-                          school: counselor.school
-                        });
-                      }}
-                    >
-                      Edit
-                    </button>
-                    <button 
-                      className="delete-btn"
-                      onClick={() => setDeleteCounselor(counselor)}
-                    >
-                      Delete
-                    </button>
-                  </td>
+              {counselors.length > 0 ? (
+                counselors.map((counselor) => (
+                  <tr key={counselor.id}>
+                    <td>{counselor.name}</td>
+                    <td>{counselor.email}</td>
+                    <td>{counselor.phoneNo}</td>
+                    <td>{counselor.school}</td>
+                    <td className="actions">
+                      <button 
+                        className="edit-btn"
+                        onClick={() => {
+                          setEditCounselor(counselor);
+                          setEditForm({
+                            id: counselor.id,
+                            name: counselor.name,
+                            email: counselor.email,
+                            phoneNo: counselor.phoneNo,
+                            school: counselor.school
+                          });
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button 
+                        className="delete-btn"
+                        onClick={() => setDeleteCounselor(counselor)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">No counselors available.</td> {/* Adjusted colspan */}
                 </tr>
-              ))}
+              )
+              }
             </tbody>
           </table>
         </div>

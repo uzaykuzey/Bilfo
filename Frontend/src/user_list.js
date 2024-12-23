@@ -265,40 +265,47 @@ export default function UserList() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.username}</td>
-                  <td>{user.email}</td>
-                  <td>{user.bilkentId}</td>
-                  <td>{user.status}</td>
-                  <td className="actions-ulist">
-                    <button 
-                      className="promote-btn"
-                      onClick={() => handlePromoteClick(user)}
-                    >
-                      Promote
-                    </button>
-                    <button 
-                      className="demote-btn"
-                      onClick={() => handleDemoteClick(user)}
-                    >
-                      Demote
-                    </button>
-                    <button 
-                      className="edit-btn"
-                      onClick={() => handleEditClick(user)}
-                    >
-                      Edit
-                    </button>
-                    <button 
-                      className="remove-btn"
-                      onClick={() => handleRemoveClick(user)}
-                    >
-                      Remove
-                    </button>
-                  </td>
+              {users.length > 0 ? (
+                users.map((user) => (
+                  <tr key={user.id}>
+                    <td>{user.username}</td>
+                    <td>{user.email}</td>
+                    <td>{user.bilkentId}</td>
+                    <td>{user.status}</td>
+                    <td className="actions-ulist">
+                      <button 
+                        className="promote-btn"
+                        onClick={() => handlePromoteClick(user)}
+                      >
+                        Promote
+                      </button>
+                      <button 
+                        className="demote-btn"
+                        onClick={() => handleDemoteClick(user)}
+                      >
+                        Demote
+                      </button>
+                      <button 
+                        className="edit-btn"
+                        onClick={() => handleEditClick(user)}
+                      >
+                        Edit
+                      </button>
+                      <button 
+                        className="remove-btn"
+                        onClick={() => handleRemoveClick(user)}
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">No advisors available.</td> {/* Adjusted colspan */}
                 </tr>
-              ))}
+              )
+              }
             </tbody>
           </table>
         </div>

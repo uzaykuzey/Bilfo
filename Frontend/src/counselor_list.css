@@ -6,7 +6,9 @@
 .content-list {
   flex: 1;
   padding: 20px;
-  margin-left: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .content-list h2 {
@@ -29,24 +31,27 @@
   background: white;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
   overflow-x: auto;
 }
 
-table {
+.counselor-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th, td {
-  padding: 12px;
+.counselor-table th, td {
+  padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
 
-th {
-  background-color: #f8f9fa;
+.counselor-table th {
+  background-color: #f1f1f1;
   font-weight: bold;
+}
+
+.counselor-table tr:hover {
+  background-color: #f5f5f5;
 }
 
 .actions {

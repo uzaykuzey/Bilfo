@@ -177,7 +177,7 @@ export default function CounselorList() {
         </button>
 
         <div className="table-container">
-          <table>
+          <table className="counselor-table">
             <thead>
               <tr>
                 <th>Name</th>

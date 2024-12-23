@@ -163,18 +163,24 @@ export default function AdvisorListLayout() {
               </tr>
             </thead>
             <tbody>
-              {advisors.map((advisor) => (
-                <tr key={advisor.id}>
-                  <td>{advisor.username}</td>
-                  <td>{advisor.email}</td>
-                  <td>{advisor.bilkentId}</td>
-                  <td className="actions">
-                    <button onClick={() => handlePromoteClick(advisor)}>Promote</button>
-                    <button onClick={() => handleDemoteClick(advisor)}>Demote</button>
-                    <button onClick={() => handleRemoveClick(advisor)}>Remove</button>
-                  </td>
+              {advisors.length > 0 ? (
+                advisors.map((advisor) => (
+                  <tr key={advisor.id}>
+                    <td>{advisor.username}</td>
+                    <td>{advisor.email}</td>
+                    <td>{advisor.bilkentId}</td>
+                    <td className="actions">
+                      <button onClick={() => handlePromoteClick(advisor)}>Promote</button>
+                      <button onClick={() => handleDemoteClick(advisor)}>Demote</button>
+                      <button onClick={() => handleRemoveClick(advisor)}>Remove</button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">No advisors available.</td> {/* Adjusted colspan */}
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

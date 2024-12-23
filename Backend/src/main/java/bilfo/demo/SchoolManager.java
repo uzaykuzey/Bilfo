@@ -75,7 +75,6 @@ public class SchoolManager {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             return Pair.of(0, 1);
         }
     }

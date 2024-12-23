@@ -112,9 +112,9 @@ export default function FairApplicationForm() {
             district: formData.district,
             date: formData.date,
             time: formData.time,
-            contactInfo: formData.contactInfo
+            contactMail: formData.contactInfo
         };
-
+        
         try {
             const response = await api.post("/form/fairform", fairFormData);
             

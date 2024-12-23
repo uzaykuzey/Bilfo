@@ -126,6 +126,7 @@ export default function SchoolToursForm() {
         const schoolFormData = {
             schoolName: formData.schoolName,
             city: formData.city,
+            district: formData.district,
             date1: formData.firstTimeDate,
             time1: formData.firstTimeHour,
             date2: formData.secondTimeDate,

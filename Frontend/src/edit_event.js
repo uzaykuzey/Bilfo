@@ -80,7 +80,43 @@ const EditEvent = () => {
 
     return (
         <div className="home-layout">
-            <NavbarLayout />
+            <nav className="sidebar">
+                <div className="logo-container">
+                    <div className="logo">
+                        <img
+                            src="/bilkent.png?height=60&width=60"
+                            alt="University Logo"
+                            className="logo-image"
+                        />
+                        <div className="logo-text">
+                            <h1>BILFO</h1>
+                            <p>Bilkent Information Office</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="nav-links">
+                    <a href="/" className="nav-link">Campus Tours</a>
+                    <a href="/fair_application" className="nav-link">Fair Application</a>
+                    <a href="/edit_event" className="nav-link">Edit Event</a>
+                    <a href="/feedback" className="nav-link">Feedback</a>
+                    <a href="/login" className="nav-link" id = "login">Log In</a>
+                </div>
+
+                <div className="language-switcher">
+                    <img
+                        src="/Flag_England.png?height=32&width=40"
+                        alt="English"
+                        className="language-icon"
+                    />
+                    <img
+                        src="/Flag_of_Turkey.png?height=32&width=40"
+                        alt="Turkish"
+                        className="language-icon"
+                    />
+                </div>
+            </nav>
+
 
             <div className="edit-event-container">
                 {!formData ? (

@@ -180,9 +180,30 @@
     max-width: 90vw;
   }
 
+  .cancel-popup-content {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px; 
+    max-width: 90vw;
+  }
+
+  .popup-details-content {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px; 
+    max-width: 90vw;
+  }
+
   .popup-close-icon {
     display: flex;
     justify-content: flex-end;
+    cursor: pointer;
   }
 
   .tour-details {

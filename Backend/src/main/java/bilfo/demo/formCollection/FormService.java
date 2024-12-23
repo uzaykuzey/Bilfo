@@ -101,26 +101,10 @@ public class FormService {
         List<Form> forms = formRepository.findAllByTypeAndApproved(type, state);
         Comparator<Form> comparator = switch (sort) {
             case BY_DATE_OF_FORM -> Comparator.comparing(Form::getDateOfForm);
-            case BY_ADMISSIONS_TO_BILKENT -> new Comparator<Form>()
-                                                {
-                                                    @Override
-                                                    public int compare(Form o1, Form o2) {
-                                                        return o1.getBilkentAdmissions()-o2.getBilkentAdmissions();
-                                                    }
-                                                };
-            case BY_PERCENTAGE_OF_ADMISSIONS_TO_BILKENT -> new Comparator<Form>()
-                                                {
-                                                    @Override
-                                                    public int compare(Form o1, Form o2) {
-                                                        return o1.getPercentageOfBilkentAdmissions()-o2.getPercentageOfBilkentAdmissions();
-                                                    }
-                                                };
-            default -> null;
+            case BY_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(Form::getBilkentAdmissions);
+            case BY_PERCENTAGE_OF_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(Form::getPercentageOfBilkentAdmissions);
         };
-
-        if (comparator != null) {
-            forms.sort(comparator);
-        }
+        forms.sort(comparator);
 
         return forms;
     }

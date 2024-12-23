@@ -150,7 +150,7 @@ public class SchoolManager {
      */
     private static class TurkishComparator implements Comparator<String> {
 
-        public static final String comprehensiveAlphabet = "ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ";
+        public static final String comprehensiveAlphabet = " .0123456789ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ";
         @Override
         public int compare(String o1, String o2) {
             int len = Math.min(o1.length(), o2.length());

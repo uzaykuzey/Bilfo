@@ -64,7 +64,7 @@ public class SchoolManager {
 
     public boolean schoolExists(String city, String district, String school)
     {
-        return schools.containsKey(city) && schools.get(city).containsKey(district) && schools.get(city).get(school).containsKey(school);
+        return schools.containsKey(city) && schools.get(city).containsKey(district) && schools.get(city).get(district).containsKey(school);
     }
 
     public Pair<Integer, Integer> getAdmissionStatistics(String city, String district, String school)
@@ -75,7 +75,6 @@ public class SchoolManager {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             return Pair.of(0, 1);
         }
     }

@@ -54,7 +54,7 @@ public class FormService {
 
     public Optional<Form> createForm(EVENT_TYPES type, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleDates, String contactMail, String city, String district, String schoolName, int visitorCount, String visitorNotes, String counselorEmail, String[] names, DEPARTMENT department) {
         logger.info("Creating Form");
-        
+
         if(type!=EVENT_TYPES.INDIVIDUAL_TOUR)
         {
             if(!SchoolManager.getInstance().schoolExists(city, district, schoolName))
@@ -115,13 +115,27 @@ public class FormService {
     public List<Form> getForms(EVENT_TYPES type, FORM_STATES state, SORTING_TYPES sort)
     {
         List<Form> forms = formRepository.findAllByTypeAndApproved(type, state);
-        Comparator<Form> comparator = switch (sort) {
-            case BY_DATE_OF_FORM -> Comparator.comparing(Form::getDateOfForm);
-            case BY_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(Form::getBilkentAdmissions);
-            case BY_PERCENTAGE_OF_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(Form::getPercentageOfBilkentAdmissions);
-            default -> throw new IllegalArgumentException("Unsupported sorting type: " + sort);
+        switch (sort) {
+            case BY_DATE_OF_FORM -> forms.sort(new Comparator<Form>() {
+                                        @Override
+                                        public int compare(Form o1, Form o2) {
+                                            return o1.getDateOfForm().compareTo(o2.getDateOfForm());
+                                        }
+                                    });
+            case BY_ADMISSIONS_TO_BILKENT -> forms.sort(new Comparator<Form>() {
+                                                @Override
+                                                public int compare(Form o1, Form o2) {
+                                                    return -(o1.getBilkentAdmissions() - (o2.getBilkentAdmissions()));
+                                                }
+                                            });
+            case BY_PERCENTAGE_OF_ADMISSIONS_TO_BILKENT -> forms.sort(new Comparator<Form>() {
+                                                @Override
+                                                public int compare(Form o1, Form o2) {
+                                                    return -(o1.getPercentageOfBilkentAdmissions() - (o2.getPercentageOfBilkentAdmissions()));
+                                                }
+                                            });
         };
-        forms.sort(comparator);
+
 
         return forms;
     }

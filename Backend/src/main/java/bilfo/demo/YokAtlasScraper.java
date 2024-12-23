@@ -18,6 +18,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,7 +56,14 @@ public class YokAtlasScraper {
             driverPath = driverPath.substring(1);
             System.setProperty("webdriver.chrome.driver", driverPath);
 
-            driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless");
+
+            options.addArguments("--disable-gpu");
+            options.addArguments("--window-size=1920,1080");
+
+            driver = new ChromeDriver(options);
+
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(2000));
 
             // 1) Point to the resources folder.

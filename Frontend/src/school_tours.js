@@ -144,7 +144,7 @@ export default function SchoolToursForm() {
             const response = await api.post("/form/hsform", schoolFormData);
     
             // Handle the API response
-            if (response.status === 200) {
+            if (response.status === 201) {
                 setFormData({
                     schoolName: '',
                     city: '',

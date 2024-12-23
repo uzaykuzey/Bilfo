@@ -110,10 +110,11 @@
     text-align: center;
   }
   /* Popup styling */
-.popup-content {
-  font-family: Arial, sans-serif;
-  text-align: center;
-}
+  .popup-content {
+    background-color: transparent;
+    border: transparent;
+    box-shadow: none;
+  }
 
 .day-selection {
   margin: 15px 0;

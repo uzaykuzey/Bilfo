@@ -189,7 +189,7 @@ export default function GuideListLayout() {
           modal
           closeOnDocumentClick
         >
-          <div className="add-guide-popup">
+          <div className="popup-container">
             <h2>Add Guide</h2>
             <form
               onSubmit={async (e) => {

@@ -21,6 +21,7 @@ import ForgotPasswordLayout from './forgot_password';
 import PuantajTableGuideLayout from './puantaj_table_guide';
 import DashboardLayout from './dashboard';
 import EditEvent from './edit_event';
+import UserList from './user_list';
 
 function App() {
   const { user } = useAuth();
@@ -141,10 +142,10 @@ function App() {
          path="/userHome/:bilkentId/user_list"
          element={
            <ProtectedRoute allowedRoles={['ADMIN']}>
-             <DashboardLayout />
+             <UserList />
            </ProtectedRoute>
          }
-       />
+       />        
 
         {/* Catch-all route */}
         <Route path="*" element={

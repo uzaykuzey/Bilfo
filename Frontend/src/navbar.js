@@ -48,6 +48,11 @@ export default function NavbarLayout(){
     navigate(`/userHome/${bilkentId}/dashboard`, { state: { statusUser}});
   };
 
+  const handleUserListClick = (e) => {
+    e.preventDefault();
+    navigate(`/userHome/${bilkentId}/user_list`, { state: { statusUser}});
+  };
+
   return(
     <nav className="sidebar" >
         <div className="logo-container">
@@ -65,14 +70,15 @@ export default function NavbarLayout(){
         </div>
 
         <div className="nav-links">
+          
           <a className="nav-link" onClick={goToUserHome}>Profile</a>
           <a className="nav-link" onClick={goToTourFairList}>Tours and Fairs</a>
 
-          {(statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR" || statusUser === "ADMIN") && (
+          {(statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR") && (
             <a className="nav-link" onClick={goToAdvisorlist}>Advisor List</a>
           )}
 
-          {(statusUser === "ADVISOR" || statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR" || statusUser === "ADMIN") && (
+          {(statusUser === "ADVISOR" || statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR") && (
             <a className="nav-link" onClick={goToGuideList}>Guide List</a>
           )}
 
@@ -84,6 +90,10 @@ export default function NavbarLayout(){
           {(statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR" || statusUser === "ADMIN") && (
             <a className="nav-link" onClick={goToPuantajTableGuide}>Puantaj Table: Guides</a>
           )}
+
+          {(statusUser === "ADMIN") && (
+            <a className="nav-link" onClick={handleUserListClick}>User List</a>
+          )}  
           
           {(statusUser === "COORDINATOR" || statusUser === "ACTING DIRECTOR" || statusUser === "ADMIN") && (
             <a className="nav-link" onClick={handleDashboardClick}>Dashboard</a>

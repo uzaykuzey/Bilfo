@@ -29,9 +29,9 @@ public class SecurityConfig{
                                                                     ,"/form/hsform", "/form/indform", "/form/fairform", "/promoteUser", "/form/evaluate",
                                                                 "/addGuide","/removeUser", "/addAdvisor", "/addCoordinator", "/addActingDirector",
                                                                 "/changeAvailability", "/event/feedback", "/event/claimEvent", "/forgotPasswordMail",
-                                                                "/forgotPasswordChangeRequest", "/demoteUser", "/log/addLog", "/log/deleteLog",
+                                                                "/forgotPasswordChangeRequest", "/demoteUser", "/log/addLog", "/editUser", "/log/deleteLog",
                                                                 "/log/markLogAsPaid", "/log/markAllLogsAsPaid", "/dashboard/createDashboard", "/event/offerEvent").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/event", "/form", "/getAvailability", "/getFeedback", "/getAdvisorsOfTheDay","/getUserInfo"
+                        .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/getAllUsers", "/event", "/form", "/getAvailability", "/getFeedback", "/getAdvisorsOfTheDay","/getUserInfo"
                                                                 , "/event/getScheduleOfWeek","/form/getForms", "/event/getEvents", "/school/cityNames", "/school/districtNames", "/school/schoolNames",
                                                                   "/log/getLogs", "/log/getEventsOfUserThatDontHaveLogsAndFinished","/log/getAllGuidesLogTable", "/guidesAvailable",
                                                                     "/event/getGuidesOfEvent").permitAll()

@@ -138,6 +138,10 @@ public class EventManager {
     {
         ObjectId form=new ObjectId(formId);
         ObjectId event=new ObjectId(eventId);
-        return null;
+        if(eventService.cancelEvent(form,event))
+        {
+            return new ResponseEntity<>("Successfully cancelled event", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Unsuccesful cancel", HttpStatus.BAD_REQUEST);
     }
 }

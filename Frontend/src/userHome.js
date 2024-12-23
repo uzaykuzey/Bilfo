@@ -12,9 +12,9 @@ export default function UserHomeLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   console.log("Location in UserHome:", location);
-  
+
   // Safely access state and provide fallback
-  const statusUser = location.state?.statusUser || 'GUIDE';
+  const statusUser = location.state?.statusUser || "GUIDE";
   console.log("StatusUser in UserHome:", statusUser);
 
   const [advisors, setAdvisors] = useState([]); // Stores multiple advisors
@@ -77,7 +77,7 @@ export default function UserHomeLayout() {
   const goToSettings = (e) => {
     e.preventDefault();
     navigate(`/userHome/${bilkentId}/settings`, { state: { statusUser } });
-  }
+  };
 
   return (
     <div className="home-layout">
@@ -87,7 +87,9 @@ export default function UserHomeLayout() {
       <main className="main-content">
         {/* Advisor Section */}
         <div className="advisor-section">
-          <p><strong>Advisors of the day:</strong></p>
+          <p>
+            <strong>Advisors of the day:</strong>
+          </p>
           <ul>
             {advisors.map((advisor, index) => (
               <li key={index}>
@@ -109,9 +111,7 @@ export default function UserHomeLayout() {
                 className="profile-image"
               />
               <div className="profile-header-details">
-                <h2>
-                  {profile.username}
-                </h2>
+                <h2>{profile.username}</h2>
                 <h3>
                   {(() => {
                     switch (profile.role) {
@@ -148,10 +148,12 @@ export default function UserHomeLayout() {
                 <strong>Role:</strong> {profile.role}
               </p>
               {profile.role === "ADVISOR" && (
-              <p>
-                <strong>Day of Advisor:</strong>{" "}
-                {profile.dayOfAdvisor === "NOT_ASSIGNED" ? "Not Assigned" : profile.dayOfAdvisor}
-              </p>
+                <p>
+                  <strong>Day of Advisor:</strong>{" "}
+                  {profile.dayOfAdvisor === "NOT_ASSIGNED"
+                    ? "Not Assigned"
+                    : profile.dayOfAdvisor}
+                </p>
               )}
               <p>
                 <strong>Total Hours of Service:</strong> {profile.totalHours}

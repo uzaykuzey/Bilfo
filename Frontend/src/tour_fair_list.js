@@ -417,7 +417,7 @@ export default function TourListLayout() {
     };
   
     return (
-      <div className="popup-content">
+      <div className="popup-content-evaluate">
         {/* Cross icon for closing */}
         <div className="popup-close-icon" onClick={handleCancel}>
           <FaTimes />
@@ -425,7 +425,7 @@ export default function TourListLayout() {
   
         <h3>Evaluate Tour</h3>
         {selectedTour.type === "HIGHSCHOOL_TOUR" && (
-          <div>
+          <div className="tour-details">
             <p><strong>Tour Name:</strong> {selectedTour.name}</p>
             <p><strong>City:</strong> {selectedTour.city}</p>
             <p><strong>Date:</strong> {formattedDate}</p>
@@ -452,7 +452,7 @@ export default function TourListLayout() {
           {selectedTour.possibleTimes &&
             selectedTour.possibleTimes.map((time, index) => (
               <div key={index} className="time-radio">
-                <input
+                <input className="radio-possible-times"
                   type="radio"
                   id={`time-${index}`}
                   name="time-selection"

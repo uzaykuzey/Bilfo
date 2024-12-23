@@ -195,7 +195,7 @@ export default function CounselorList() {
                     <td>{counselor.email}</td>
                     <td>{counselor.phoneNo}</td>
                     <td>{counselor.school}</td>
-                    <td className="actions">
+                    <td className="actions-counselor">
                       <button 
                         className="edit-btn"
                         onClick={() => {

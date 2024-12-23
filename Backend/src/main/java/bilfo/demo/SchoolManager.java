@@ -62,6 +62,11 @@ public class SchoolManager {
         return schools.containsKey(city) && schools.get(city).containsKey(district) ? schools.get(city).get(district).keySet().toArray(new String[0]): new String[]{};
     }
 
+    public boolean schoolExists(String city, String district, String school)
+    {
+        return schools.containsKey(city) && schools.get(city).containsKey(district) && schools.get(city).get(school).containsKey(school);
+    }
+
     public Pair<Integer, Integer> getAdmissionStatistics(String city, String district, String school)
     {
         try
@@ -153,6 +158,10 @@ public class SchoolManager {
         public static final String comprehensiveAlphabet = " .-()0123456789AÂBCÇDEFGĞHIÎİJKLMNOÖPQRSŞTUÜVWXYZ";
         @Override
         public int compare(String o1, String o2) {
+            if(o1==null)
+            {
+                return o2==null ? 0: -1;
+            }
             int len = Math.min(o1.length(), o2.length());
             for (int i = 0; i < len; i++) {
                 int index1 = comprehensiveAlphabet.indexOf(o1.charAt(i));

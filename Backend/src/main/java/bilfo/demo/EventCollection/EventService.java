@@ -285,6 +285,8 @@ public class EventService {
                 if(optionalForm.isEmpty()) {
                     continue;
                 }
+                optionalForm.get().setApproved(FORM_STATES.ACCEPTED_AND_COMPLETED);
+                formRepository.save(optionalForm.get());
                 eventRepository.save(event);
             }
         }

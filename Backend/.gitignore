@@ -35,3 +35,4 @@ build/
 ### ENV Files ###
 .env
 highschools.txt
+chromedriver.exe

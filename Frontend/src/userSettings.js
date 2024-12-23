@@ -90,16 +90,8 @@ export default function UserSettingsLayout() {
           <h2>Editing</h2>
           <span className="edit-icon">✏️</span>
         </div>
-        <div className="profile-section-s">
-          <div className="profile-pic">
-            <img src="/path/to/profile-picture.png" alt="User Profile" />
-          </div>
-          <button className="save-icon">Save Icon</button>
-        </div>
 
         <div className="editing-section">
-          
-
           <div className="form-container-settings">
             {/* Username */}
             <div className="form-group">

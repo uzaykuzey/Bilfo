@@ -1,0 +1,196 @@
+.content-list-user {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 4rem;
+  align-items: center;
+}
+
+#user-list-header {
+  font-size: 2.5rem;
+}
+
+.user-table-container {
+  margin: 20px auto;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.user-table th,
+.user-table td {
+  padding: 10px;
+}
+
+.user-table tr {
+  border-bottom: 1px solid #ddd;
+
+}
+
+.user-table th {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+.user-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.add-user-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.add-user-btn:hover {
+  background-color: #0056b3;
+}
+
+.user-modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.actions-ulist {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.actions-ulist button {
+  margin: 0 5px;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.actions-ulist button:hover {
+  opacity: 0.9;
+}
+
+.actions-ulist .promote-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.actions-ulist .demote-btn {
+
+  color: black;
+}
+
+.actions-ulist .edit-btn {
+  background-color: #ffc107;
+  color: white;
+}
+
+.actions-ulist .remove-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.error-message {
+  color: #dc3545;
+  margin: 10px 0;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.popup-content {
+  background-color: transparent;
+  border: transparent;
+  box-shadow: none;
+}
+
+.popup-container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 4px solid #0056b3;
+  width: 400px;
+  max-width: 90vw;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.popup-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.popup-actions button:hover {
+  opacity: 0.9;
+}
+
+.popup-actions button:first-child {
+  background-color: #28a745;
+  color: white;
+}
+
+.popup-actions button:last-child {
+  background-color: #6c757d;
+  color: white;
+}
+
+
+

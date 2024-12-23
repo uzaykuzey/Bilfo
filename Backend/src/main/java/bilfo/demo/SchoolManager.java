@@ -77,15 +77,7 @@ public class SchoolManager {
 
     public int getAdmissionsToBilkent(String city, String district, String school)
     {
-        try
-        {
-            return schools.get(city).get(district).get(school).getFirst();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return 0;
-        }
+        return getAdmissionStatistics(city, district, school).getFirst();
     }
 
     public int getBilkentToTotalAdmissionsPercentage(String city, String district, String school)
@@ -154,11 +146,11 @@ public class SchoolManager {
 
     /**
      * A custom comparator class because java.text.Collator class was slow.
-     * Should only be used with capital turkish/english letters: ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ
+     * Should only be used with the following characters: " .-()0123456789AÂBCÇDEFGĞHIÎİJKLMNOÖPQRSŞTUÜVWXYZ"
      */
     private static class TurkishComparator implements Comparator<String> {
 
-        public static final String comprehensiveAlphabet = "ABCÇDEFGĞHIİJKLMNOÖPQRSŞTUÜVWXYZ";
+        public static final String comprehensiveAlphabet = " .-()0123456789AÂBCÇDEFGĞHIÎİJKLMNOÖPQRSŞTUÜVWXYZ";
         @Override
         public int compare(String o1, String o2) {
             int len = Math.min(o1.length(), o2.length());

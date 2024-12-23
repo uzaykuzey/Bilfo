@@ -14,4 +14,6 @@ public interface FormPasswordRepository extends MongoRepository<FormPassword, Ob
     public Optional<FormPassword> findByFormId(ObjectId formId);
     public void removeById(ObjectId formId);
     public List<FormPassword> findByContactMail(String contactMail);
+    public List<FormPassword> findAll();
+    public void deleteByFormId(ObjectId formId); // New method
 }

@@ -413,6 +413,11 @@ public class UserManager {
         return new ResponseEntity<List<User>>(availableGuides,HttpStatus.OK);
     }
 
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<>(userService.allUsers(), HttpStatus.OK);
+    }
+
     public static String generatePassword(int length) {
         String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";

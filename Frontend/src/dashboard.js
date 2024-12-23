@@ -111,6 +111,18 @@ export default function DashboardLayout() {
     }]
   };
 
+  const handleCounselorsClick = () => {
+    navigate(`/userHome/${bilkentId}/dashboard/counselors`);
+  };
+
+  const handleSchoolsClick = () => {
+    navigate(`/userHome/${bilkentId}/dashboard/schools`);
+  };
+
+  const handleFeedbacksClick = () => {
+    navigate(`/userHome/${bilkentId}/dashboard/feedbacks`);
+  };
+
   if (isLoading) {
     return (
       <div className="home-layout">
@@ -187,6 +199,37 @@ export default function DashboardLayout() {
                 <span>{dashboardData.tourCounts.total}</span>
               </div>
             </div>
+          </div>
+          <div className="dashboard-buttons">
+            <button 
+              className="dashboard-button counselors"
+              onClick={handleCounselorsClick}
+            >
+              <div className="button-content">
+                <i className="fas fa-users"></i>
+                <span>Counselors</span>
+              </div>
+            </button>
+
+            <button 
+              className="dashboard-button schools"
+              onClick={handleSchoolsClick}
+            >
+              <div className="button-content">
+                <i className="fas fa-school"></i>
+                <span>Schools</span>
+              </div>
+            </button>
+
+            <button 
+              className="dashboard-button feedbacks"
+              onClick={handleFeedbacksClick}
+            >
+              <div className="button-content">
+                <i className="fas fa-comments"></i>
+                <span>Feedbacks</span>
+              </div>
+            </button>
           </div>
         </div>
       </div>

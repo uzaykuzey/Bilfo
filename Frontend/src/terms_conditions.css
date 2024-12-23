@@ -1,4 +1,4 @@
-.popup-overlay { 
+.popup-overlay-terms { 
     position: fixed;
     top: 0;
     left: 0;
@@ -12,16 +12,22 @@
     overflow: hidden; /* Prevent the entire page from scrolling */
 }
 
-.popup-content {
+.popup-content-terms {
     background: #fff;
     padding: 2rem;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
     width: 90%; /* Adjust for smaller screens */
-    max-width: 400px;
+    max-width: 800px;
     max-height: 80vh; /* Ensure the modal does not exceed viewport height */
-    overflow-y: auto; /* Add vertical scrolling for overflowing content */
     position: relative; /* Keeps content within its container */
+}
+
+.popup-content-terms .terms {
+    overflow-y: auto;
 }
 
 .close-terms {

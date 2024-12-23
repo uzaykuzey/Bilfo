@@ -556,7 +556,7 @@ public class EventService {
         int total=0;
         for(Form form: forms)
         {
-            if(form.getApproved()==FORM_STATES.REJECTED)
+            if(form.getApproved()==FORM_STATES.REJECTED || form.getType()!=EVENT_TYPES.HIGHSCHOOL_TOUR)
             {
                 continue;
             }

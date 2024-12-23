@@ -135,12 +135,16 @@ public class FormManager {
     {
         FORM_STATES state = FORM_STATES.valueOf(getFormsRequest.get("state").toUpperCase());
         EVENT_TYPES type = EVENT_TYPES.valueOf(getFormsRequest.get("type").toUpperCase());
-
+        SORTING_TYPES sort=SORTING_TYPES.BY_DATE_OF_FORM;
+        if(getFormsRequest.containsKey("sort"))
+        {
+            sort = SORTING_TYPES.valueOf(getFormsRequest.get("sort").toUpperCase());
+        }
         if(state==FORM_STATES.ACCEPTED)
         {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(formService.getForms(type, state), HttpStatus.OK);
+        return new ResponseEntity<>(formService.getForms(type, state, sort), HttpStatus.OK);
     }
 
 

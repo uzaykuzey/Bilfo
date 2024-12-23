@@ -18,8 +18,8 @@ public class FairForm extends Form {
     private String district;
     private String schoolName;
 
-    public FairForm(ObjectId id, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, String contactMail, String city, String district, String schoolName) {
-        super(id, approved, possibleTimes, EVENT_TYPES.FAIR, contactMail);
+    public FairForm(ObjectId id, Date dateOfForm, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, String contactMail, String city, String district, String schoolName) {
+        super(id, dateOfForm, approved, possibleTimes, EVENT_TYPES.FAIR, contactMail);
         this.city = city;
         this.district = district;
         this.schoolName = schoolName;

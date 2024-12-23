@@ -1,0 +1,7 @@
+package bilfo.demo.enums;
+
+public enum SORTING_TYPES {
+    BY_DATE_OF_FORM,
+    BY_ADMISSIONS_TO_BILKENT,
+    BY_PERCENTAGE_OF_ADMISSIONS_TO_BILKENT
+}

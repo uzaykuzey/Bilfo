@@ -71,8 +71,27 @@ public class SchoolManager {
         catch (Exception e)
         {
             e.printStackTrace();
-            return Pair.of(0, 0);
+            return Pair.of(0, 1);
         }
+    }
+
+    public int getAdmissionsToBilkent(String city, String district, String school)
+    {
+        try
+        {
+            return schools.get(city).get(district).get(school).getFirst();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int getBilkentToTotalAdmissionsPercentage(String city, String district, String school)
+    {
+        Pair<Integer, Integer> stat=getAdmissionStatistics(city, district, school);
+        return (100 * stat.getFirst())/stat.getSecond();
     }
 
     public void readSchoolFile(String filePath) {

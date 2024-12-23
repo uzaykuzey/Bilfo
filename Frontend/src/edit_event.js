@@ -120,7 +120,7 @@ const EditEvent = () => {
                         {success && <div className="success-message">{success}</div>}
                         <form onSubmit={handleEdit} className="edit-form">
                             {/* Render form fields based on the event type */}
-                            {formData.type === 'SCHOOL_TOUR' && (
+                            {formData.type === 'HIGHSCHOOL_TOUR' && (
                                 <>
                                     <div className="form-group">
                                         <label>First Choice Date:</label>

@@ -3,8 +3,12 @@ package bilfo.demo.formCollection;
 
 import bilfo.demo.EventCollection.Event;
 import bilfo.demo.EventCollection.EventService;
+import bilfo.demo.SchoolManager;
 import bilfo.demo.enums.*;
 import bilfo.demo.mailSender.MailSenderService;
+import bilfo.demo.passwordCollection.eventPasswordCollection.FormPassword;
+import bilfo.demo.passwordCollection.eventPasswordCollection.FormPasswordService;
+import bilfo.demo.userCollection.UserManager;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -24,6 +26,12 @@ public class FormService {
     @Autowired
     private FormRepository formRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    @Lazy
+    FormPasswordService formPasswordService;
     @Autowired
     @Lazy
     private EventService eventService;
@@ -51,18 +59,21 @@ public class FormService {
         }*/
 
         Form form = new Form();
+        Date today = new Date();
         switch (type)
         {
-            case FAIR -> form = new FairForm(new ObjectId(), approved, possibleDates, contactMail, city, district, schoolName);
-            case INDIVIDUAL_TOUR -> form = new IndividualTourForm(new ObjectId(), approved, possibleDates, contactMail, visitorCount, visitorNotes, names, department);
-            case HIGHSCHOOL_TOUR -> form = new HighSchoolTourForm(new ObjectId(), approved, possibleDates, contactMail, visitorCount, visitorNotes, schoolName, counselorEmail, city, district);
+            case FAIR -> form = new FairForm(new ObjectId(), today, approved, possibleDates, contactMail, city, district, schoolName);
+            case INDIVIDUAL_TOUR -> form = new IndividualTourForm(new ObjectId(), today, approved, possibleDates, contactMail, visitorCount, visitorNotes, names, department);
+            case HIGHSCHOOL_TOUR -> form = new HighSchoolTourForm(new ObjectId(), today, approved, possibleDates, contactMail, visitorCount, visitorNotes, schoolName, counselorEmail, city, district);
             default -> throw new IllegalArgumentException("Unknown EVENT_TYPE: " + type);
         }
-
+        String password = UserManager.generatePassword(16);
+        FormPassword formPassword = new FormPassword(new ObjectId(), form.getId(), form.getContactMail(), passwordEncoder.encode(password));
+        mailSenderService.sendEmail(form.getContactMail(), "Bilkent Form Application", "Your event has been completed, you can give your feedback by using code:\n"+password);
         // Save the Form in the database
         Form savedForm = formRepository.save(form);
         logger.info("Form created successfully.");
-
+        formPasswordService.saveFormPassword(formPassword);
         return Optional.of(savedForm);
     }
 
@@ -85,9 +96,17 @@ public class FormService {
         return eventService.createEvent(formId, new ArrayList<>(), new ArrayList<>(), form.get().getType(), chosenDate, chosenTime);
     }
 
-    public List<Form> getForms(EVENT_TYPES type, FORM_STATES state)
+    public List<Form> getForms(EVENT_TYPES type, FORM_STATES state, SORTING_TYPES sort)
     {
-        return formRepository.findAllByTypeAndApproved(type, state);
+        List<Form> forms = formRepository.findAllByTypeAndApproved(type, state);
+        Comparator<Form> comparator = switch (sort) {
+            case BY_DATE_OF_FORM -> Comparator.comparing(Form::getDateOfForm);
+            case BY_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(Form::getBilkentAdmissions);
+            case BY_PERCENTAGE_OF_ADMISSIONS_TO_BILKENT -> Comparator.comparingInt(Form::getPercentageOfBilkentAdmissions);
+        };
+        forms.sort(comparator);
+
+        return forms;
     }
 
 }

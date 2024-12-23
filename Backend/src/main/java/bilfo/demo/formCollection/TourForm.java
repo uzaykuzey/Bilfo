@@ -17,8 +17,8 @@ public class TourForm extends Form {
     private int visitorCount;
     private String visitorNotes;
 
-    public TourForm(ObjectId id, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, String contactMail, int visitorCount, String visitorNotes, EVENT_TYPES type) {
-        super(id, approved, possibleTimes, type, contactMail);
+    public TourForm(ObjectId id, Date dateOfForm, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleTimes, String contactMail, int visitorCount, String visitorNotes, EVENT_TYPES type) {
+        super(id, dateOfForm, approved, possibleTimes, type, contactMail);
         this.visitorCount = visitorCount;
         this.visitorNotes = visitorNotes;
     }

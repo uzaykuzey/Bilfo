@@ -11,38 +11,108 @@
 
 #suggested-header {
   padding-top: 4rem;
+  padding-bottom: 2rem;
+  
 }
 
-.table-container {
+#suggested-h1 {
+  font-size: 2rem;
+  text-align: left;
+  margin-bottom: 0%;
+}
+
+#suggested-h2 {
+  font-size: 2rem;
+  text-align: left;
+  margin-bottom: 0%;
+}
+
+.table-container-suggested {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Adds space between the tables */
+    gap: 20px; 
 }
 
 .table-section {
     margin-bottom: 20px; /* Optional, adds more space between tables */
 }
 
+.tour-table-container {
+  max-height: 600px;
+  overflow-y: scroll;
+}
+
 .tour-table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+}
+
+.tour-table-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.tour-table-container::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+  border-radius: 5px;
 }
 
 .tour-table th, .tour-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+  padding: 12px 15px;
+  font-size: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-family: "Arial", sans-serif;
 }
 
+.tour-table td {
+  background-color: white;
+}
+.tour-table tr:hover {
+  background-color: #f5f5f5;
+}
 .tour-table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
+  background-color: #f1f1f1; 
+  font-weight: bold;
 }
 .table-section p {
   font-style: italic;
   color: #888;
   margin: 10px 0;
 }
+
+.claim-btn {
+  margin: 0 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #28a745;
+}
+
+.claim-btn:hover {
+  opacity: 0.9;
+}
+
+.reject-btn {
+  margin: 0 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #dc3545;
+}
+
+.reject-btn:hover {
+  opacity: 0.9;
+}
+
 .popup-content-suggested {
   padding: 20px;
   background-color: white;
@@ -56,6 +126,7 @@
   background-color: transparent;
   border: transparent;
   box-shadow: none;
+  max-width: 400px;
 }
 
 .popup-content button {

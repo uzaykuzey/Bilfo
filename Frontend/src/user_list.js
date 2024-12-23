@@ -148,10 +148,45 @@ export default function UserList() {
       alert("Please fill in all fields correctly. ID must be 8 digits, email must be valid, and phone must be 10 digits.");
       return;
     }
+
     try {
-      const response = await api.post("/create", newUser);
-      if (response.status === 201) {
-        setUsers([...users, response.data]);
+      let endpoint;
+      switch (newUser.status) {
+        case 'GUIDE':
+          endpoint = '/addGuide';
+          break;
+        case 'ADVISOR':
+          endpoint = '/addAdvisor';
+          break;
+        case 'COORDINATOR':
+          endpoint = '/addCoordinator';
+          break;
+        case 'ACTING_DIRECTOR':
+          endpoint = '/addActingDirector';
+          break;
+        default:
+          alert('Invalid user type');
+          return;
+      }
+
+      // Add department field if not ACTING_DIRECTOR
+      const userData = {
+        username: newUser.username,
+        bilkentId: parseInt(newUser.bilkentId),
+        email: newUser.email,
+        phoneNo: newUser.phoneNo,
+        department: newUser.status !== 'ACTING_DIRECTOR' ? newUser.department : undefined,
+        trainee: newUser.status === 'GUIDE' ? false : undefined, // for guides
+        day: newUser.status === 'ADVISOR' ? 'MONDAY' : undefined // for advisors
+      };
+
+      const response = await api.post(endpoint, userData);
+      
+      if (response.status === 200) {
+        // Refresh the user list
+        const updatedUsers = await api.get("/getAllUsers");
+        setUsers(updatedUsers.data);
+        
         setIsAddPopupOpen(false);
         setNewUser({
           username: "",
@@ -161,9 +196,12 @@ export default function UserList() {
           department: "CS",
           status: "GUIDE"
         });
+        
+        alert("User added successfully. A password has been sent to their email.");
       }
     } catch (error) {
       console.error("Error adding user:", error);
+      alert(`Failed to add user: ${error.response?.data || error.message}`);
     }
   };
 
@@ -403,6 +441,8 @@ export default function UserList() {
               name="bilkentId"
               value={newUser.bilkentId}
               onChange={handleChange}
+              pattern="\d{8}"
+              title="ID must be 8 digits"
             />
           </div>
           <div className="input-group">
@@ -417,10 +457,15 @@ export default function UserList() {
           <div className="input-group">
             <label>Phone:</label>
             <input
-              type="text"
+              type="tel"
               name="phoneNo"
               value={newUser.phoneNo}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                handleChange({ target: { name: 'phoneNo', value } });
+              }}
+              pattern="\d{10}"
+              title="Phone number must be 10 digits"
             />
           </div>
           <div className="input-group">
@@ -434,9 +479,52 @@ export default function UserList() {
               <option value="ADVISOR">Advisor</option>
               <option value="COORDINATOR">Coordinator</option>
               <option value="ACTING_DIRECTOR">Acting Director</option>
-              <option value="ADMIN">Admin</option>
             </select>
           </div>
+
+          {newUser.status !== 'ACTING_DIRECTOR' && (
+            <div className="input-group">
+              <label>Department:</label>
+              <select
+                name="department"
+                value={newUser.department}
+                onChange={handleChange}
+              >
+                <option value="NOT_APPLICABLE">Not Applicable</option>
+                <option value="AMER">AMER</option>
+                <option value="ARCH">ARCH</option>
+                <option value="CHEM">CHEM</option>
+                <option value="COMD">COMD</option>
+                <option value="CS">CS</option>
+                <option value="CTIS">CTIS</option>
+                <option value="ECON">ECON</option>
+                <option value="EDU">EDU</option>
+                <option value="EEE">EEE</option>
+                <option value="ELIT">ELIT</option>
+                <option value="FA">FA</option>
+                <option value="GRA">GRA</option>
+                <option value="HART">HART</option>
+                <option value="IAED">IAED</option>
+                <option value="IE">IE</option>
+                <option value="IR">IR</option>
+                <option value="LAUD">LAUD</option>
+                <option value="LAW">LAW</option>
+                <option value="MAN">MAN</option>
+                <option value="MATH">MATH</option>
+                <option value="MBG">MBG</option>
+                <option value="ME">ME</option>
+                <option value="MSC">MSC</option>
+                <option value="PHIL">PHIL</option>
+                <option value="PHYS">PHYS</option>
+                <option value="POLS">POLS</option>
+                <option value="PSYC">PSYC</option>
+                <option value="THEA">THEA</option>
+                <option value="THM">THM</option>
+                <option value="THR">THR</option>
+                <option value="TRIN">TRIN</option>
+              </select>
+            </div>
+          )}
           <div className="popup-actions">
             <button onClick={handleAddUser}>Save</button>
             <button onClick={() => setIsAddPopupOpen(false)}>Cancel</button>

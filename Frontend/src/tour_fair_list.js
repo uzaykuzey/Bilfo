@@ -317,7 +317,7 @@ export default function TourListLayout() {
   
     return (
       <div className="popup-overlay">
-        <div className="popup-content">
+        <div className="popup-details-content">
           {/* Close Icon */}
           <div className="popup-close-icon" onClick={closeDetailsPopup}>
             ×
@@ -373,8 +373,10 @@ export default function TourListLayout() {
       <div className="cancel-popup-content">
         <h3>Cancel Tour</h3>
         <p>Are you sure you want to cancel this tour?</p>
-        <button onClick={() => cancelTour(selectedCancel)}>Confirm Cancel</button>
-        <button onClick={() => setCancelPopupOpen(false)}>Cancel</button>
+        <div className="cancel-popup-buttons">
+        <button className="reject-btn" onClick={() => cancelTour(selectedCancel)}>Confirm Cancel</button>
+        <button className="claim-btn" onClick={() => setCancelPopupOpen(false)}>Cancel</button>
+        </div>
       </div>
     );
   };

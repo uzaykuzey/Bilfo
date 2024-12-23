@@ -25,6 +25,7 @@ import UserList from './user_list';
 import CounselorList from './counselor_list';
 import SchoolList from './school_list';
 import FeedbackList from './feedback_list';
+import SuggestedToursLayout from './suggested_tours';
 
 function App() {
   const { user } = useAuth();
@@ -96,6 +97,14 @@ function App() {
          }
        />
 
+      <Route
+         path="/userHome/:bilkentId/suggested_tours"
+         element={
+           <ProtectedRoute allowedRoles={['GUIDE']}>
+             <SuggestedToursLayout />
+           </ProtectedRoute>
+         }
+       />
         <Route
          path="/userHome/:bilkentId/availability"
          element={

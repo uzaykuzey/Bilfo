@@ -34,7 +34,8 @@ public class SecurityConfig{
                         .requestMatchers(HttpMethod.GET,"/getGuides","/getAdvisors", "/getAllUsers", "/event", "/form", "/getAvailability", "/getFeedback", "/getAdvisorsOfTheDay","/getUserInfo"
                                                                 , "/event/getScheduleOfWeek","/form/getForms", "/event/getEvents", "/school/cityNames", "/school/districtNames", "/school/schoolNames",
                                                                   "/log/getLogs", "/log/getEventsOfUserThatDontHaveLogsAndFinished","/log/getAllGuidesLogTable", "/guidesAvailable",
-                                                                    "/event/getGuidesOfEvent", "/counselor/getAll", "/form/getEventDetails", "/dashboard/getDashboard").permitAll()
+                                                                    "/event/getGuidesOfEvent", "/counselor/getAll", "/form/getEventDetails", "/dashboard/getDashboard",
+                                                                    "/event/getSuggestedEvents").permitAll()
 
                         .anyRequest().authenticated()
                 )

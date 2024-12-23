@@ -54,22 +54,25 @@ public class FormService {
 
     public Optional<Form> createForm(EVENT_TYPES type, FORM_STATES approved, List<Pair<Date, TOUR_TIMES>> possibleDates, String contactMail, String city, String district, String schoolName, int visitorCount, String visitorNotes, String counselorEmail, String[] names, DEPARTMENT department) {
         logger.info("Creating Form");
-
-        if(type!=EVENT_TYPES.INDIVIDUAL_TOUR && !SchoolManager.getInstance().schoolExists(city, district, schoolName))
+        
+        if(type!=EVENT_TYPES.INDIVIDUAL_TOUR)
         {
-            return Optional.empty();
-        }
-
-        var forms=formRepository.findAllByApproved(FORM_STATES.ACCEPTED);
-        forms.addAll(formRepository.findAllByApproved(FORM_STATES.NOT_REVIEWED));
-        var cityDistrictSchool= Triple.of(city, district, schoolName);
-        for(Form form: forms)
-        {
-            if(form.getCityDistrictSchool().equals(cityDistrictSchool))
+            if(!SchoolManager.getInstance().schoolExists(city, district, schoolName))
             {
                 return Optional.empty();
             }
+            var forms=formRepository.findAllByTypeAndApproved(type, FORM_STATES.ACCEPTED);
+            forms.addAll(formRepository.findAllByTypeAndApproved(type, FORM_STATES.NOT_REVIEWED));
+            var cityDistrictSchool= Triple.of(city, district, schoolName);
+            for(Form form: forms)
+            {
+                if(form.getCityDistrictSchool().equals(cityDistrictSchool))
+                {
+                    return Optional.empty();
+                }
+            }
         }
+
 
         Form form;
         Date today = new Date();

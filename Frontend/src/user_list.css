@@ -132,8 +132,35 @@
   color: #666;
 }
 
+#popup-2 {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
 
+#popup-4 {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
 
+#popup-6 {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+#popup-8 {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+#popup-10 {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
 
 .popup-container {
   background: white;
@@ -172,6 +199,10 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.popup-actions button:hover {
+  opacity: 0.9;
 }
 
 .popup-actions button:first-child {

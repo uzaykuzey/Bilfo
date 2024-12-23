@@ -80,6 +80,13 @@
     margin-bottom: 20px;
 }
 
+.form-header h3 {
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 1px;
+  color: rgb(152, 148, 148);
+}
+
 .tour-form {
     display: flex;
     flex-direction: column;
@@ -137,8 +144,8 @@
 }
 
 .error {
-  color: red; /* Make the text red */
-  font-size: 14px; /* Match the font size with the input labels */
-  font-weight: bold; /* Make it stand out */
-  margin-top: 5px; /* Add some spacing above the error message */
+  color: red; 
+  font-size: 14px; 
+  font-weight: bold; 
+  margin-top: 5px; 
 }

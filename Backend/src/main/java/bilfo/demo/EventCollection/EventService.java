@@ -512,5 +512,29 @@ public class EventService {
         return false;
     }
 
+    public List<Triple<Event, Form, Feedback>> getAllFeedbacks()
+    {
+        List<Triple<Event, Form, Feedback>> result = new ArrayList<>();
+        List<Event> allEvents = eventRepository.findEventsByState(EVENT_STATES.COMPLETED);
+
+        for(Event event: allEvents)
+        {
+            if(event.getFeedback()==null)
+            {
+                continue;
+            }
+            Optional<Feedback> feedback=feedbackService.findFeedbackById(event.getFeedback());
+            Optional<Form> form=formService.getForm(event.getOriginalForm());
+
+            if(form.isEmpty() || feedback.isEmpty())
+            {
+                continue;
+            }
+
+            result.add(Triple.of(event, form.get(), feedback.get()));
+        }
+        return result;
+    }
+
 }
 

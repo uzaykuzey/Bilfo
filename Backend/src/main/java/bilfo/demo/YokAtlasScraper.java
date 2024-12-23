@@ -24,6 +24,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+//YÖK Atlas
 @RequestMapping("/yokAtlas")
 public class YokAtlasScraper {
     private static final String BASE_URL = "https://yokatlas.yok.gov.tr";

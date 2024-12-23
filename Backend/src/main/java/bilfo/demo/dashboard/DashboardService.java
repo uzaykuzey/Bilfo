@@ -1,4 +1,4 @@
-package bilfo.demo.dashboardCollection;
+package bilfo.demo.dashboard;
 
 import bilfo.demo.EventCollection.Event;
 import bilfo.demo.EventCollection.EventService;
@@ -12,6 +12,7 @@ import bilfo.demo.formCollection.HighSchoolTourForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
@@ -26,27 +27,24 @@ public class DashboardService {
     @Autowired
     private FormRepository formRepository;
     
-    @Autowired
-    private DashboardRepository dashboardRepository;
-    
     private final SchoolManager schoolManager = SchoolManager.getInstance();
 
-    public Dashboard createDashboard(Dashboard dashboard) {
+    public Dashboard getDashboard() {
         // Calculate all dashboard data
-        Map<String, Object> dashboardData = getDashboardData();
-        
+        Map<String, Map<String, Integer>> dashboardData = getDashboardData();
+        Dashboard dashboard=new Dashboard();
+
         // Populate the dashboard with calculated data
-        dashboard.setCityDistribution((Map<String, Integer>) dashboardData.get("cityDistribution"));
-        dashboard.setFormDistribution((Map<String, Integer>) dashboardData.get("formDistribution"));
-        dashboard.setWeeklySchedule((Map<String, Integer>) dashboardData.get("weeklySchedule"));
-        dashboard.setTourStats((Map<String, Integer>) dashboardData.get("tourStats"));
-        
-        // Save the dashboard to MongoDB
-        return dashboardRepository.save(dashboard);
+        dashboard.setCityDistribution(dashboardData.get("cityDistribution"));
+        dashboard.setFormDistribution(dashboardData.get("formDistribution"));
+        dashboard.setWeeklySchedule(dashboardData.get("weeklySchedule"));
+        dashboard.setTourStats(dashboardData.get("tourStats"));
+
+        return dashboard;
     }
 
-    private Map<String, Object> getDashboardData() {
-        Map<String, Object> dashboardData = new HashMap<>();
+    private Map<String, Map<String, Integer>> getDashboardData() {
+        Map<String, Map<String, Integer>> dashboardData = new HashMap<>();
         
         // Get city distribution data
         Map<String, Integer> cityDistribution = calculateCityDistribution();
@@ -68,14 +66,7 @@ public class DashboardService {
     }
 
     private Map<String, Integer> calculateCityDistribution() {
-        Map<String, Integer> cityCount = new LinkedHashMap<>();
-        String[] cities = schoolManager.getCityNames();
-        
-        // Initialize with major cities
-        for (String city : cities) {
-            cityCount.put(city, 0);
-        }
-        cityCount.put("Others", 0);
+        HashMap<String, Integer> cityCount = new LinkedHashMap<>();
 
         // Count forms by city for high school tours
         List<HighSchoolTourForm> highSchoolForms = formRepository
@@ -87,14 +78,32 @@ public class DashboardService {
 
         for (HighSchoolTourForm form : highSchoolForms) {
             String city = form.getCity();
-            if (cityCount.containsKey(city)) {
-                cityCount.put(city, cityCount.get(city) + 1);
-            } else {
-                cityCount.put("Others", cityCount.get("Others") + 1);
-            }
+            cityCount.put(city, cityCount.containsKey(city) ? cityCount.get(city) + 1: 1);
         }
 
-        return cityCount;
+        List<Map.Entry<String, Integer>> sortedEntries = cityCount.entrySet()
+                .stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue())) // Sort by value descending
+                .collect(Collectors.toList());
+
+        Map<String, Integer> top5 = sortedEntries.stream()
+                .limit(5)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+
+        int otherSum = sortedEntries.stream()
+                .skip(5)
+                .mapToInt(Map.Entry::getValue)
+                .sum();
+
+        top5.put("Other", otherSum);
+
+
+        return top5;
     }
 
     private Map<String, Integer> calculateFormDistribution() {
@@ -115,6 +124,7 @@ public class DashboardService {
         return formStats;
     }
 
+    @Scheduled(fixedRate = 100000)
     private Map<String, Integer> calculateWeeklySchedule() {
         Map<String, Integer> schedule = new LinkedHashMap<>();
         String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};

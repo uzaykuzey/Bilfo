@@ -25,22 +25,22 @@ public class CounselorService {
     }
 
     public Optional<Counselor> createCounselor(String name, String email, String phoneNo, String schoolName) {
-        logger.info("Creating counselor with name: {}", name);
+        try {
+            if (name == null || email == null || phoneNo == null || schoolName == null) {
+                return Optional.empty();
+            }
 
-        Optional<Counselor> existingUser = counselorRepository.findCounselorByEmail(email);
-        if(existingUser.isPresent()) {
-            logger.warn("Counselor with ID {} already exists. User creation failed.", email);
+            Optional<Counselor> existingUser = counselorRepository.findCounselorByEmail(email);
+            if(existingUser.isPresent()) {
+                return Optional.empty();
+            }
+
+            Counselor counselor = new Counselor(new ObjectId(), name, email, phoneNo, schoolName);
+            Counselor savedCounselor = counselorRepository.save(counselor);
+            return Optional.of(savedCounselor);
+        } catch (Exception e) {
             return Optional.empty();
         }
-
-        // Create the new Counselor object
-        Counselor counselor = new Counselor(new ObjectId(), name, email, phoneNo, schoolName);
-
-        // Save the counselor in the database
-        Counselor savedcounselor = counselorRepository.save(counselor);
-        logger.info("Counselor with name {} created successfully.", name);
-
-        return Optional.of(savedcounselor);
     }
 
     public Counselor updateCounselor(Counselor counselor) {

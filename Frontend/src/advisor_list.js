@@ -233,7 +233,7 @@ export default function AdvisorListLayout() {
         <Popup open={true} onClose={() => setIsAddPopupOpen(false)} position="center center">
           <div className="popup-container">
             <h2>Add Advisor</h2>
-            <div className="input-group">
+            <div className="form-group">
               <label>Name:</label>
               <input
                 type="text"
@@ -242,7 +242,7 @@ export default function AdvisorListLayout() {
                 onChange={handleChange}
               />
             </div>
-            <div className="input-group">
+            <div className="form-group">
               <label>ID:</label>
               <input
                 type="text"
@@ -251,7 +251,7 @@ export default function AdvisorListLayout() {
                 onChange={handleChange}
               />
             </div>
-            <div className="input-group">
+            <div className="form-group">
               <label>E-mail:</label>
               <input
                 type="email"
@@ -260,7 +260,7 @@ export default function AdvisorListLayout() {
                 onChange={handleChange}
               />
             </div>
-            <div className="input-group">
+            <div className="form-group">
               <label>Phone:</label>
               <input
                 type="text"
@@ -269,7 +269,7 @@ export default function AdvisorListLayout() {
                 onChange={handleChange}
               />
             </div>
-            <div className="input-group">
+            <div className="form-group">
               <label>Department:</label>
               <select
                 name="department"
@@ -309,7 +309,7 @@ export default function AdvisorListLayout() {
                 <option value="TRIN">TRIN</option>
               </select>
             </div>
-            <div className="input-group">
+            <div className="form-group">
               <label>Day Of the Advisor:</label>
               <select
                 name="day"

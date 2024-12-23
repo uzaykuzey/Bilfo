@@ -87,6 +87,8 @@
     background-color: #0056b3;
   }
 
+  
+
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -180,13 +182,18 @@
   font-weight: bold;
 }
 
-.form-group input,
+.form-group text,
 .form-group select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+#check-trainee {
+  display: flex;
+}
+
 
 .popup-buttons {
   display: flex;

@@ -18,13 +18,14 @@
   .tour-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: 20px auto;
     font-size: 16px;
     text-align: left;
   }
   
   .tour-table th, .tour-table td {
     border-bottom: 1px solid #dddddd;
+    max-width: 450px;
     padding: 12px 15px;
   }
   
@@ -80,7 +81,7 @@
     border-radius: 5px;
     font-size: 14px;
   }
-  .assign-button, .claim-button, .cancel-button, .details-button {
+  .assign-button, .claim-button, .cancel-button-tflist, .details-button {
     margin-right: 5px;
     padding: 5px 10px;
     font-size: 14px;
@@ -99,7 +100,7 @@
     border-radius: 4px;
   }
   
-  .cancel-button {
+  .cancel-button-tflist {
     background-color: #f44336;
     color: white;
     border-radius: 4px;

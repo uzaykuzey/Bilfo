@@ -61,7 +61,7 @@ public class UserManager {
             trainee = Boolean.parseBoolean(userRequest.get("trainee"));
         }
         // Attempt to create the user
-        Optional<User> newUser = userService.createUser(bilkentId, username, email, phoneNo, password, status, department, new ArrayList<>(), new ArrayList<>(), trainee, new boolean[User.AVAILABILITY_LENGTH], day);
+        Optional<User> newUser = userService.createUser(bilkentId, username, email, phoneNo, password, status, department, new ArrayList<>(), new ArrayList<>(), trainee, new boolean[User.AVAILABILITY_LENGTH], day, false);
 
         if (newUser.isPresent()) {
             return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
@@ -257,7 +257,7 @@ public class UserManager {
         boolean trainee = Boolean.parseBoolean(addGuideRequest.get("trainee"));
         DEPARTMENT department = DEPARTMENT.valueOf(addGuideRequest.get("department").toUpperCase());
         String tempPassword = generatePassword(User.DEFAULT_GUIDE_PASSWORD_LENGTH);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.GUIDE, department, new ArrayList<>(), new ArrayList<>(), trainee, new boolean[User.AVAILABILITY_LENGTH], DAY.NOT_ASSIGNED);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.GUIDE, department, new ArrayList<>(), new ArrayList<>(), trainee, new boolean[User.AVAILABILITY_LENGTH], DAY.NOT_ASSIGNED, false);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new GUIDE!!!",
                     "Your password is " + tempPassword + ". Change it as soon as possible.");
@@ -276,7 +276,7 @@ public class UserManager {
         DEPARTMENT department = DEPARTMENT.valueOf(addAdvisorRequest.get("department").toUpperCase());
         DAY day = DAY.valueOf(addAdvisorRequest.get("day").toUpperCase());
         String tempPassword = generatePassword(User.DEFAULT_ADVISOR_PASSWORD_LENGTH);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ADVISOR, department, new ArrayList<>(), new ArrayList<>(), false, new boolean[User.AVAILABILITY_LENGTH], day);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ADVISOR, department, new ArrayList<>(), new ArrayList<>(), false, new boolean[User.AVAILABILITY_LENGTH], day, false);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new ADVISOR!!!",
                                         "Your password is " + tempPassword + ". Change it as soon as possible.");
@@ -294,7 +294,7 @@ public class UserManager {
         String phoneNo = addCoordinatorRequest.get("phoneNo");
         DEPARTMENT department = DEPARTMENT.valueOf(addCoordinatorRequest.get("department").toUpperCase());
         String tempPassword = generatePassword(User.DEFAULT_COORDINATOR_PASSWORD_LENGTH);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.COORDINATOR, department, new ArrayList<>(), new ArrayList<>(), false, new boolean[User.AVAILABILITY_LENGTH], DAY.NOT_ASSIGNED);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.COORDINATOR, department, new ArrayList<>(), new ArrayList<>(), false, new boolean[User.AVAILABILITY_LENGTH], DAY.NOT_ASSIGNED, false);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new COORDINATOR!!!",
                     "Your password is " + tempPassword + ". Change it as soon as possible.");
@@ -311,7 +311,7 @@ public class UserManager {
         String email = addActingDirectorRequest.get("email");
         String phoneNo = addActingDirectorRequest.get("phoneNo");
         String tempPassword = generatePassword(User.DEFAULT_ACTING_DIRECTOR_PASSWORD_LENGTH);
-        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ACTING_DIRECTOR, DEPARTMENT.NOT_APPLICABLE, new ArrayList<>(), new ArrayList<>(), false, new boolean[User.AVAILABILITY_LENGTH], DAY.NOT_ASSIGNED);
+        Optional<User> user = userService.createUser(bilkentId, name, email, phoneNo, tempPassword, USER_STATUS.ACTING_DIRECTOR, DEPARTMENT.NOT_APPLICABLE, new ArrayList<>(), new ArrayList<>(), false, new boolean[User.AVAILABILITY_LENGTH], DAY.NOT_ASSIGNED, false);
         if(user.isPresent()) {
             mailSenderManager.sendEmail(email,"You are a new COORDINATOR!!!",
                     "Your password is " + tempPassword + ". Change it as soon as possible.");

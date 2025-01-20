@@ -42,10 +42,10 @@ export default function SuggestedToursLayout() {
 
     const formatTime = (timeString) => {
         const timeMap = {
-            NINE_AM: "09:00 AM",
-            ELEVEN_AM: "11:00 AM",
-            ONETHIRTY_PM: "01:30 PM",
-            FOUR_PM: "04:00 PM"
+            NINE_AM: "09.00 AM",
+            ELEVEN_AM: "11.00 AM",
+            ONE_THIRTY_PM: "01.30 PM",
+            FOUR_PM: "04.00 PM"
         };
         return timeMap[timeString] || timeString;
     };

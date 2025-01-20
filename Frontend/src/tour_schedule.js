@@ -212,7 +212,7 @@
                 </table>
               )}
               <Popup open={isPopupOpen} onClose={closePopup} modal closeOnDocumentClick>
-                  <div className="popup-content">
+                  <div className="popup-content-schedule">
                     <h3>Event Details</h3>
                     {selectedEvent ? (
                       <p>{selectedEvent.split(".")[0]}</p> // Display the event name by splitting at the dot

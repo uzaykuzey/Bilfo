@@ -138,7 +138,8 @@ public class EventManager {
     public ResponseEntity<String> cancelEvent(@RequestBody Map<String,String> formId)
     {
         ObjectId form=new ObjectId(formId.get("formId"));
-        if(eventService.cancelEvent(form))
+        boolean byCounselor=Boolean.parseBoolean(formId.get("byCounselor"));
+        if(eventService.cancelEvent(form, byCounselor))
         {
             return new ResponseEntity<>("Successfully cancelled event", HttpStatus.OK);
         }

@@ -64,6 +64,8 @@ export default function TourListLayout() {
         return "13.30";
       case "FOUR_PM":
         return "16.00";
+      case "WHOLE_DAY":
+        return "whole day";
       default:
         return "N/A";
     }
@@ -317,7 +319,7 @@ export default function TourListLayout() {
   
     return (
       <div className="popup-overlay">
-        <div className="popup-content">
+        <div className="popup-details-content">
           {/* Close Icon */}
           <div className="popup-close-icon" onClick={closeDetailsPopup}>
             ×
@@ -357,7 +359,7 @@ export default function TourListLayout() {
   const cancelTour = async (tour) => {
     console.log(tour);
     try {
-      const response = await api.post("/event/cancelEvent", { formId: tour.second?.id });
+      const response = await api.post("/event/cancelEvent", { formId: tour.second?.id ,byCounselor: true});
       if (response.status === 200) {
         alert("Tour canceled successfully!");
       } else {
@@ -372,9 +374,11 @@ export default function TourListLayout() {
     return (
       <div className="cancel-popup-content">
         <h3>Cancel Tour</h3>
+        <div className="claim-popup-buttons">
         <p>Are you sure you want to cancel this tour?</p>
-        <button onClick={() => cancelTour(selectedCancel)}>Confirm Cancel</button>
-        <button onClick={() => setCancelPopupOpen(false)}>Cancel</button>
+        <button className = "reject-btn" onClick={() => cancelTour(selectedCancel)}>Confirm Cancel</button>
+        <button className="claim-btn" onClick={() => setCancelPopupOpen(false)}>Cancel</button>
+        </div>
       </div>
     );
   };
@@ -430,7 +434,7 @@ export default function TourListLayout() {
         closePopup();
       } catch (error) {
         console.error("Error rejecting the tour:", error);
-        alert("Failed to reject the tour. Please try again.");
+        //alert("Failed to reject the tour. Please try again.");
       }
     };
   
@@ -448,13 +452,7 @@ export default function TourListLayout() {
         </div>
   
         <h3>Evaluate Tour</h3>
-        {selectedTour.form?.type === "HIGHSCHOOL_TOUR" && (
-          <div className="tour-details">
-            <p><strong>Tour Name:</strong> {selectedTour.form?.name}</p>
-            <p><strong>City:</strong> {selectedTour.form?.city}</p>
-            
-          </div>
-        )}
+        
         {/* Additional details for INDIVIDUAL_TOUR */}
         {selectedTour.form?.type === "INDIVIDUAL_TOUR" && (
           <div className="individual-tour-details">
@@ -594,9 +592,19 @@ export default function TourListLayout() {
       if (selectedStatus === "Accepted") {
         return (
           <>
-            <button className="assign-button" onClick={() => openAssignPopup(tour)}>Assign Guide</button>
+
+            {statusUser != "GUIDE" && (
+              <button
+                className="assign-button"
+                onClick={() => openAssignPopup(tour)}
+              >
+                Assign Guide
+              </button>
+            )}
             <button className="claim-button" onClick={() => claimTour(tour)}>Claim</button>
-            <button className="cancel-button" onClick={() => openCancelPopup(tour)}>Cancel</button>
+            {statusUser != "GUIDE" && (
+            <button className="cancel-button-tflist" onClick={() => openCancelPopup(tour)}>Cancel</button>
+            )}
             <button className="details-button" onClick={() => openDetailsPopup(tour)}>Details</button>
           </>
         );
@@ -605,9 +613,7 @@ export default function TourListLayout() {
           <button className="evaluate-button" onClick={() => openPopup(tour)}>Evaluate</button>
         );
       } else {
-        return (
-          <button className="details-button">Details</button>
-        );
+        return;
       }
     };
   
@@ -678,7 +684,7 @@ export default function TourListLayout() {
           }
         case "INDIVIDUAL_TOUR":
           if (selectedStatus !== "Accepted") {
-            var firstPossibleTime = tour.possibleTimes?.[0];
+            var firstPossibleTime = tour.form?.possibleTimes?.[0];
             var date = firstPossibleTime ? new Date(firstPossibleTime.first) : null;
             var rawTime = firstPossibleTime?.second || "N/A";
             var formattedTime = mapTime(rawTime);
@@ -686,12 +692,12 @@ export default function TourListLayout() {
             var formattedDate = formatDate(date);
             return (
               <>
-                <td>{tour.names}</td>
-                <td>{tour.department}</td>
+                <td>{tour.form?.names}</td>
+                <td>{tour.form?.department}</td>
                 <td>{formattedDate}</td>
                 <td>{day}</td>
                 <td>{formattedTime}</td>
-                <td>{tour.visitorCount}</td>
+                <td>{tour.form?.visitorCount}</td>
                 <td>{renderActions(tour)}</td>
               </>
             );
@@ -787,9 +793,16 @@ export default function TourListLayout() {
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
           >
-            <option value="Pending">Pending</option>
-            <option value="Accepted">Accepted</option>
-            <option value="Rejected">Rejected</option>
+            {statusUser === "GUIDE" ? (
+              <option value="Accepted">Accepted</option>
+            ) : (
+              <>
+                <option value="Pending">Pending</option>
+                <option value="Accepted">Accepted</option>
+                <option value="Rejected">Rejected</option>
+              </>
+            )}
+            
           </select>
 
           <label htmlFor="type">Type: </label>

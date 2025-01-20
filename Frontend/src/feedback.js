@@ -74,7 +74,7 @@ export default function FeedbackLayout() {
         <div className="nav-links">
           <a href="/" className="nav-link">Campus Tours</a>
           <a href="/fair_application" className="nav-link">Fair Application</a>
-          <a href="/edit_event" className="nav-link">Edit Event</a>
+          <a href="/edit_event" className="nav-link">Cancel Event</a>
           <a href="/feedback" className="nav-link">Feedback</a>
           <a href="/login" className="nav-link" id = "login">Log In</a>
         </div>

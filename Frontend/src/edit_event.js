@@ -62,12 +62,12 @@ const EditEvent = () => {
                             <p>Bilkent Information Office</p>
                         </div>
                     </div>
-                </div>
+                </div>  
 
                 <div className="nav-links">
                     <a href="/" className="nav-link">Campus Tours</a>
                     <a href="/fair_application" className="nav-link">Fair Application</a>
-                    <a href="/edit_event" className="nav-link">Edit Event</a>
+                    <a href="/edit_event" className="nav-link">Cancel Event</a>
                     <a href="/feedback" className="nav-link">Feedback</a>
                     <a href="/login" className="nav-link" id="login">Log In</a>
                 </div>
@@ -75,7 +75,7 @@ const EditEvent = () => {
                 
             </nav>
             <div className="edit-event-container">
-                <h2>Edit Event</h2>
+                <h2>Cancel Event</h2>
                 {error && <div className="error-message">{error}</div>}
                 {success && <div className="success-message">{success}</div>}
                 <form onSubmit={handleIdSubmit} className="id-form">

@@ -219,9 +219,13 @@ export default function UserList() {
           const updatedUsers = await api.get("/getAllUsers");
           setUsers(updatedUsers.data);
           setPromoteUser(null);
+        } else{
+          alert("Failed to promote!!");
+          setPromoteUser(null);
         }
       } catch (error) {
         console.error("Error promoting user:", error);
+        alert("Failed to promote!!");
       }
     }
   };

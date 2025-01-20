@@ -57,17 +57,17 @@ public class FormService {
         logger.info("Creating Form");
 
         Date today = new Date();
-        /*for(var pair : possibleDates)
+        for(var pair : possibleDates)
         {
             if(pair.getFirst().before(today) || DAY.dayDifference(today, pair.getFirst()) < 14)
             {
                 return Optional.empty();
             }
-        }*/
+        }
 
         if(type!=EVENT_TYPES.INDIVIDUAL_TOUR)
         {
-            if(!SchoolManager.getInstance().schoolExists(city, district, schoolName))
+            if(!SchoolManager.getInstance().schoolExists(city, district, schoolName) || (visitorCount<=0 && type==EVENT_TYPES.HIGHSCHOOL_TOUR))
             {
                 return Optional.empty();
             }
@@ -94,7 +94,7 @@ public class FormService {
         }
         String password = UserManager.generatePassword(16);
         FormPassword formPassword = new FormPassword(new ObjectId(), form.getId(), form.getContactMail(), passwordEncoder.encode(password));
-        mailSenderService.sendEmail(form.getContactMail(), "Bilkent Form Application", "Your event has been completed, you can give your feedback by using code:\n"+password);
+        mailSenderService.sendEmail(form.getContactMail(), "Bilkent Form Application", "Your event application "+(type==EVENT_TYPES.HIGHSCHOOL_TOUR ? "for the school "+schoolName: "")+" has been received. After it is completed, you can give your feedback by using code:\n"+password);
         // Save the Form in the database
         Form savedForm = formRepository.save(form);
         logger.info("Form created successfully.");
@@ -152,7 +152,7 @@ public class FormService {
             {
                 result.add(new FormWithStats(form, 0, 0));
             }
-            result.add(new FormWithStats(form, form.getBilkentAdmissions(), form.getPercentageOfBilkentAdmissions()));
+            else{result.add(new FormWithStats(form, form.getBilkentAdmissions(), form.getPercentageOfBilkentAdmissions()));}
         }
         return result;
     }

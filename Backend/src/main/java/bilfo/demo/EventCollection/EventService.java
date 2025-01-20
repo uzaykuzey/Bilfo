@@ -200,7 +200,7 @@ public class EventService {
                 List<Event> events = eventRepository.findAll();
                 Optional<Event> event = Optional.empty();
                 for(Event eventCurr : events){
-                 if(eventCurr.getOriginalForm().equals(form.get().getId())){
+                 if(eventCurr.getOriginalForm().equals(formPassword.getFormId())){
                      event = Optional.of(eventCurr);
                      break;
                  }
@@ -486,21 +486,28 @@ public class EventService {
         return eventRepository;
     }
 
-    public boolean cancelEvent(ObjectId formId)
+    public boolean cancelEvent(ObjectId formId, boolean byCounselor)
     {
         Optional<Form> optionalForm = formService.getForm(formId);
         if(optionalForm.isEmpty())
         {
             return false;
         }
-        Optional<FormPassword> formPassword=formPasswordService.getFormPasswordWithFormId(formId);
-        if(formPassword.isEmpty())
+
+        if(byCounselor)
         {
-            return false;
+            Optional<FormPassword> formPassword=formPasswordService.getFormPasswordWithFormId(formId);
+            if(formPassword.isEmpty())
+            {
+                return false;
+            }
+
+
+            formPasswordService.deleteFormPassword(formPassword.get());
         }
 
+
         Optional<Event> optionalEvent = eventRepository.findEventByOriginalForm(formId);
-        formPasswordService.deleteFormPassword(formPassword.get());
 
         if(optionalEvent.isEmpty())
         {
@@ -522,7 +529,7 @@ public class EventService {
 
         event.setState(EVENT_STATES.CANCELLED);
         eventRepository.save(event);
-        return false;
+        return true;
     }
 
     public List<Triple<Event, Form, Feedback>> getAllFeedbacks()

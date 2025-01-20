@@ -50,7 +50,7 @@ public class UserService {
         return userRepository.findByBilkentId(bilkentId);
     }
 
-    public Optional<User> createUser(int bilkentId, String username, String email, String phoneNo, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability, DAY day) {
+    public Optional<User> createUser(int bilkentId, String username, String email, String phoneNo, String password, USER_STATUS status, DEPARTMENT department, List<ObjectId> logs, List<ObjectId> suggestedEvents, boolean trainee, boolean[] availability, DAY day, boolean passwordHashed) {
         logger.info("Creating user with ID: {}", bilkentId);
 
         // Check if user already exists
@@ -61,7 +61,7 @@ public class UserService {
         }
 
         // Hash the password
-        String hashedPassword = passwordEncoder.encode(password);
+        String hashedPassword = passwordHashed ? password: passwordEncoder.encode(password);
         logger.info("Password hashed successfully for user ID: {}", bilkentId);
 
         // Create the new User object
@@ -292,7 +292,7 @@ public class UserService {
         boolean[] availability = guide.getAvailability();
 
         userRepository.deleteById(guide.getId());
-        Optional<User> user=this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.ADVISOR, department, logs, suggestedEvents, false, availability, day);
+        Optional<User> user=this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.ADVISOR, department, logs, suggestedEvents, false, availability, day, true);
         return user.isPresent();
     }
 
@@ -314,7 +314,7 @@ public class UserService {
         List<ObjectId> suggestedEvents = advisor.getSuggestedEvents();
         boolean[] availability = advisor.getAvailability();
         userRepository.deleteById(advisor.getId());
-        System.out.println(this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.COORDINATOR, department, logs, suggestedEvents, false, availability, DAY.NOT_ASSIGNED));
+        System.out.println(this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.COORDINATOR, department, logs, suggestedEvents, false, availability, DAY.NOT_ASSIGNED, true));
         return true;
     }
 
@@ -358,7 +358,7 @@ public class UserService {
         boolean[] availability = advisor.getAvailability();
 
         userRepository.deleteById(advisor.getId());
-        Optional<User> user=this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.GUIDE, department, logs, suggestedEvents, false, availability, DAY.NOT_ASSIGNED);
+        Optional<User> user=this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.GUIDE, department, logs, suggestedEvents, false, availability, DAY.NOT_ASSIGNED,true);
         return user.isPresent();
     }
 
@@ -375,7 +375,7 @@ public class UserService {
         boolean[] availability = coordinator.getAvailability();
 
         userRepository.deleteById(coordinator.getId());
-        Optional<User> user=this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.ADVISOR, department, logs, suggestedEvents, false, availability, day);
+        Optional<User> user=this.createUser(bilkentId, username, email, phoneNo, password, USER_STATUS.ADVISOR, department, logs, suggestedEvents, false, availability, day, true);
         return user.isPresent();
     }
 
